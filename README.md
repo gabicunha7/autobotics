@@ -2,7 +2,7 @@
 
 ## Documentação
 Acesse a documentação completa do projeto em:  
-[https://seulinkparadocumentacao.com/autobotics](https://seulinkparadocumentacao.com/autobotics)
+[Documentação do Projeto](https://bandteccom-my.sharepoint.com/:w:/g/personal/davi_ssilva_sptech_school/ET8NAfja_6hGmHQmD1Cz16QB_ba6oKQxlMQYcMHoU2hFgA?e=1pZPzf)
 
 ---
 
