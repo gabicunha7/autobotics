@@ -7,7 +7,7 @@ Acesse a documentação completa do projeto em:
 ---
 
 ## 📌 Visão Geral
-O **Autobotics** é uma plataforma unificada para coleta, armazenamento e análise em tempo real das métricas de **CPU, RAM e armazenamento** de controladores de robôs industriais, com foco no setor automotivo.  
+O **Autobotics** é um sistema unificado para coleta, armazenamento e análise em tempo real das métricas de **CPU, RAM e armazenamento** de controladores de robôs industriais, com foco no setor automotivo.  
 
 Utilizando práticas **ITIL** de gestão de incidentes e problemas, o sistema prevê falhas digitais antes que impactem a produção, acionando alertas automáticos e gerando ordens de serviço para manutenção proativa.
 
@@ -16,7 +16,7 @@ Utilizando práticas **ITIL** de gestão de incidentes e problemas, o sistema pr
 ## 🚀 Objetivos
 - Prevenir paradas não planejadas causadas por sobrecarga ou degradação dos recursos computacionais  
 - Reduzir custos de *downtime* e elevar o **OEE (Overall Equipment Effectiveness)**  
-- Entregar ROI em até 12 meses, com economia potencial de **R$ 2,5 a 6 milhões/ano** para uma planta com 200 robôs  
+- Entregar ROI em até --- alguns meses --- , com economia potencial de **R$ 2,5 a 6 milhões/ano** para uma planta com 200 robôs  
 
 ---
 
@@ -30,11 +30,11 @@ Utilizando práticas **ITIL** de gestão de incidentes e problemas, o sistema pr
 ---
 
 ## 🔧 Tecnologias Utilizadas
-- **Linguagens:** Python (coleta), JavaScript/TypeScript (API), Java/Kotlin (---)  
+- **Linguagens:** Python (coleta), JavaScript (API), Java (---)  
 - **Banco de dados:** MySQL
 - **Frameworks:** ---
-- **Integrações:** Slack Webhooks, MQTT/EtherNet-IP, 
-- **Infraestrutura:** AWS EC2, Docker, GitHub Actions (CI/CD)  
+- **Integrações:** Slack Webhooks ---
+- **Infraestrutura:** AWS EC2, Docker ---
 
 ---
 
@@ -42,8 +42,7 @@ Utilizando práticas **ITIL** de gestão de incidentes e problemas, o sistema pr
 1. Agente **Python** instalado no controlador coleta métricas de CPU, uso de memória e espaço em disco em intervalos configuráveis  
 2. Dados são enviados à API via **HTTP ou MQTT** com segurança (TLS e autenticação)  
 3. API processa, valida e armazena as métricas no banco.
-4. **Motor de regras** avalia *thresholds* estáticos e dinâmicos, disparando alertas quando necessário  
-5. **Frontend** exibe dashboards em tempo real e histórico; alertas geram ordens de serviço no sistema de tickets ITIL  
+4. **Frontend** exibe dashboards em tempo real e histórico; alertas geram ordens de serviço no sistema de tickets ITIL  
 
 ---
 
