@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Autobotics</title>
+</head>
+
+<body>
+
+    <header>
+        <img src="assets/AUTOBOTICS.png" alt="">
+        <nav>
+            <a href="#hero">Início</a>
+            <a href="#sobre">Sobre</a>
+            <a href="#servicos">Serviços</a>
+            <a href="#contato">Contato</a>
+        </nav>
+    </header>
+    <section id="hero">
+        <div class="inicio">
+            <div class="texto-inicio">
+                <h1>Bem-vindo!</h1>
+                <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus doloribus placeat excepturi, dolor
+                    maxime illum. Suscipit tempora deleniti, reiciendis maxime nesciunt accusamus quaerat? Unde a quidem
+                    recusandae quos est facilis.
+                </h3>
+                <button><h4>Alguma coisa</h4></button>
+            </div>
+        </div>
+    </section>
+
+    <section id="sobre">
+        <div class="texto-sobre">
+            <h2>Quem somos</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui officiis dicta perferendis eveniet nam,
+                architecto accusamus accusantium, deleniti vel esse, doloremque placeat illum voluptas earum ea eum.
+                Porro, reprehenderit labore!
+            </p>
+            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dignissimos odit maiores doloremque
+                exercitationem modi architecto temporibus animi magnam dolorum, cupiditate laboriosam, ea eveniet
+                voluptate minus non commodi. Repudiandae, maiores quidem?
+            </p>
+        </div>
+        <div class="missao">
+            <div class="miss-1">
+                <img src="assets/região.png" alt="">
+                <div class="texto-missao">
+                    <h3>Titulo aqui</h3>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit, assumenda dolor. Fuga, sequi
+                        officiis, quasi nobis eum cum assumenda saepe impedit exercitationem earum cumque sapiente
+                        minima
+                        nam! Illum, tempore ad?
+                    </p>
+                </div>
+            </div>
+            <div class="miss-2">
+                <img src="assets/ideia.png" alt="">
+                <div class="texto-missao">
+                    <h3>Titulo aqui</h3>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit, assumenda dolor. Fuga, sequi
+                        officiis, quasi nobis eum cum assumenda saepe impedit exercitationem earum cumque sapiente
+                        minima
+                        nam! Illum, tempore ad?
+                    </p>
+                </div>
+            </div>
+            <div class="miss-3">
+                <img src="assets/tecnologia.png" alt="">
+                <div class="texto-missao">
+                    <h3>Titulo aqui</h3>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit, assumenda dolor. Fuga, sequi
+                        officiis, quasi nobis eum cum assumenda saepe impedit exercitationem earum cumque sapiente
+                        minima
+                        nam! Illum, tempore ad?
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="servicos">
+        <div class="container-servicos">
+            <div class="servicos">
+                <div class="texto-servico">
+                    <h2>Serviços</h2>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. A, nihil eaque repellendus itaque,
+                        adipisci
+                        excepturi nesciunt nisi optio quasi, recusandae provident quibusdam voluptatum hic voluptas
+                        architecto.
+                        Totam explicabo alias corporis?
+                    </p>
+                </div>
+                <div class="imagem-servico">
+                    <img src="assets/Automação.png" alt="">
+                </div>
+            </div>
+            <div class="servicos2">
+                <div class="imagem-servico">
+                    <img src="assets/Automação2.png" alt="">
+                </div>
+                <div class="texto-servico">
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. A, nihil eaque repellendus itaque,
+                        adipisci
+                        excepturi nesciunt nisi optio quasi, recusandae provident quibusdam voluptatum hic voluptas
+                        architecto.
+                        Totam explicabo alias corporis?
+                    </p>
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nesciunt cumque corrupti autem placeat
+                        rerum quibusdam deserunt alias debitis fugiat eveniet voluptate, id beatae reiciendis! Unde
+                        recusandae illum quidem quasi eligendi?
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="contato">
+
+        <div class="contato">
+            <div class="formulario">
+                <form action="">
+                    <div class="campo">
+                        <label for="">aaaaaaaa</label>
+                        <input type="" name="" id="">
+                    </div>
+                    <div class="campo">
+                        <label for="">aaaaaaaa</label>
+                        <input type="" name="" id="">
+                    </div>
+                    <div class="campo">
+                        <label for="">aaaaaaaa</label>
+                        <input type="" name="" id="">
+                    </div>
+                </form>
+            </div>
+            <img src="assets/contate-nos.png" alt="">
+
+        </div>
+
+    </section>
+
+    <footer>
+        <p>&copy; 2025 - Autobotics | Todos os direitos reservados</p>
+    </footer>
+
+    <script>
+        // Seleciona todos os links do menu
+        const links = document.querySelectorAll("header nav a");
+
+        links.forEach(link => {
+            link.addEventListener("click", function (e) {
+                e.preventDefault(); // evita o salto padrão
+                const targetId = this.getAttribute("href");
+                const target = document.querySelector(targetId);
+
+                // Rolagem suave até a seção
+                window.scrollTo({
+                    top: target.offsetTop - 19, // medida do salto da página
+                    behavior: "smooth"
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>
