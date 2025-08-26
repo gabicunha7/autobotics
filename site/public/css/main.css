@@ -1,0 +1,172 @@
+.pagina {
+    min-height: var(--tamanhoPagina);
+    scroll-margin-top: var(--tamanhoHeader);
+}
+
+h1 {
+    font-size: 4rem;
+}
+
+.inicio {
+    display: flex;
+    align-items: center;
+
+    background-image: url("../assets/robos-industriais3.jpg");
+    background-size: cover;
+    background-position: center;
+    background-color: rgba(85, 85, 85, 0.9);
+    background-blend-mode: multiply;
+}
+
+.texto-inicio {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #eeece9;
+}
+
+.texto-inicio h1 {
+    font-size: 4rem;
+}
+
+.texto-inicio h3 {
+    font-size: 1.5rem;
+}
+
+.texto-inicio button {
+    font-size: 1.5rem;
+    color: #e9e9e9;
+    background-color:#26282c00;
+    border-radius: 2rem;
+    padding: 1rem;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    border: 0.2rem solid #e9e9e97c;
+}
+
+.texto-inicio button:hover{
+    background-color: #da771a;
+}
+
+/* Page sobre nós*/
+
+.texto-sobre {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+
+}
+
+.texto-sobre h2 {
+    font-size: 2.5rem;
+    color: #F26716;
+}
+
+.texto-sobre p {
+    color: #26282c;
+}
+
+/*missão da empresa*/
+.missao {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    height: 28rem;
+}
+
+.missao img {
+    width: 9rem;
+}
+
+.miss {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.miss:nth-child(1) {
+    background-color: #eb682b;
+    color: #f3e8de;
+}
+
+.miss:nth-child(2) {
+    background-color: #f3e8de;
+    color: #eb682b;
+}
+
+.miss:nth-child(3) {
+    background-color: #ee8a5b;
+    color: #f3e8de;
+}
+
+.texto-missao {
+    display: flex;
+    padding: 1rem;
+    flex-wrap: wrap;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.texto-missao h3 {
+    font-size: 30px;
+}
+
+.missao>div {
+    flex: 1;
+}
+
+/*Servicos*/
+
+.servicos {
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 2rem;
+}
+
+.texto-servico h2 {
+    font-size: 35px;
+    color: #F26716;
+}
+
+.imagem-servico img {
+    width: 25rem;
+}
+
+/*parte de contato*/
+
+.contato {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 5rem;
+}
+
+.contato img {
+    width: 25rem;
+}
+
+.formulario-home {
+    display: flex;
+    background-color: #26282c;
+    color: #fff;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+    width: 35rem;
+    border-radius: 15px;
+    box-shadow: 10px 20px #da771a;
+}
+
+.campo {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}

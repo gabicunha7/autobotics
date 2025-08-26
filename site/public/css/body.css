@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --tamanhoHeader: 4rem;
+    --tamanhoFooter: var(--tamanhoHeader);
+    --tamanhoPagina: calc(100vh - var(--tamanhoHeader));
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: "Jost", sans-serif;
+    line-height: 1.6;
+    background-color: #e9e9e9;
+    overflow-x: hidden;
+}
+
+.container {
+    margin: auto;
+    width: 80%;
+}
