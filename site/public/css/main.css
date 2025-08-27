@@ -11,7 +11,7 @@ h1 {
     display: flex;
     align-items: center;
 
-    background-image: url("../assets/robos-industriais3.jpg");
+    background-image: url("../assets/fundo/robos-industriais3.jpg");
     background-size: cover;
     background-position: center;
     background-color: rgba(85, 85, 85, 0.9);
@@ -113,7 +113,7 @@ h1 {
 }
 
 .texto-missao h3 {
-    font-size: 30px;
+    font-size: 2rem;
 }
 
 .missao>div {
@@ -131,7 +131,7 @@ h1 {
 }
 
 .texto-servico h2 {
-    font-size: 35px;
+    font-size: 2.2rem;
     color: #F26716;
 }
 
@@ -153,16 +153,16 @@ h1 {
 
 .formulario-home {
     display: flex;
-    background-color: #26282c;
-    color: #fff;
+    background-color: #d1d1d1;
+    color:  #26282c;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     text-align: center;
     flex-direction: column;
     width: 35rem;
-    border-radius: 15px;
-    box-shadow: 10px 20px #da771a;
+    border-radius: 1rem;
+    box-shadow: 0.7rem 1.2rem #da771a;
 }
 
 .campo {
