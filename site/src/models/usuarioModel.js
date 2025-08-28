@@ -1,5 +1,5 @@
 var database = require("../database/config")
-
+/*
 function autenticar(email, senha) {
     console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ", email, senha)
     var instrucaoSql = `
@@ -25,4 +25,42 @@ function cadastrar(nome, email, senha, fkEmpresa) {
 module.exports = {
     autenticar,
     cadastrar
+};*/
+
+function cadastrarFuncionario(
+  fk_empresa,
+  fk_setor,
+  nome,
+  email,
+  senha_hash,
+  cpf,
+  cargo,
+  nivel_de_acesso
+) {
+  var instrucao = `
+    INSERT INTO funcionario
+      (fk_empresa, fk_setor, nome, email, senha_hash, cpf, cargo, nivel_de_acesso)
+    VALUES
+      (${fk_empresa}, ${fk_setor === null ? "NULL" : fk_setor},
+       '${nome}', '${email}', '${senha_hash}',
+       ${cpf    ? `'${cpf}'`    : "NULL"},
+       ${cargo  ? `'${cargo}'`  : "NULL"},
+       ${nivel_de_acesso ? `'${nivel_de_acesso}'` : "NULL"})
+  `;
+  return database.executar(instrucao);
+}
+
+function buscarPorEmail(email) {
+  var instrucao = `
+    SELECT *
+      FROM funcionario
+     WHERE email = '${email}'
+       AND ativo = 1
+  `;
+  return database.executar(instrucao);
+}
+
+module.exports = {
+  cadastrarFuncionario,
+  buscarPorEmail
 };
