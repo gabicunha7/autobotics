@@ -14,7 +14,7 @@ CREATE TABLE empresa (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	razao_social VARCHAR(50),
 	cnpj CHAR(14),
-	codigo_ativacao VARCHAR(50)
+
 );
 
 CREATE TABLE usuario (
