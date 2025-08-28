@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/body.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/form.css">
+
+    <title> Cadastrar - Autobotics </title>
+</head>
+
+<body>
+
+    <header>
+        <section class="container">
+            <a href="index.html">
+                <img src="assets/logo/AUTOBOTICS.png" alt="Logo Autobotics">
+            </a>
+            <nav>
+                <a href="index.html#inicio"> Início </a>
+                <a href="index.html#sobre"> Sobre </a>
+                <a href="index.html#servicos"> Serviços </a>
+                <a href="index.html#contato"> Contato </a>
+                <a href="entrar.html" class="botao"> Entrar </a>
+            </nav>
+        </section>
+    </header>
+
+    <main id="login" class="pagina container">
+        <section class="form">
+            <div class="redirecionar">
+                <h2 class="titulo"> Já possui cadastro? </h2>
+                <a href="login.html" class="botaoLink"> Entre </a>
+            </div>
+
+            <div class="formulario">
+                <h2 class="titulo"> Cadastre-se </h2>
+
+                <label for="nome">
+                    <img src="assets/icones/userImg.png" alt="Icone de usuário" class="iconesPeq">
+                    Nome
+                </label>
+                <input type="text" name="nome" id="nome" placeholder="Digite seu nome">
+
+                <label for="email">
+                    <img src="assets/icones/emailImg.png" alt="Icone de e-mail" class="iconesPeq">
+                    E-mail
+                </label>
+                <input type="email" name="email" id="email" placeholder="Digite seu e-mail">
+
+                <label for="senha">
+                    <img src="assets/icones/senhaImg.png" alt="Icone de senha" class="iconesPeq">
+                    Senha
+                </label>
+                <input type="password" name="senha" id="senha" placeholder="Digite sua senha">
+
+                <label for="conf_senha">
+                    <img src="assets/icones/senhaImg.png" alt="Icone de senha" class="iconesPeq">
+                    Confirmar Senha
+                </label>
+                <input type="password" name="conf_senha" id="conf_senha" placeholder="Confirme sua senha">
+
+                <button class="botaoLink" id="botaoCadastrar"> Cadastrar </button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 - Autobotics | Todos os direitos reservados </p>
+    </footer>
+
+</body>
+
+</html>
