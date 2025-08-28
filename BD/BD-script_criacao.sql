@@ -18,7 +18,7 @@ CREATE TABLE empresa (
   cnpj VARCHAR(20),
   telefone VARCHAR(30),
   fk_endereco INT,
-  codigo_cadastro VARCHAR(100),
+  status ENUM('PENDENTE', 'APROVADA', 'REPROVADA') NOT NULL DEFAULT 'PENDENTE'
   CONSTRAINT fk_empresa_endereco FOREIGN KEY (fk_endereco) REFERENCES endereco(id_endereco)
 );
 
