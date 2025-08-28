@@ -1,8 +1,7 @@
-// src/controllers/empresaController.js
 var enderecoModel = require("../models/enderecoModel");
 var empresaModel = require("../models/empresaModel");
 var usuarioModel = require("../models/usuarioModel");
-
+var database = require("../database/config");
 
 function cadastrar(req, res) {
   var { nome, cnpj, telefone, endereco } = req.body;
@@ -101,7 +100,7 @@ function alterarStatus(req, res) {
           throw { erroTratado: true };
         }
 
-        return funcionarioModel.cadastrarFuncionario(
+        return usuarioModel.cadastrarFuncionario(
           idEmpresa,
           null,
           nomeRep,
