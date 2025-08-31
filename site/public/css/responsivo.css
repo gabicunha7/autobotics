@@ -1,0 +1,43 @@
+@media screen and (max-width: 768px) {
+    .menu-responsivo {
+        display: flex;
+    }
+
+    .menu-normal {
+        display: none;
+    }
+
+    .form {
+        flex-direction: column-reverse;
+    }
+
+    .formulario, .redirecionar, .formulario-home {
+        padding: 1rem 0;
+    }
+
+    .missao, .servicos, .contato {
+        flex-direction: column;
+    }
+    
+    #sobre, #servicos, #contato {
+        margin-top: 3rem;
+    }
+
+    .figura {
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .menu-normal {
+        display: flex;
+    }
+    
+    .menu-responsivo {
+        display: none;
+    }
+
+    .elemento-vazio {
+        display: none;
+    }
+}

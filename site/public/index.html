@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/form.css">
+    <link rel="stylesheet" href="css/responsivo.css">
+
 
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <title> Home - Autobotics </title>
@@ -18,16 +20,46 @@
 
     <header>
         <section class="container">
-            <a href="index.html">
+            <nav class="menu-responsivo">
+                <input type="checkbox" name="chk_hamburguer" id="chk_hamburguer" class="check_hamburguer">
+
+                <section class="hamburguer">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </section>
+                <ul>
+                    <li>
+                        <a href="index.html#inicio"> Início </a>
+                    </li>
+                    <li>
+                        <a href="index.html#sobre"> Sobre </a>
+                    </li>
+                    <li>
+                        <a href="index.html#servicos"> Serviços </a>
+                    </li>
+                    <li>
+                        <a href="index.html#contato"> Contato </a>
+                    </li>
+                    <li>
+                        <a href="login.html"> Entrar </a>
+                    </li>
+                </ul>
+            </nav>
+
+
+            <a class="link-logo" href="index.html">
                 <img src="assets/logo/AUTOBOTICS.png" alt="Logo Autobotics">
             </a>
-            <nav>
-                <a href="#inicio"> Início </a>
-                <a href="#sobre"> Sobre </a>
-                <a href="#servicos"> Serviços </a>
-                <a href="#contato"> Contato </a>
+            <nav class="menu-normal">
+                <a href="index.html#inicio"> Início </a>
+                <a href="index.html#sobre"> Sobre </a>
+                <a href="index.html#servicos"> Serviços </a>
+                <a href="index.html#contato"> Contato </a>
                 <a href="login.html" class="botao"> Entrar </a>
             </nav>
+
+            <span class="elemento-vazio"></span>
         </section>
     </header>
 
@@ -106,12 +138,12 @@
                 </p>
             </div>
             <div class="imagem-servico">
-                <img src="assets/fundo/Automação.png" alt="">
+                <img src="assets/fundo/Automação.png" alt="" class="figura">
             </div>
         </div>
         <div class="servicos">
             <div class="imagem-servico">
-                <img src="assets/fundo/Automação2.png" alt="">
+                <img src="assets/fundo/Automação2.png" alt="" class="figura">
             </div>
             <div class="texto-servico">
                 <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. A, nihil eaque repellendus itaque,
@@ -134,22 +166,19 @@
 
         <div class="contato">
             <div class="formulario-home">
-                <form action="">
-                    <div class="campo">
-                        <label for="">aaaaaaaa</label>
-                        <input type="" name="" id="">
-                    </div>
-                    <div class="campo">
-                        <label for="">aaaaaaaa</label>
-                        <input type="" name="" id="">
-                    </div>
-                    <div class="campo">
-                        <label for="">aaaaaaaa</label>
-                        <input type="" name="" id="">
-                    </div>
-                </form>
+                <h2 class="titulo"> Fale Conosco </h2>
+
+                <label for="">aaaaaaaa</label>
+                <input type="" name="" id="">
+
+                <label for="">aaaaaaaa</label>
+                <input type="" name="" id="">
+
+                <label for="">aaaaaaaa</label>
+                <input type="" name="" id="">
             </div>
-            <img src="assets/fundo/contate-nos.png" alt="">
+        
+            <img src="assets/fundo/contate-nos.png" alt="" class="figura">
 
         </div>
 
