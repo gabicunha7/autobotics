@@ -1,5 +1,5 @@
 footer {
-    height: var(--tamanhoFooter);
+    min-height: var(--tamanhoFooter);
     background: #333;
     color: #fff;
     text-align: center;
