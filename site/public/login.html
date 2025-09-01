@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/footer.css">
     <link rel="stylesheet" href="css/form.css">
+    <link rel="stylesheet" href="css/responsivo.css">
+
 
     <title> Entrar - Autobotics </title>
 </head>
@@ -17,16 +19,46 @@
 
     <header>
         <section class="container">
-            <a href="index.html">
+             <nav class="menu-responsivo">
+                <input type="checkbox" name="chk_hamburguer" id="chk_hamburguer" class="check_hamburguer">
+
+                <section class="hamburguer">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </section>
+                <ul>
+                    <li>
+                        <a href="index.html#inicio"> Início </a>
+                    </li>
+                    <li>
+                        <a href="index.html#sobre"> Sobre </a>
+                    </li>
+                    <li>
+                        <a href="index.html#servicos"> Serviços </a>
+                    </li>
+                    <li>
+                        <a href="index.html#contato"> Contato </a>
+                    </li>
+                    <li>
+                        <a href="login.html"> Entrar </a>
+                    </li>
+                </ul>
+            </nav>
+
+
+            <a class="link-logo" href="index.html">
                 <img src="assets/logo/AUTOBOTICS.png" alt="Logo Autobotics">
             </a>
-            <nav>
+            <nav class="menu-normal">
                 <a href="index.html#inicio"> Início </a>
                 <a href="index.html#sobre"> Sobre </a>
                 <a href="index.html#servicos"> Serviços </a>
                 <a href="index.html#contato"> Contato </a>
-                <a href="entrar.html" class="botao"> Entrar </a>
+                <a href="login.html" class="botao"> Entrar </a>
             </nav>
+
+            <span class="elemento-vazio"></span>
         </section>
     </header>
 

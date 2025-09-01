@@ -69,12 +69,16 @@ h1 {
     color: #26282c;
 }
 
+.figura {
+    width: 25rem;
+}
+
 /*missão da empresa*/
 .missao {
     display: flex;
     flex-wrap: nowrap;
     justify-content: center;
-    height: 28rem;
+    min-height: 28rem;
 }
 
 .missao img {
@@ -135,23 +139,17 @@ h1 {
     color: #F26716;
 }
 
-.imagem-servico img {
-    width: 25rem;
-}
-
 /*parte de contato*/
 
 .contato {
     display: flex;
-    flex-wrap: nowrap;
-    gap: 5rem;
-}
-
-.contato img {
-    width: 25rem;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
 }
 
 .formulario-home {
+    width: 100%;
     display: flex;
     background-color: #d1d1d1;
     color:  #26282c;
@@ -160,8 +158,8 @@ h1 {
     align-items: center;
     text-align: center;
     flex-direction: column;
-    width: 35rem;
     border-radius: 1rem;
+    padding: 1rem 0;
     box-shadow: 0.7rem 1.2rem #da771a;
 }
 
