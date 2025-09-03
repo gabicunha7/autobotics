@@ -4,61 +4,74 @@ var usuarioModel = require("../models/usuarioModel");
 var database = require("../database/config");
 
 function cadastrar(req, res) {
-  var { nome, cnpj, telefone, endereco } = req.body;
-  if (!nome || !cnpj || !endereco) {
+  var {
+    nome,
+    cnpj,
+    endereco,
+    nomeRepresentante,
+    emailRepresentante,
+    senhaRepresentante
+  } = req.body;
+
+  if (!nome || !cnpj || !endereco
+      || !nomeRepresentante || !emailRepresentante || !senhaRepresentante) {
     return res.status(400).json({
-      mensagem: "'nome', 'cnpj' e 'endereco' são obrigatórios."
+      mensagem:
+        "Informe nome, cnpj, endereco e nome/email/senha do representante."
     });
   }
 
-  var idEnderecoCriado;
+  let idEnderecoCriado, idEmpresaCriada;
 
-  empresaModel.buscarPorCnpj(cnpj)
-    .then(function (achou) {
-      if (achou.length > 0) {
-        res.status(409).json({ mensagem: `CNPJ ${cnpj} já cadastrado.` });
-        throw { erroTratado: true };
-      }
-      return enderecoModel.cadastrarEndereco(
-        endereco.estado,
-        endereco.cidade,
-        endereco.bairro,
-        endereco.logradouro,
-        endereco.cep
-      );
-    })
-    .then(function (resultadoEndereco) {
-      idEnderecoCriado = resultadoEndereco.insertId;
-      return empresaModel.cadastrar(
-        nome,
-        cnpj,
-        telefone,
-        idEnderecoCriado
-      );
-    })
-    .then(function (resultadoEmpresa) {
-      res.status(201).json({
-        idEmpresa: resultadoEmpresa.insertId,
-        nome,
-        cnpj,
-        telefone,
-        endereco: {
-          idEndereco: idEnderecoCriado,
-          ...endereco
-        }
-      });
-    })
-    .catch(function (erro) {
-      if (idEnderecoCriado && !erro.erroTratado) {
-        database.executar(
-          `DELETE FROM endereco WHERE id_endereco = ${idEnderecoCriado}`
-        );
-      }
-      if (!erro.erroTratado) {
-        console.error("Falha ao registrar empresa:", erro);
-        res.status(500).json({ mensagem: "Erro interno ao cadastrar empresa." });
-      }
+  enderecoModel.cadastrarEndereco(
+    endereco.estado,
+    endereco.cidade,
+    endereco.bairro,
+    endereco.logradouro,
+    endereco.cep
+  )
+  .then(function(resultEnd) {
+    idEnderecoCriado = resultEnd.insertId;
+
+    return empresaModel.cadastrar(
+      nome, cnpj, idEnderecoCriado
+    );
+  })
+  .then(function(resultEmp) {
+    idEmpresaCriada = resultEmp.insertId;
+
+    
+    return  usuarioModel.cadastrarFuncionario(
+      idEmpresaCriada,
+      null,                  
+      nomeRepresentante,
+      emailRepresentante,
+      senhaRepresentante,
+      null, null,
+      "REPRESENTANTE"
+    );
+  })
+  .then(function(resultRep) {
+    res.status(201).json({
+      idEmpresa:              idEmpresaCriada,
+      idEndereco:             idEnderecoCriado,
+      idUsuarioRepresentante: resultRep.insertId
     });
+  })
+  .catch(function(err) {
+    if (idEmpresaCriada) {
+      database.executar(
+        `DELETE FROM empresa  WHERE id_empresa  = ${idEmpresaCriada}`
+      );
+    }
+    if (idEnderecoCriado) {
+      database.executar(
+        `DELETE FROM endereco WHERE id_endereco = ${idEnderecoCriado}`
+      );
+    }
+    console.error("Erro no cadastro completo:", err);
+    res.status(500).json({ mensagem: "Erro interno no cadastro." });
+  });
 }
 
 
@@ -131,6 +144,16 @@ function alterarStatus(req, res) {
     });
 }
 
+function listar(req, res) {
+  empresaModel.listarTodas()
+    .then(empresas => res.status(200).json(empresas))
+    .catch(err => {
+      console.error("Erro ao listar empresas:", err);
+      res.status(500).json({ mensagem: "Erro interno ao listar empresas." });
+    });
+}
 
 
-module.exports = { cadastrar, alterarStatus };
+
+
+module.exports = { cadastrar, alterarStatus, listar};

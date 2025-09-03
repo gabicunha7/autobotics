@@ -1,31 +1,5 @@
-var database = require("../database/config")
-/*
-function autenticar(email, senha) {
-    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function entrar(): ", email, senha)
-    var instrucaoSql = `
-        SELECT id, nome, email, fk_empresa as empresaId FROM usuario WHERE email = '${email}' AND senha = '${senha}';
-    `;
-    console.log("Executando a instrução SQL: \n" + instrucaoSql);
-    return database.executar(instrucaoSql);
-}
-
-// Coloque os mesmos parâmetros aqui. Vá para a var instrucaoSql
-function cadastrar(nome, email, senha, fkEmpresa) {
-    console.log("ACESSEI O USUARIO MODEL \n \n\t\t >> Se aqui der erro de 'Error: connect ECONNREFUSED',\n \t\t >> verifique suas credenciais de acesso ao banco\n \t\t >> e se o servidor de seu BD está rodando corretamente. \n\n function cadastrar():", nome, email, senha, fkEmpresa);
-    
-    // Insira exatamente a query do banco aqui, lembrando da nomenclatura exata nos valores
-    //  e na ordem de inserção dos dados.
-    var instrucaoSql = `
-        INSERT INTO usuario (nome, email, senha, fk_empresa) VALUES ('${nome}', '${email}', '${senha}', '${fkEmpresa}');
-    `;
-    console.log("Executando a instrução SQL: \n" + instrucaoSql);
-    return database.executar(instrucaoSql);
-}
-
-module.exports = {
-    autenticar,
-    cadastrar
-};*/
+// src/models/funcionarioModel.js
+var database = require("../database/config");
 
 function cadastrarFuncionario(
   fk_empresa,
@@ -37,30 +11,50 @@ function cadastrarFuncionario(
   cargo,
   nivel_de_acesso
 ) {
-  var instrucao = `
+  var sql = `
     INSERT INTO funcionario
       (fk_empresa, fk_setor, nome, email, senha_hash, cpf, cargo, nivel_de_acesso)
     VALUES
       (${fk_empresa}, ${fk_setor === null ? "NULL" : fk_setor},
-       '${nome}', '${email}', '${senha_hash}',
+       '${nome}',    '${email}',    '${senha_hash}',
        ${cpf    ? `'${cpf}'`    : "NULL"},
        ${cargo  ? `'${cargo}'`  : "NULL"},
-       ${nivel_de_acesso ? `'${nivel_de_acesso}'` : "NULL"})
+       '${nivel_de_acesso}')
   `;
-  return database.executar(instrucao);
+  return database.executar(sql);
 }
 
 function buscarPorEmail(email) {
-  var instrucao = `
+  var sql = `
     SELECT *
       FROM funcionario
      WHERE email = '${email}'
        AND ativo = 1
   `;
-  return database.executar(instrucao);
+  return database.executar(sql);
+}
+
+
+function buscarPorEmailComStatus(email) {
+  var sql = `
+    SELECT
+      f.id_funcionario,
+      f.nome,
+      f.email,
+      f.senha_hash,
+      f.nivel_de_acesso,
+      e.status AS status_empresa
+    FROM funcionario AS f
+    JOIN empresa    AS e
+      ON f.fk_empresa = e.id_empresa
+    WHERE f.email = '${email}'
+      AND f.ativo = 1
+  `;
+  return database.executar(sql);
 }
 
 module.exports = {
   cadastrarFuncionario,
-  buscarPorEmail
+  buscarPorEmail,
+  buscarPorEmailComStatus
 };

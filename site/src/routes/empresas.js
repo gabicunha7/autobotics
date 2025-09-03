@@ -30,9 +30,8 @@ router.get("/buscar/:id", function (req, res) {
     empresaController.buscarPorId(req, res);
 });
 
-router.get("/listar", function (req, res) {
-  empresaController.listar(req, res);
-});
+router.get("/", empresaController.listar);
+
 
 router.patch("/:id/status", function (req, res) {
   empresaController.alterarStatus(req, res);
