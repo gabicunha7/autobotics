@@ -93,6 +93,54 @@
         <p>&copy; 2025 - Autobotics | Todos os direitos reservados </p>
     </footer>
 
-</body>
+<script>
+  
+    const inputEmail = document.getElementById("email");
+    const inputSenha = document.getElementById("senha");
+    const botaoEntrar = document.getElementById("botaoEntrar");
 
+    botaoEntrar.addEventListener("click", function(event) {
+      event.preventDefault(); 
+
+      const email = inputEmail.value.trim();
+      const senha = inputSenha.value;
+
+      if (!email || !senha) {
+        alert("Preencha e-mail e senha para entrar.");
+        return;
+      }
+
+
+      if (email == "root" && senha == "Sptech#2024"){
+        window.location.href = "empresas.html";
+        console.log("Bem vindo admin")
+      }
+
+
+      fetch("/usuarios/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, senha })
+      })
+      .then(async response => {
+        const data = await response.json();
+        if (!response.ok) {
+          
+          alert(data.mensagem || "Erro ao realizar login");
+          return;
+        }
+     
+        alert(`Olá ${data.nome}! Login efetuado.`);
+     
+        window.location.href = "dashboard.html";
+      })
+      .catch(err => {
+        console.error("Falha na requisição de login:", err);
+        alert("Não foi possível conectar ao servidor.");
+      });
+    });
+  </script>
+</body>
 </html>

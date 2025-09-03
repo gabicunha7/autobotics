@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Empresas – Autobotics</title>
+  <link rel="stylesheet" href="css/body.css"/>
+  <link rel="stylesheet" href="css/header.css"/>
+  <link rel="stylesheet" href="css/main.css"/>
+  <link rel="stylesheet" href="css/form.css"/>
+  <link rel="stylesheet" href="css/responsivo.css"/>
+  <style>
+   
+    .card {
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+    .card-header {
+      padding: 1rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #fff;
+    }
+    .card-body {
+      padding: 1rem;
+    }
+    .btn-aprovar {
+      background: #28a745;
+      color: #fff;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn-reprovar {
+      background: #dc3545;
+      color: #fff;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-left: 0.5rem;
+    }
+    .tabela-empresas {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .tabela-empresas th,
+    .tabela-empresas td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    .tabela-empresas tbody tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+
+</header>
+
+<main class="pagina container">
+  <div class="card">
+    <div class="card-header" style="background:#f0ad4e;">
+      Empresas Pendentes
+    </div>
+    <div class="card-body">
+      <table class="tabela-empresas">
+        <thead>
+          <tr>
+            <th>ID</th><th>Nome</th><th>CNPJ</th><th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="pendentes-body">
+    
+        </tbody>
+      </table>
+      <p id="nenhuma-pendente" class="mensagem-vazia" style="display:none; margin-top:1rem;">
+        Nenhuma empresa pendente
+      </p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" style="background:#5cb85c;">
+      Empresas Aprovadas
+    </div>
+    <div class="card-body">
+      <table class="tabela-empresas">
+        <thead>
+          <tr>
+            <th>ID</th><th>Nome</th><th>CNPJ</th>
+          </tr>
+        </thead>
+        <tbody id="aprovadas-body">
+    
+        </tbody>
+      </table>
+      <p id="nenhuma-aprovada" class="mensagem-vazia" style="display:none; margin-top:1rem;">
+        Nenhuma empresa aprovada
+      </p>
+    </div>
+  </div>
+</main>
+
+<footer>
+ 
+</footer>
+
+<script>
+  window.addEventListener("DOMContentLoaded", function() {
+    fetch("/empresas")
+      .then(res => res.json())
+      .then(empresas => {
+        const pendentes = empresas.filter(e => e.status === "PENDENTE");
+        const aprovadas = empresas.filter(e => e.status === "APROVADA");
+        preencherPendentes(pendentes);
+        preencherAprovadas(aprovadas);
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Falha ao carregar empresas.");
+      });
+  });
+
+  function preencherPendentes(lista) {
+    const tbody = document.getElementById("pendentes-body");
+    const msg   = document.getElementById("nenhuma-pendente");
+    tbody.innerHTML = "";
+    if (!lista.length) {
+      msg.style.display = "block";
+      return;
+    }
+    msg.style.display = "none";
+    lista.forEach(emp => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${emp.idEmpresa}</td>
+        <td>${emp.nome}</td>
+        <td>${emp.cnpj}</td>
+        <td>
+          <button class="btn-aprovar" data-id="${emp.idEmpresa}" data-acao="APROVADA">Aprovar</button>
+          <button class="btn-reprovar" data-id="${emp.idEmpresa}" data-acao="REPROVADA">Reprovar</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+    tbody.querySelectorAll("button").forEach(btn =>
+      btn.addEventListener("click", handleStatusChange)
+    );
+  }
+
+  function preencherAprovadas(lista) {
+    const tbody = document.getElementById("aprovadas-body");
+    const msg   = document.getElementById("nenhuma-aprovada");
+    tbody.innerHTML = "";
+    if (!lista.length) {
+      msg.style.display = "block";
+      return;
+    }
+    msg.style.display = "none";
+    lista.forEach(emp => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${emp.idEmpresa}</td>
+        <td>${emp.nome}</td>
+        <td>${emp.cnpj}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function handleStatusChange(e) {
+    const btn = e.currentTarget;
+    const id  = btn.getAttribute("data-id");
+    const status = btn.getAttribute("data-acao");
+    fetch(`/empresas/${id}/status`, {
+      method: "PATCH",
+      headers: { "Content-Type":"application/json" },
+      body: JSON.stringify({ status })
+    })
+    .then(async res => {
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.mensagem||"Erro");
+      alert(`Empresa ${id} ${status.toLowerCase()}.`);
+      window.location.reload();
+    })
+    .catch(err => {
+      console.error(err);
+      alert(err.message);
+    });
+  }
+</script>
+</body>
+</html>

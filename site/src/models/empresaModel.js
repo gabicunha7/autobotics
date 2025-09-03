@@ -1,15 +1,17 @@
 var database = require("../database/config");
 
 
-function cadastrar(nome, cnpj, telefone, fk_endereco) {
+function cadastrar(nome, cnpj, fk_endereco) {
   var instrucao = `
     INSERT INTO empresa
-      (nome, cnpj, telefone, fk_endereco)
+      (nome, cnpj, fk_endereco)
     VALUES
-      ('${nome}', '${cnpj}', '${telefone}', ${fk_endereco})
+      ('${nome}', '${cnpj}', ${fk_endereco})
   `;
   return database.executar(instrucao);
 }
+
+
 
 function buscarPorCnpj(cnpj) {
   var instrucao = `SELECT * FROM empresa WHERE cnpj = '${cnpj}'`;
@@ -32,9 +34,19 @@ function buscarPorId(idEmpresa) {
   return database.executar(instrucao);
 }
 
+function listarTodas() {
+  var sql = `SELECT id_empresa  AS idEmpresa,
+                    nome,
+                    cnpj,
+                    status
+               FROM empresa`;
+  return database.executar(sql);
+}
+
 module.exports = {
   buscarPorId,
   buscarPorCnpj,
   cadastrar,
-  atualizarStatus
+  atualizarStatus,
+  listarTodas
 };
