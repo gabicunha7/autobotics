@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cadastrar Empresa – Autobotics</title>
   <link rel="stylesheet" href="css/body.css" />
   <link rel="stylesheet" href="css/header.css" />
@@ -11,50 +12,51 @@
   <link rel="stylesheet" href="css/footer.css">
   <link rel="stylesheet" href="css/responsivo.css" />
 </head>
+
 <body>
 
   <header>
-     <section class="container">
-         <nav class="menu-responsivo">
-            <input type="checkbox" name="chk_hamburguer" id="chk_hamburguer" class="check_hamburguer">
+    <section class="container">
+      <nav class="menu-responsivo">
+        <input type="checkbox" name="chk_hamburguer" id="chk_hamburguer" class="check_hamburguer">
 
-            <section class="hamburguer">
-                <span></span>
-                <span></span>
-                <span></span>
-            </section>
-            <ul>
-                <li>
-                    <a href="index.html#inicio"> Início </a>
-                </li>
-                <li>
-                    <a href="index.html#sobre"> Sobre </a>
-                </li>
-                <li>
-                    <a href="index.html#servicos"> Serviços </a>
-                </li>
-                <li>
-                    <a href="index.html#contato"> Contato </a>
-                </li>
-                <li>
-                    <a href="login.html"> Entrar </a>
-                </li>
-            </ul>
-        </nav>
-
-
-        <a class="link-logo" href="index.html">
-            <img src="assets/logo/AUTOBOTICS.png" alt="Logo Autobotics">
-        </a>
-        <nav class="menu-normal">
+        <section class="hamburguer">
+          <span></span>
+          <span></span>
+          <span></span>
+        </section>
+        <ul>
+          <li>
             <a href="index.html#inicio"> Início </a>
+          </li>
+          <li>
             <a href="index.html#sobre"> Sobre </a>
+          </li>
+          <li>
             <a href="index.html#servicos"> Serviços </a>
+          </li>
+          <li>
             <a href="index.html#contato"> Contato </a>
-            <a href="login.html" class="botao"> Entrar </a>
-        </nav>
+          </li>
+          <li>
+            <a href="login.html"> Entrar </a>
+          </li>
+        </ul>
+      </nav>
 
-        <span class="elemento-vazio"></span>
+
+      <a class="link-logo" href="index.html">
+        <img src="assets/logo/AUTOBOTICS.png" alt="Logo Autobotics">
+      </a>
+      <nav class="menu-normal">
+        <a href="index.html#inicio"> Início </a>
+        <a href="index.html#sobre"> Sobre </a>
+        <a href="index.html#servicos"> Serviços </a>
+        <a href="index.html#contato"> Contato </a>
+        <a href="login.html" class="botao"> Entrar </a>
+      </nav>
+
+      <span class="elemento-vazio"></span>
     </section>
   </header>
 
@@ -65,76 +67,88 @@
         <a href="login.html" class="botaoLink">Entrar</a>
       </div>
 
-      <form id="formCadastro" class="formulario">
+      <div id="formCadastro" class="formulario">
         <h2 class="titulo">Cadastro de Empresa</h2>
 
-        <!-- Dados da Empresa -->
-        <label for="nome_empresa">
-             <img src="assets/icones/userImg.png" alt="Icone de usuário" class="iconesPeq">
-            Nome da Empresa
-        </label>
-        <input type="text" id="nome_empresa" name="nome_empresa" placeholder="Digite o nome da sua empresa" required />
+        <section class="carrossel-cadastro">
+          <div class="slide">
 
-        <label for="cnpj">
-            <img src="assets/icones/userImg.png" alt="Icone de usuário" class="iconesPeq">
-            CNPJ
-        </label>
-        <input type="text" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00" required />
-        
-        <!-- Endereço -->
-        <h3>Endereço</h3>
-        <label for="estado">
-            <img src="assets/icones/userImg.png" alt="Icone de usuário" class="iconesPeq">
-            Estado
-        </label>
-        <input type="text" id="estado" name="estado" placeholder="SP" required />
+            <h3 class="subtitulo"> Empresa </h3>
+            <label for="nome_empresa">
+              <img src="assets/icones/userImg.png" alt="Icone de usuário" class="iconesPeq">
+              Nome da Empresa
+            </label>
+            <input type="text" id="nome_empresa" name="nome_empresa" placeholder="Digite o nome da sua empresa" />
 
-        <label for="cidade">
-            <img src="assets/icones/userImg.png" alt="Icone de usuário" class="iconesPeq">
-            Cidade
-        </label>
-        <input type="text" id="cidade" name="cidade" placeholder="São Paulo" required />
+            <label for="cnpj">
+              <img src="assets/icones/userImg.png" alt="Icone de usuário" class="iconesPeq">
+              CNPJ
+            </label>
+            <input type="text" id="cnpj" name="cnpj" placeholder="00.000.000/0000-00" />
 
-        <label for="bairro">
-            <img src="assets/icones/userImg.png" alt="Icone de usuário" class="iconesPeq">
-            Bairro
-        </label>
-        <input type="text" id="bairro" name="bairro" placeholder="Centro" />
+            <h3 class="subtitulo"> Representante </h3>
+            <label for="nome_representante">
+              <img src="assets/icones/userImg.png" alt="Icone de usuário" class="iconesPeq">
+              Nome do Representante
+            </label>
+            <input type="text" id="nome_representante" name="nome_representante" placeholder="Digite o nome" />
 
-        <label for="logradouro">
-            <img src="assets/icones/userImg.png" alt="Icone de usuário" class="iconesPeq">
-            Logradouro
-        </label>
-        <input type="text" id="logradouro" name="logradouro" placeholder="Rua das Flores, 100" />
+            <label for="email_representante">
+              <img src="assets/icones/emailImg.png" alt="Icone de e-mail" class="iconesPeq">
+              E-mail do Representante
+            </label>
+            <input type="email" id="email_representante" name="email_representante" placeholder="contato@empresa.com" />
 
-        <label for="cep">
-            <img src="assets/icones/userImg.png" alt="Icone de usuário" class="iconesPeq">
-            CEP
-        </label>
-        <input type="text" id="cep" name="cep" placeholder="01001-000" required />
+            <label for="senha_representante">
+              <img src="assets/icones/senhaImg.png" alt="Icone de senha" class="iconesPeq">
+              Senha Provisória
+            </label>
+            <input type="password" id="senha_representante" name="senha_representante" placeholder="Mínimo 6 caracteres"
+              minlength="6" />
 
-        <!-- Representante -->
-        <h3>Representante</h3>
-        <label for="nome_representante">
-            <img src="assets/icones/userImg.png" alt="Icone de usuário" class="iconesPeq">
-            Nome do Representante
-        </label>
-        <input type="text" id="nome_representante" name="nome_representante" placeholder="Digite o nome" required />
+            <button class="botaoLink" onclick="validarEmpresa()"> Avançar</button>
+          </div>
 
-        <label for="email_representante">
-            <img src="assets/icones/emailImg.png" alt="Icone de e-mail" class="iconesPeq">
-            E-mail do Representante
-        </label>
-        <input type="email" id="email_representante" name="email_representante" placeholder="contato@empresa.com" required />
+          <div class="slide">
+            <h3 class="subtitulo"> Endereço </h3>
+            <label for="estado">
+              <img src="assets/icones/userImg.png" alt="Icone de usuário" class="iconesPeq">
+              Estado
+            </label>
+            <input type="text" id="estado" name="estado" placeholder="SP" />
 
-        <label for="senha_representante">
-            <img src="assets/icones/senhaImg.png" alt="Icone de senha" class="iconesPeq">
-            Senha Provisória
-        </label>
-        <input type="password" id="senha_representante" name="senha_representante" placeholder="Mínimo 6 caracteres" minlength="6" required />
+            <label for="cidade">
+              <img src="assets/icones/userImg.png" alt="Icone de usuário" class="iconesPeq">
+              Cidade
+            </label>
+            <input type="text" id="cidade" name="cidade" placeholder="São Paulo" />
 
-        <button type="submit" class="botaoLink">Cadastrar Empresa</button>
-      </form>
+            <label for="bairro">
+              <img src="assets/icones/userImg.png" alt="Icone de usuário" class="iconesPeq">
+              Bairro
+            </label>
+            <input type="text" id="bairro" name="bairro" placeholder="Centro" />
+
+            <label for="logradouro">
+              <img src="assets/icones/userImg.png" alt="Icone de usuário" class="iconesPeq">
+              Logradouro
+            </label>
+            <input type="text" id="logradouro" name="logradouro" placeholder="Rua das Flores, 100" />
+
+            <label for="cep">
+              <img src="assets/icones/userImg.png" alt="Icone de usuário" class="iconesPeq">
+              CEP
+            </label>
+            <input type="text" id="cep" name="cep" placeholder="01001-000" />
+
+            <div class="botoes">
+              <button class="botaoLink" onclick="avancar(0)"> Voltar </button>
+              <button type="submit" class="botaoLink"> Cadastrar </button>
+            </div>
+
+          </div>
+        </section>
+      </div>
     </section>
   </main>
 
@@ -142,23 +156,24 @@
     <p>&copy; 2025 – Autobotics | Todos os direitos reservados</p>
   </footer>
 
+  <script src="js/carrossel.js"></script>
   <script>
-    document.getElementById("formCadastro").addEventListener("submit", function(event) {
+    document.getElementById("formCadastro").addEventListener("submit", function (event) {
       event.preventDefault();
 
       const dados = {
         nome: document.getElementById("nome_empresa").value.trim(),
         cnpj: document.getElementById("cnpj").value.trim(),
         endereco: {
-          estado:   document.getElementById("estado").value.trim(),
-          cidade:   document.getElementById("cidade").value.trim(),
-          bairro:   document.getElementById("bairro").value.trim(),
+          estado: document.getElementById("estado").value.trim(),
+          cidade: document.getElementById("cidade").value.trim(),
+          bairro: document.getElementById("bairro").value.trim(),
           logradouro: document.getElementById("logradouro").value.trim(),
-          cep:      document.getElementById("cep").value.trim()
+          cep: document.getElementById("cep").value.trim()
         },
-        nomeRepresentante:   document.getElementById("nome_representante").value.trim(),
-        emailRepresentante:  document.getElementById("email_representante").value.trim(),
-        senhaRepresentante:  document.getElementById("senha_representante").value
+        nomeRepresentante: document.getElementById("nome_representante").value.trim(),
+        emailRepresentante: document.getElementById("email_representante").value.trim(),
+        senhaRepresentante: document.getElementById("senha_representante").value
       };
 
       fetch("/empresas/cadastrar", {
@@ -168,20 +183,21 @@
         },
         body: JSON.stringify(dados)
       })
-      .then(async response => {
-        const data = await response.json();
-        if (!response.ok) {
-          throw new Error(data.mensagem || "Erro ao cadastrar a empresa");
-        }
-        alert(`Empresa cadastrada: ID ${data.idEmpresa}\nRepresentante: ID ${data.idUsuarioRepresentante}`);
-        window.location.href = "login.html";
-      })
-      .catch(error => {
-        alert(error.message);
-        console.error("Falha no cadastro:", error);
-      });
+        .then(async response => {
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.mensagem || "Erro ao cadastrar a empresa");
+          }
+          alert(`Empresa cadastrada: ID ${data.idEmpresa}\nRepresentante: ID ${data.idUsuarioRepresentante}`);
+          window.location.href = "login.html";
+        })
+        .catch(error => {
+          alert(error.message);
+          console.error("Falha no cadastro:", error);
+        });
     });
   </script>
 
 </body>
+
 </html>
