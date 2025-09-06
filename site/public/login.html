@@ -19,7 +19,7 @@
 
     <header>
         <section class="container">
-             <nav class="menu-responsivo">
+            <nav class="menu-responsivo">
                 <input type="checkbox" name="chk_hamburguer" id="chk_hamburguer" class="check_hamburguer">
 
                 <section class="hamburguer">
@@ -84,63 +84,23 @@
                 </label>
                 <input type="password" name="senha" id="senha" placeholder="Digite sua senha">
 
-                <button class="botaoLink" id="botaoEntrar"> Entrar </button>
+                <button class="botaoLink" onclick="validar()"> Entrar </button>
             </div>
         </section>
+
+        <div id="div_aguardar" class="loading-div">
+            <img src="assets//icones/userImg.png" alt="Icone logo aguardar">
+            <div class="borda_aguardar"></div>
+        </div>
+        <div id="div_erros_login"></div>
     </main>
 
     <footer>
         <p>&copy; 2025 - Autobotics | Todos os direitos reservados </p>
     </footer>
 
-<script>
-  
-    const inputEmail = document.getElementById("email");
-    const inputSenha = document.getElementById("senha");
-    const botaoEntrar = document.getElementById("botaoEntrar");
-
-    botaoEntrar.addEventListener("click", function(event) {
-      event.preventDefault(); 
-
-      const email = inputEmail.value.trim();
-      const senha = inputSenha.value;
-
-      if (!email || !senha) {
-        alert("Preencha e-mail e senha para entrar.");
-        return;
-      }
-
-
-      if (email == "root" && senha == "Sptech#2024"){
-        window.location.href = "empresas.html";
-        console.log("Bem vindo admin")
-      }
-
-
-      fetch("/usuarios/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ email, senha })
-      })
-      .then(async response => {
-        const data = await response.json();
-        if (!response.ok) {
-          
-          alert(data.mensagem || "Erro ao realizar login");
-          return;
-        }
-     
-        alert(`Olá ${data.nome}! Login efetuado.`);
-     
-        window.location.href = "dashboard.html";
-      })
-      .catch(err => {
-        console.error("Falha na requisição de login:", err);
-        alert("Não foi possível conectar ao servidor.");
-      });
-    });
-  </script>
+    <script src="js/loginEmpresa.js"></script>
+    <script src="js/sessao.js"></script>
 </body>
+
 </html>

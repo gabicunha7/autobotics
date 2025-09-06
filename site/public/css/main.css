@@ -168,3 +168,48 @@ h1 {
     flex-wrap: wrap;
     flex-direction: column;
 }
+
+/* Aguardar */
+#div_aguardar {
+    display: none;
+    position: fixed;
+    top: 0px;
+    left: 0;
+    height: 100%;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.379);
+    justify-content: center;
+    align-items: center;
+}
+
+#div_aguardar img {
+    width: 6rem;
+    height: fit-content;
+    position: relative;
+}
+
+#div_aguardar .borda_aguardar {
+    position: absolute;
+    width: 7rem;
+    height: 7rem;
+    border-radius: 50%;
+    border: 0.2rem solid #26282c;
+    border-top-color: #da771a;
+    animation: linear infinite 1s aguardar;
+}
+
+@keyframes aguardar {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+#div_erros_login {
+    display: none;
+    position: fixed;
+    left: 1rem;
+    bottom: 1rem;
+    color: #f3e8de;
+    background-color: #9b0202;
+    padding: 2rem;
+}

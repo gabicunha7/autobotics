@@ -34,7 +34,7 @@ router.get("/", empresaController.listar);
 
 
 router.patch("/:id/status", function (req, res) {
-  empresaController.alterarStatus(req, res);
+    empresaController.alterarStatus(req, res);
 });
 
 module.exports = router;

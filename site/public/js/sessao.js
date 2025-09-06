@@ -31,6 +31,11 @@ function finalizarAguardar(texto) {
     if (texto) {
         divErrosLogin.style.display = "flex";
         divErrosLogin.innerHTML = texto;
+
+        setTimeout(() => {
+            divErrosLogin.style.display = 'none';
+        }, 4000);
     }
 }
+
 
