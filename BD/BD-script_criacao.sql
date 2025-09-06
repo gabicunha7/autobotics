@@ -48,7 +48,6 @@ CREATE TABLE funcionario (
   nome VARCHAR(150) NOT NULL,
   email VARCHAR(150) NOT NULL,
   senha_hash VARCHAR(255) NOT NULL,
-  cpf VARCHAR(20) NOT NULL,
   ativo TINYINT(1) DEFAULT 1,
   fk_empresa INT NOT NULL,
   fk_setor INT,
