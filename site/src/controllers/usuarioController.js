@@ -11,7 +11,7 @@ function login(req, res) {
             .json({ mensagem: "'email' e 'senha' são obrigatórios." });
     }
 
-    usuarioModel.buscarPorEmailComStatus(email)
+    usuarioModel.buscarPorEmailComStatus(email, senha)
         .then(function (resultados) {
             if (resultados.length === 0) {
                 res.status(401).json({ mensagem: "Credenciais inválidas." });
@@ -28,18 +28,12 @@ function login(req, res) {
                 throw { erroTratado: true };
             }
 
-            // 2) Verifica senha (ainda sem hash)
-            if (senha !== usuario.senha_hash) {
-                res.status(401).json({ mensagem: "Credenciais inválidas." });
-                throw { erroTratado: true };
-            }
-
             // 3) Sucesso: retorna dados do usuário
             res.status(200).json({
                 idUsuario: usuario.id_funcionario,
                 nome: usuario.nome,
                 email: usuario.email,
-                perfil: usuario.nivel_de_acesso
+                cargo: usuario.fk_cargo
             });
         })
         .catch(function (err) {

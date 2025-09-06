@@ -14,7 +14,7 @@ function cadastrarFuncionario(
       (fk_empresa, fk_setor, nome, email, senha_hash, fk_cargo)
     VALUES
       (${fk_empresa}, ${fk_setor === null ? "NULL" : fk_setor},
-       '${nome}',    '${email}',    '${senha_hash}',
+       '${nome}',    '${email}', SHA2('${senha_hash}', 256),
        ${cargo ? cargo : "NULL"})
   `;
     return database.executar(sql);
@@ -31,14 +31,14 @@ function buscarPorEmail(email) {
 }
 
 
-function buscarPorEmailComStatus(email) {
+function buscarPorEmailComStatus(email, senha) {
     var sql = `
     SELECT
       f.id_funcionario,
       f.nome,
       f.email,
-      f.senha_hash,
-      f.nivel_de_acesso,
+      f.senha_hash = SHA2('${senha}', 256),
+      f.fk_cargo,
       e.status AS status_empresa
     FROM funcionario AS f
     JOIN empresa    AS e

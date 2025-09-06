@@ -383,24 +383,25 @@ function cadastrar() {
         body: JSON.stringify(dados)
     })
         .then(function (resposta) {
-                console.log("resposta: ", resposta);
-    
-                if (resposta.ok) {
-                    var divErrosLogin = document.getElementById("div_erros_login");
-                    divErrosLogin.style.backgroundColor = '#069006';
-                
-                    finalizarAguardar("Cadastro realizado com sucesso! Redirecionando para tela de login...");  
-    
-                    setTimeout(() => {
-                        window.location = "login.html";
-                    }, "2000");
-    
-                } else {
-                    throw "Houve um erro ao tentar realizar o cadastro!";
-                }
-            })
-            .catch(function (resposta) {
-                console.log(`#ERRO: ${resposta}`);
-                finalizarAguardar(resposta);
-            });
+            console.log("resposta: ", resposta);
+
+            if (resposta.ok) {
+                var divErrosLogin = document.getElementById("div_erros_login");
+                divErrosLogin.style.backgroundColor = '#069006';
+
+                finalizarAguardar("Cadastro realizado com sucesso! Redirecionando para tela de login...");
+
+                setTimeout(() => {
+                    window.location = "login.html";
+                }, "2000");
+
+            } else {
+                finalizarAguardar("Houve um erro ao tentar realizar o cadastro!");
+                throw "Houve um erro ao tentar realizar o cadastro!";
+            }
+        })
+        .catch(function (resposta) {
+            console.log(`#ERRO: ${resposta}`);
+            finalizarAguardar(resposta);
+        });
 }
