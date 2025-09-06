@@ -2,41 +2,37 @@
 var database = require("../database/config");
 
 function cadastrarFuncionario(
-  fk_empresa,
-  fk_setor,
-  nome,
-  email,
-  senha_hash,
-  cpf,
-  cargo,
-  nivel_de_acesso
+    fk_empresa,
+    fk_setor,
+    nome,
+    email,
+    senha_hash,
+    cargo
 ) {
-  var sql = `
+    var sql = `
     INSERT INTO funcionario
-      (fk_empresa, fk_setor, nome, email, senha_hash, cpf, cargo, nivel_de_acesso)
+      (fk_empresa, fk_setor, nome, email, senha_hash, fk_cargo)
     VALUES
       (${fk_empresa}, ${fk_setor === null ? "NULL" : fk_setor},
        '${nome}',    '${email}',    '${senha_hash}',
-       ${cpf    ? `'${cpf}'`    : "NULL"},
-       ${cargo  ? `'${cargo}'`  : "NULL"},
-       '${nivel_de_acesso}')
+       ${cargo ? cargo : "NULL"})
   `;
-  return database.executar(sql);
+    return database.executar(sql);
 }
 
 function buscarPorEmail(email) {
-  var sql = `
+    var sql = `
     SELECT *
       FROM funcionario
      WHERE email = '${email}'
        AND ativo = 1
   `;
-  return database.executar(sql);
+    return database.executar(sql);
 }
 
 
 function buscarPorEmailComStatus(email) {
-  var sql = `
+    var sql = `
     SELECT
       f.id_funcionario,
       f.nome,
@@ -50,11 +46,11 @@ function buscarPorEmailComStatus(email) {
     WHERE f.email = '${email}'
       AND f.ativo = 1
   `;
-  return database.executar(sql);
+    return database.executar(sql);
 }
 
 module.exports = {
-  cadastrarFuncionario,
-  buscarPorEmail,
-  buscarPorEmailComStatus
+    cadastrarFuncionario,
+    buscarPorEmail,
+    buscarPorEmailComStatus
 };
