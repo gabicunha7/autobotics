@@ -26,6 +26,14 @@
     .figura {
         width: 100%;
     }
+
+    .redirecionar {
+        display: none;
+    }
+
+    .redirecionar-pequeno {
+        display: block;
+    }
 }
 
 @media screen and (min-width: 768px) {

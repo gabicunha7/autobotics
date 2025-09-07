@@ -112,6 +112,28 @@ input + h3 {
     margin-top: 1rem;
 }
 
+input + .botaoLink {
+    margin-top: 1rem;
+}
+
+.redirecionar-pequeno {
+    width: 100%;
+    text-align: center;
+    display: none;
+    margin-top: 1rem;
+    font-weight: bold;
+}
+
+.redirecionar-pequeno a {
+    text-decoration: none;
+    color: #ac4306;
+    transition: all 0.3s ease-in-out;
+}
+
+.redirecionar-pequeno a:hover {
+    color: #26282c;
+}
+
 span.erro {
     width: 70%;
     padding-left: 1rem;
