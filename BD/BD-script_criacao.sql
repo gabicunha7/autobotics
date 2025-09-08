@@ -15,7 +15,7 @@ CREATE TABLE endereco (
 CREATE TABLE empresa (
   id_empresa INT PRIMARY KEY AUTO_INCREMENT,
   nome VARCHAR(150) NOT NULL,
-  cnpj VARCHAR(20) NOT NULL,
+  cnpj CHAR(18) NOT NULL,
   fk_endereco INT,
   status VARCHAR(20) NOT NULL DEFAULT 'PENDENTE', 
   CONSTRAINT chk_status CHECK (status in ('PENDENTE', 'APROVADA', 'REPROVADA')),
