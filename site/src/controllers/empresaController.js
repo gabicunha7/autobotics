@@ -52,8 +52,7 @@ function cadastrar(req, res) {
       nomeRepresentante,
       emailRepresentante,
       senhaRepresentante,
-      null, null,
-      "REPRESENTANTE"
+      1
     );
   })
   //Se der certo o item 3) Devolve como status um json dos valores de id de insert no banco
@@ -65,15 +64,15 @@ function cadastrar(req, res) {
     });
   })
   //Se der errado, apaga o registro de empresa, para não ficar vazia
-  .catch(function(err) {
+  .catch(async function(err) {
     if (idEmpresaCriada) {
-      database.executar(
+      await database.executar(
         `DELETE FROM empresa  WHERE id_empresa  = ${idEmpresaCriada}`
       );
     }
     //Se der errado, apaga o registro de endereco, para não ficar vazio
     if (idEnderecoCriado) {
-      database.executar(
+      await database.executar(
         `DELETE FROM endereco WHERE id_endereco = ${idEnderecoCriado}`
       );
     }
@@ -112,33 +111,10 @@ function alterarStatus(req, res) {
       }
 
       if (novoStatus === "APROVADA") {
-        var nomeRep = req.body.nomeRepresentante;
-        var emailRep = req.body.emailRepresentante;
-        var senhaRep = req.body.senhaRepresentante;
-
-        if (!nomeRep || !emailRep || !senhaRep) {
-          res.status(400).json({
-            mensagem:
-              "Para aprovar, informe nomeRepresentante, emailRepresentante e senhaRepresentante."
-          });
-          throw { erroTratado: true };
-        }
-
-        return usuarioModel.cadastrarFuncionario(
-          idEmpresa,
-          null,
-          nomeRep,
-          emailRep,
-          senhaRep,
-          null,
-          null,
-          'REPRESENTANTE'
-        )
-          .then(function (resultadoFuncionario) {
+          (function () {
             res.status(200).json({
               idEmpresa: idEmpresa,
               status: novoStatus,
-              idUsuarioRepresentante: resultadoFuncionario.insertId,
               mensagem: "Empresa aprovada e representante criado."
             });
           });

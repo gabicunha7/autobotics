@@ -36,10 +36,12 @@ CREATE TABLE setor (
 -- Cargo
 CREATE TABLE cargo (
   id_cargo INT PRIMARY KEY AUTO_INCREMENT,
+  fk_empresa INT,
   cargo VARCHAR(50),
   pode_editar TINYINT(1),
   pode_excluir TINYINT(1),
-  pode_inserir TINYINT(1)
+  pode_inserir TINYINT(1),
+  CONSTRAINT fk_cargo_empresa FOREIGN KEY (fk_empresa) REFERENCES empresa(id_empresa)
 );
 
 -- Funcionario (Separados em setores)
@@ -57,7 +59,6 @@ CREATE TABLE funcionario (
   CONSTRAINT fk_funcionario_setor FOREIGN KEY (fk_setor) REFERENCES setor(id_setor),
   CONSTRAINT fk_funcionario_cargo FOREIGN KEY (fk_cargo) REFERENCES cargo(id_cargo),
   CONSTRAINT fk_funcionario_superior FOREIGN KEY (fk_superior) REFERENCES funcionario(id_funcionario),
-  UNIQUE ix_cpf (cpf),
   UNIQUE ix_email (email)
 );
 
@@ -90,3 +91,10 @@ CREATE TABLE parametrizacao_alerta(
   CONSTRAINT fk_parametro_setor FOREIGN KEY (fk_setor) REFERENCES setor(id_setor),
   PRIMARY KEY (fk_empresa, fk_setor)
 );
+
+CREATE USER "aluno" IDENTIFIED BY "sptech";
+GRANT ALL PRIVILEGES on autobotics.* TO "aluno";
+FLUSH PRIVILEGES;
+
+
+INSERT INTO cargo(cargo, pode_editar, pode_excluir, pode_inserir) VALUES ("Representante", 1, 1, 1);

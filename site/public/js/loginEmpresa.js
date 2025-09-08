@@ -54,7 +54,7 @@ function validar() {
 function entrar() {
     aguardar();
 
-    if (email.value == "root" && senha.value == "Sptech#2024") {
+    if (email.value == "root@email.com" && senha.value == "Sptech#2024") {
         window.location.href = "empresas.html";
     }
 
