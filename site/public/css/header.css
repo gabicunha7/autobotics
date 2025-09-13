@@ -41,15 +41,20 @@ header .container {
     align-items: center;
 }
 
-.botao {
+.menu-normal .botao {
+    color: var(--corTextoSec);
+    background-color: var(--corBotao);
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
     padding: 0.5rem 1.5rem;
     border-radius: 2rem;
-    border: 0.15rem solid #26282c;
+    border: none;
+    cursor: pointer;
 }
 
-a.botao:hover {
-    background-color: #eb812b;
-    color: #e9e9e9;
+.botao:hover {
+    background-color: #c76000;
 }
 
 .menu-responsivo .hamburguer {
@@ -62,7 +67,7 @@ a.botao:hover {
         width: 2rem;
         height: 0.3rem;
         margin-bottom: 0.6rem;
-        background-color: #26282c;
+        background-color: var(--corTextoSec);
         border-radius: 0.2rem;
         transition: all 0.2s ease-in-out;
     }
@@ -80,6 +85,7 @@ a.botao:hover {
 .menu-responsivo .check_hamburguer:checked ~ .hamburguer span:nth-child(1) {
     transform-origin: 0% 0%;
     transform: rotate(45deg) scaleX(1.35);
+    background-color: var(--corTextoPri);
 }
 
 .menu-responsivo .check_hamburguer:checked ~ .hamburguer span:nth-child(2) {
@@ -89,6 +95,7 @@ a.botao:hover {
 .menu-responsivo .check_hamburguer:checked ~ .hamburguer span:nth-child(3) {
     transform-origin: 0% 100%;
     transform: rotate(-45deg) scaleX(1.35);
+    background-color: var(--corTextoPri);
 }
 
 .menu-responsivo ul {
@@ -99,7 +106,7 @@ a.botao:hover {
     width: 12rem;
     min-height: 100vh;
     padding-top: 6.25rem;
-    background-color: #a9a9a9;
+    background-color: #1C3144;
     margin-left: -100%;
     transition: all 0.2s ease-in-out;
 }
@@ -113,7 +120,7 @@ a.botao:hover {
 }
 
 .menu-responsivo ul li a {
-    color: #26282c;
+    color: var(--corTextoPri);
     text-decoration: none;
     font-size: 1.4rem;
     transition: all 0.2s ease-in-out;
@@ -128,5 +135,5 @@ a.botao:hover {
 }
 
 .menu-responsivo ul li a:hover {
-    color: #eb812b;
+    color: var(--corBotao);
 }
