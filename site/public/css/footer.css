@@ -1,7 +1,7 @@
 footer {
     min-height: var(--tamanhoFooter);
-    background: #333;
-    color: #fff;
+    background: var(--corFundoFooter);
+    color: var(--corTextoPri);
     text-align: center;
-    padding: 20px;
+    padding: 1.5rem;
 }

@@ -24,7 +24,7 @@ h1 {
     justify-content: center;
     align-items: center;
     text-align: center;
-    color: #eeece9;
+    color: var(--corTextoPri);
 }
 
 .texto-inicio h1 {
@@ -35,21 +35,6 @@ h1 {
     font-size: 1.5rem;
 }
 
-.texto-inicio button {
-    font-size: 1.5rem;
-    color: #e9e9e9;
-    background-color:#26282c00;
-    border-radius: 2rem;
-    padding: 1rem;
-    transition: all 0.3s ease-in-out;
-    cursor: pointer;
-    border: 0.2rem solid #e9e9e97c;
-}
-
-.texto-inicio button:hover{
-    background-color: #da771a;
-}
-
 /* Page sobre nós*/
 
 .texto-sobre {
@@ -57,16 +42,16 @@ h1 {
     flex-wrap: wrap;
     justify-content: center;
     text-align: center;
-
+    padding-bottom: 1rem;
 }
 
 .texto-sobre h2 {
     font-size: 2.5rem;
-    color: #F26716;
+    color: var(--corTituloH2);
 }
 
 .texto-sobre p {
-    color: #26282c;
+    color: var(--corTextoSec);
 }
 
 .figura {
@@ -94,17 +79,17 @@ h1 {
 
 .miss:nth-child(1) {
     background-color: #eb682b;
-    color: #f3e8de;
+    color: var(--corTextoMissao);
 }
 
 .miss:nth-child(2) {
-    background-color: #f3e8de;
+    background-color: var(--corTextoMissao);
     color: #eb682b;
 }
 
 .miss:nth-child(3) {
     background-color: #ee8a5b;
-    color: #f3e8de;
+    color: var(--corTextoMissao);
 }
 
 .texto-missao {
@@ -136,7 +121,7 @@ h1 {
 
 .texto-servico h2 {
     font-size: 2.2rem;
-    color: #F26716;
+    color: var(--corTituloH2);
 }
 
 /*parte de contato*/
@@ -151,22 +136,26 @@ h1 {
 .formulario-home {
     width: 100%;
     display: flex;
-    background-color: #d1d1d1;
-    color:  #26282c;
+    background-color: var(--corFundoForm);
+    color:  var(--corTextoSec);
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     text-align: center;
     flex-direction: column;
     border-radius: 1rem;
-    padding: 1rem 0;
-    box-shadow: 0.7rem 1.2rem #da771a;
+    padding: 2rem 0;
 }
 
 .campo {
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
+}
+
+
+#sobre, #servicos, #contato {
+    margin: 2rem auto;
 }
 
 /* Aguardar */
@@ -193,8 +182,8 @@ h1 {
     width: 7rem;
     height: 7rem;
     border-radius: 50%;
-    border: 0.2rem solid #26282c;
-    border-top-color: #da771a;
+    border: 0.2rem solid var(--corTextoSec);
+    border-top-color: var(--corBotao);
     animation: linear infinite 1s aguardar;
 }
 
@@ -209,7 +198,7 @@ h1 {
     position: fixed;
     left: 1rem;
     bottom: 1rem;
-    color: #f3e8de;
+    color: var(--corTextoPri);
     background-color: #9b0202;
     padding: 2rem;
 }

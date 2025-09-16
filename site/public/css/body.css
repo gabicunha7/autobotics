@@ -9,7 +9,21 @@
 :root {
     --tamanhoHeader: 4rem;
     --tamanhoFooter: var(--tamanhoHeader);
-    --tamanhoPagina: calc(100vh - var(--tamanhoHeader));
+    --tamanhoPagina: calc(100vh - var(--tamanhoHeader) - 1rem);
+    --corFundoBody: #e9e9e9;
+
+    --corTextoPri: #eeece9;
+    --corTextoSec: #26282c;
+
+    --corTituloH2: #F26716;
+
+    --corBotao: #F26716;
+    --corFundoRedirect: #1C3144;
+    --corFundoForm: #A9B7C7; 
+    
+    --corFundoFooter: #232323;
+
+    --corTextoMissao: #f3e8de;
 }
 
 html {
@@ -19,7 +33,7 @@ html {
 body {
     font-family: "Jost", sans-serif;
     line-height: 1.6;
-    background-color: #e9e9e9;
+    background-color: var(--fundoBody);
     overflow-x: hidden;
 }
 
