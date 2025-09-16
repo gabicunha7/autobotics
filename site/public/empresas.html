@@ -54,20 +54,37 @@
       text-align: left;
       border-bottom: 1px solid #eee;
     }
-    .tabela-empresas tbody tr:nth-child(even) {
-      background: #f9f9f9;
-    }
+
   </style>
 </head>
 <body>
 
 <header>
+        <section class="container">
+            <nav class="menu-responsivo">
+                <input type="checkbox" name="chk_hamburguer" id="chk_hamburguer" class="check_hamburguer">
 
-</header>
+                <section class="hamburguer">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </section>
+               <h1></h1>
+            </nav>
+
+            <a class="link-logo" href="index.html">
+                <img src="assets/logo/AUTOBOTICS.png" alt="Logo Autobotics">
+            </a>
+            <h2>ANALISE DE EMPRESAS</h2>
+
+            <span class="elemento-vazio"></span>
+        </section>
+    </header>
 
 <main class="pagina container">
   <div class="card">
-    <div class="card-header" style="background:#f0ad4e;">
+    <div class="card-header" style="background-color: #F26716;
+">
       Empresas Pendentes
     </div>
     <div class="card-body">
@@ -88,7 +105,7 @@
   </div>
 
   <div class="card">
-    <div class="card-header" style="background:#5cb85c;">
+    <div class="card-header" style="background:#26282c;">
       Empresas Aprovadas
     </div>
     <div class="card-body">
@@ -152,7 +169,7 @@
       tbody.appendChild(tr);
     });
     tbody.querySelectorAll("button").forEach(btn =>
-      btn.addEventListener("click", handleStatusChange)
+      btn.addEventListener("click", trocarStatus)
     );
   }
 
@@ -176,7 +193,7 @@
     });
   }
 
-  function handleStatusChange(e) {
+  function trocarStatus(e) {
     const btn = e.currentTarget;
     const id  = btn.getAttribute("data-id");
     const status = btn.getAttribute("data-acao");

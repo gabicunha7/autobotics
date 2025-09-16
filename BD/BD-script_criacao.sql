@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS autobotics;
 CREATE DATABASE autobotics;
 USE autobotics;
 
@@ -92,8 +93,9 @@ CREATE TABLE parametrizacao_alerta(
   PRIMARY KEY (fk_empresa, fk_setor)
 );
 
-CREATE USER "aluno" IDENTIFIED BY "sptech";
-GRANT ALL PRIVILEGES on autobotics.* TO "aluno";
+DROP USER IF EXISTS "agente";
+CREATE USER "agente" IDENTIFIED BY "sptech";
+GRANT ALL PRIVILEGES on autobotics.* TO "agente";
 FLUSH PRIVILEGES;
 
 
