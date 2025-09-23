@@ -64,11 +64,13 @@ Utilizando práticas **ITIL** de gestão de incidentes e problemas, o sistema pr
 ---
 
 ## 👥 Equipe
-- **César Araujo** — Product Owner  
-- **Davi Santos** — Scrum Master
-- **Fernando Silva** — 
-- **Isabelly Godoy** — 
-- **Victor Nascimento** — 
+- **Breno Otávio Costa** — Product Owner
+- **Erick Araujo Ferreira** — 
+- **Gabriela Pinheiro Lopes da Cunha** — Scrum Master
+- **João de Oliveira Neto** — 
+- **João Vitor Lira Alves** —
+- **Kauã Medeiros** — 
+
 
 ---
 
