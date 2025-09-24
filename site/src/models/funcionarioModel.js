@@ -6,7 +6,7 @@ function buscar() {
 }
 
 function cadastrar(nome, email, senha, setor) {
-    var sql = `INSERT INTO funcionario VALUES("${nome}", "${email}", "${senha}", 1, ${setor}, 1, null, 1, null);`
+    var sql = `INSERT INTO funcionario(nome, email, senha_hash, fk_empresa, fk_setor, fk_cargo, fk_superior) VALUES("${nome}", "${email}", "${senha}", 1, null, 1, null);`
     return database.executar(sql)
 }
 

@@ -72,9 +72,13 @@ function cadastrar() {
         console.log(resposta);
         
         if (resposta.ok) {
-            listar()
+            popup = document.getElementById("cadastrar-func")
+
+        popup.style.display = "none";
+            buscar()            
         }
     })
+
 }
 
 function excluir(id) {
