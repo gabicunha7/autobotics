@@ -29,7 +29,7 @@ function listar(dados) {
                 <td>${func.email}</td>
                 <td>${func.fksetor}</td>
                 <td>${func.ativo}</td>
-                <td onclick="excluir()">X</td>
+                <td onclick="excluir(${func.id_funcionario})">X</td>
             </tr>
         `;
     });
@@ -95,7 +95,7 @@ function excluir(id) {
         console.log(resposta);
         
         if (resposta.ok) {
-            listar()
+            buscar()
         }
     })
 }
