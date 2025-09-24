@@ -1,0 +1,77 @@
+body {
+    display: flex;
+    flex-direction: row;
+}
+
+main {
+    width: 87vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: blue;
+}
+
+table {
+    width: 100%;
+    background-color: blue;
+
+    
+}
+
+table, th, td {
+  border:1px solid black;
+}
+
+.container-func {
+    width: 80%;
+    height: 95%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: yellow;
+}
+
+.container-table {
+    width: 90%;
+    background-color: green;
+}
+
+.title {
+    width: 100%;
+    text-align: center;
+}
+
+.top-options {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background-color: red;
+}
+
+input {
+    width: 30%;
+    height: 30px;
+}
+
+button {
+    width: 20%;
+    height: 30px;
+}
+
+/* Cadastro de funcionario */
+
+#cadastrar-func {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    height: 85%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    background-color: white;
+}

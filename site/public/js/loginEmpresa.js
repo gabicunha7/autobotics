@@ -73,7 +73,7 @@ function entrar() {
 
             if (resposta.ok) {
                 setTimeout(() => {
-                    window.location = "dashboards.html";
+                    window.location = "dashboard.html";
                 }, "1000");
 
             } else {

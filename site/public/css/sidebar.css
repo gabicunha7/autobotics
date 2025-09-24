@@ -1,0 +1,8 @@
+aside {
+    width: 13vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    
+    background-color: red;
+}

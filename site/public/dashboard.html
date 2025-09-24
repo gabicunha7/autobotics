@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="css/body.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/funcionario.css">
+</head>
+<body>
+    <aside>
+        <section>
+            <div class="sidebar-item">
+                <a href="">
+                    <p>Dashboard</p>
+                </a>
+            </div>
+            <div class="sidebar-item">
+                <a href="">
+                    <p>Usuários</p>
+                </a>
+            </div>
+        </section>
+    </aside>
+
+    <main>
+        <section class="container-func">
+            <h1 class="title">Funcionários</h1>
+            <div class="container-table">
+                <div class="top-options">
+                    <input type="text">
+                    <button onclick="abrirPopUp('cadastrar-func')">Adicionar</button>
+                </div>
+                <table id="func-table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Setor</th>
+                        <th>Ativo</th>
+                        <th>Ação</th>
+                    </tr>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <div id="cadastrar-func">
+        <h1>Cadastrar funcionário</h1>
+        <label for="">Nome:</label>
+        <input id="ipt_nome" type="text">
+        <label for="">Email:</label>
+        <input id="ipt_email" type="text">
+        <label for="">Senha:</label>
+        <input id="ipt_senha" type="password">
+        <label for="">Setor:</label>
+        <input id="ipt_setor" type="number">
+        <button onclick="cadastrar()">Cadastrar</button>
+    </div>
+</body>
+<script src="js/gerenciarFuncionario.js"></script>
+</html>
