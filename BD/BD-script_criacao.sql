@@ -38,10 +38,7 @@ CREATE TABLE setor (
 CREATE TABLE cargo (
   id_cargo INT PRIMARY KEY AUTO_INCREMENT,
   fk_empresa INT,
-  cargo VARCHAR(50),
-  pode_editar TINYINT(1),
-  pode_excluir TINYINT(1),
-  pode_inserir TINYINT(1),
+  nome VARCHAR(50),
   CONSTRAINT fk_cargo_empresa FOREIGN KEY (fk_empresa) REFERENCES empresa(id_empresa)
 );
 
@@ -51,15 +48,12 @@ CREATE TABLE funcionario (
   nome VARCHAR(150) NOT NULL,
   email VARCHAR(150) NOT NULL,
   senha_hash VARCHAR(255) NOT NULL,
-  ativo TINYINT(1) DEFAULT 1,
+  ativo TINYINT DEFAULT 1,
   fk_empresa INT NOT NULL,
   fk_setor INT,
   fk_cargo INT NOT NULL,
-  fk_superior INT,
-  CONSTRAINT fk_funcionario_empresa FOREIGN KEY (fk_empresa) REFERENCES empresa(id_empresa),
-  CONSTRAINT fk_funcionario_setor FOREIGN KEY (fk_setor) REFERENCES setor(id_setor),
+  CONSTRAINT fk_funcionario_setor FOREIGN KEY (fk_setor, fk_empresa) REFERENCES setor(id_setor, fk_empresa),
   CONSTRAINT fk_funcionario_cargo FOREIGN KEY (fk_cargo) REFERENCES cargo(id_cargo),
-  CONSTRAINT fk_funcionario_superior FOREIGN KEY (fk_superior) REFERENCES funcionario(id_funcionario),
   UNIQUE ix_email (email)
 );
 
@@ -69,28 +63,27 @@ CREATE TABLE controlador (
   id_controlador INT AUTO_INCREMENT PRIMARY KEY,
   modelo VARCHAR(120) NOT NULL,
   numero_serial VARCHAR(120) UNIQUE,
-  firmware VARCHAR(80),
   status VARCHAR(30) DEFAULT 'ativo',
-  modelo_cpu VARCHAR(100),
-  ram_mb INT,
-  storage_mb INT,
   fk_empresa INT NOT NULL,
   fk_setor INT NOT NULL,
-  CONSTRAINT fk_controlador_empresa FOREIGN KEY (fk_empresa) REFERENCES empresa(id_empresa),
-  CONSTRAINT fk_controlador_setor FOREIGN KEY (fk_setor) REFERENCES setor(id_setor)
+  CONSTRAINT fk_controlador_setor FOREIGN KEY (fk_setor, fk_empresa) REFERENCES setor(id_setor, fk_empresa)
 );
 
+create table componente (
+	id_componente int primary key auto_increment,
+	nome varchar(15),
+	fk_empresa INT NOT NULL,
+	fk_setor INT NOT NULL,
+	CONSTRAINT fk_componente_setor FOREIGN KEY (fk_setor, fk_empresa) REFERENCES setor(id_setor, fk_empresa)
+);
 -- Parametrização dos alertas
-CREATE TABLE parametrizacao_alerta(
-  fk_empresa INT NOT NULL,
-  fk_setor INT NOT NULL,
+CREATE TABLE parametrizacao(
+  id_parametro int auto_increment primary key,
+  fk_componente INT NOT NULL,
   regras JSON,
-  componente VARCHAR(30),
-  valor_min DECIMAL(5,2),
-  valor_max DECIMAL(5,2),
-  CONSTRAINT fk_parametro_empresa FOREIGN KEY (fk_empresa) REFERENCES empresa(id_empresa),
-  CONSTRAINT fk_parametro_setor FOREIGN KEY (fk_setor) REFERENCES setor(id_setor),
-  PRIMARY KEY (fk_empresa, fk_setor)
+  min int,
+  max int,
+  CONSTRAINT fk_parametro_componente FOREIGN KEY (fk_componente) REFERENCES componente(id_componente)
 );
 
 DROP USER IF EXISTS "agente";
@@ -99,4 +92,11 @@ GRANT ALL PRIVILEGES on autobotics.* TO "agente";
 FLUSH PRIVILEGES;
 
 
-INSERT INTO cargo(cargo, pode_editar, pode_excluir, pode_inserir) VALUES ("Representante", 1, 1, 1);
+INSERT INTO cargo(nome) VALUES ('Representante'), ('Eng_Robotica'), ('Eng_Manutencao');
+
+insert into endereco(estado, cidade, cep, bairro, logradouro)
+values ("SP", "Bragança Paulista", "12900-130", "Centro", "Praça José Bonifácio");
+
+insert into empresa(nome, cnpj, fk_endereco)
+values ("Teste", "12.312.321/3123-12", 1);
+
