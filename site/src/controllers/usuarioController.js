@@ -33,7 +33,11 @@ function login(req, res) {
                 idUsuario: usuario.id_funcionario,
                 nome: usuario.nome,
                 email: usuario.email,
-                cargo: usuario.fk_cargo
+                cargo: usuario.fk_cargo,
+                empresa: usuario.fk_empresa,
+                setor: usuario.fk_setor,
+                ativo: usuario.ativo
+
             });
         })
         .catch(function (err) {

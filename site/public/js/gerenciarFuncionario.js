@@ -56,6 +56,9 @@ function buscar() {
 
 
 function cadastrar() {
+    varEmpresa = sessionStorage.EMPRESA_USUARIO;
+    alert(varEmpresa);
+
     fetch("/funcionario/cadastrar", {
         method: "POST",
         headers: {
@@ -65,7 +68,8 @@ function cadastrar() {
             nome: ipt_nome.value.trim(),
             email: ipt_email.value.trim(),
             senha: ipt_senha.value,
-            setor: ipt_setor.value
+            setor: ipt_setor.value,
+            empresa: varEmpresa
         })
     })
     .then(function (resposta) {

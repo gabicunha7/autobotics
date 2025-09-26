@@ -15,7 +15,7 @@ function cadastrarFuncionario(
     VALUES
       (${fk_empresa}, ${fk_setor === null ? "NULL" : fk_setor},
        '${nome}',    '${email}', SHA2('${senha_hash}', 256),
-       ${cargo ? cargo : "NULL"})
+       ${cargo ? 2 : "NULL"})
   `;
     return database.executar(sql);
 }
@@ -39,6 +39,9 @@ function buscarPorEmailComStatus(email, senha) {
       f.email,
       f.senha_hash = SHA2('${senha}', 256),
       f.fk_cargo,
+      f.fk_empresa,
+      f.ativo,
+      f.fk_setor,
       e.status AS status_empresa
     FROM funcionario AS f
     JOIN empresa    AS e

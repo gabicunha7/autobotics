@@ -72,10 +72,23 @@ function entrar() {
             console.log("resposta: ", resposta);
 
             if (resposta.ok) {
-                setTimeout(() => {
-                    window.location = "dashboard.html";
-                }, "1000");
+                resposta.json().then(json => {
+				console.log(json);
+				console.log(JSON.stringify(json));
 
+				sessionStorage.ID_FUNCIONARIO = json.idUsuario;
+			    sessionStorage.NOME_USUARIO = json.nome;
+				sessionStorage.EMAIL_USUARIO = json.email;
+				sessionStorage.EMPRESA_USUARIO = json.empresa;
+                sessionStorage.SETOR_USUARIO = json.setor;
+                sessionStorage.CARGO_USUARIO = json.cargo;
+                sessionStorage.ATIVO_USUARIO = json.ativo;
+                
+                setTimeout(() => {
+                    window.location = "funcionario.html";
+                }, "1000");
+                
+                });
             } else {
                 resposta.json().then(json => {
                     console.error(json.mensagem);

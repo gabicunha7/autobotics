@@ -12,8 +12,9 @@ function cadastrar(req, res) {
     email = req.body.email
     senha = req.body.senha
     setor = req.body.setor
+    empresa = req.body.empresa
 
-    funcionarioModel.cadastrar(nome, email, senha, setor).then(function (resultado) {
+    funcionarioModel.cadastrar(nome, email, senha, setor, empresa).then(function (resultado) {
         res.status(200).json(resultado)
     })
 }

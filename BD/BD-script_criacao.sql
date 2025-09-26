@@ -26,7 +26,7 @@ CREATE TABLE empresa (
 
 -- Setor / departamento (vinculado a uma empresa)
 CREATE TABLE setor (
-  id_setor INT NOT NULL,
+  id_setor INT NOT NULL auto_increment,
   fk_empresa INT NOT NULL,
   nome VARCHAR(120) NOT NULL,
   descricao TEXT,
@@ -92,11 +92,16 @@ GRANT ALL PRIVILEGES on autobotics.* TO "agente";
 FLUSH PRIVILEGES;
 
 
-INSERT INTO cargo(nome) VALUES ('Representante'), ('Eng_Robotica'), ('Eng_Manutencao');
+INSERT INTO cargo(nome) VALUES ('Eng_Robotica'), ('Eng_Manutencao');
 
 insert into endereco(estado, cidade, cep, bairro, logradouro)
 values ("SP", "Bragança Paulista", "12900-130", "Centro", "Praça José Bonifácio");
 
-insert into empresa(nome, cnpj, fk_endereco)
-values ("Teste", "12.312.321/3123-12", 1);
+insert into empresa(nome, cnpj, fk_endereco, status)
+values ("Teste", "12.312.321/3123-12", 1, "APROVADA");
 
+insert into setor(nome, descricao, fk_empresa)
+values ("SETOR DE TESTES", "Este setor é um exemplo de um teste a ser utilizado", 1);
+
+insert into funcionario (nome, email, fk_setor, fk_empresa, ativo, fk_cargo, senha_hash)
+values ("teste", "teste@gmail.com", 1, 1, 1, 2, SHA2("senha123", 256));
