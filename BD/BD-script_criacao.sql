@@ -100,6 +100,19 @@ values ("SP", "Bragança Paulista", "12900-130", "Centro", "Praça José Bonifá
 insert into empresa(nome, cnpj, fk_endereco, status)
 values ("Teste", "12.312.321/3123-12", 1, "APROVADA");
 
+delimiter $$
+create trigger after_insert_setor
+after insert on setor
+for each row
+begin
+	insert into componente (nome, fk_empresa, fk_setor)
+	values  ("CPU", new.fk_empresa, new.id_setor),
+			("RAM", new.fk_empresa, new.id_setor),
+            ("Disco", new.fk_empresa, new.id_setor);
+end;
+$$
+delimiter ;
+
 insert into setor(nome, descricao, fk_empresa)
 values ("SETOR DE TESTES", "Este setor é um exemplo de um teste a ser utilizado", 1);
 
