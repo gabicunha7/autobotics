@@ -8,12 +8,20 @@ router.get("/buscar", function (req, res) {
     funcionarioController.buscar(req, res);
 });
 
+router.get("/buscarCargos", function (req, res) {
+    funcionarioController.buscarCargos(req, res);
+})
+
 router.post("/cadastrar", function (req, res) {
     funcionarioController.cadastrar(req, res);
 });
 
 router.post("/excluir", function (req, res) {
     funcionarioController.excluir(req, res);
+})
+
+router.post("/editar", function (req, res) {
+    funcionarioController.editar(req, res);
 })
 
 module.exports = router;

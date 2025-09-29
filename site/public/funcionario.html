@@ -30,7 +30,7 @@
             <div class="container-table">
                 <div class="top-options">
                     <input type="text">
-                    <button onclick="abrirPopUp('cadastrar-func')">Adicionar</button>
+                    <button onclick="abrirPopUpCadastro('cadastrar-func')">Adicionar</button>
                 </div>
                 <table id="func-table">
                     <tr>
@@ -48,6 +48,7 @@
 
     <div id="cadastrar-func">
         <h1>Cadastrar funcionário</h1>
+        <p onclick="fecharPopUp('cadastrar-func')">X</p>
         <label for="">Nome:</label>
         <input id="ipt_nome" type="text">
         <label for="">Email:</label>
@@ -56,7 +57,29 @@
         <input id="ipt_senha" type="password">
         <label for="">Setor:</label>
         <input id="ipt_setor" type="number">
+        <label for="">Cargo:</label>
+        <select name="Cargos" id="slc_cargo">
+            
+        </select>
         <button onclick="cadastrar()">Cadastrar</button>
+    </div>
+
+    <div id="editar-func">
+        <h1>Editar funcionário</h1>
+        <p onclick="fecharPopUp('editar-func')">X</p>
+        <label for="">Nome:</label>
+        <input id="ipt_nome_editar" type="text">
+        <label for="">Email:</label>
+        <input id="ipt_email_editar" type="text">
+        <label for="">Senha:</label>
+        <input id="ipt_senha_editar" type="password">
+        <label for="">Setor:</label>
+        <input id="ipt_setor_editar" type="number">
+        <label for="">Cargo:</label>
+        <select name="Cargos" id="slc_cargo_editar">
+            
+        </select>
+        <button onclick="editar()">Cadastrar</button>
     </div>
 </body>
 <script src="js/gerenciarFuncionario.js"></script>

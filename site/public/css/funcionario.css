@@ -49,7 +49,7 @@ table, th, td {
     background-color: red;
 }
 
-input {
+input, select {
     width: 30%;
     height: 30px;
 }
@@ -61,7 +61,7 @@ button {
 
 /* Cadastro de funcionario */
 
-#cadastrar-func {
+#cadastrar-func, #editar-func {
     display: none;
     position: absolute;
     top: 50%;
