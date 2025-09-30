@@ -26,6 +26,29 @@ function abrirPopUpCadastro(id) {
     .catch(erro => {
         console.error(erro);
     });
+    
+    varEmpresa = sessionStorage.EMPRESA_USUARIO;
+
+    fetch("/funcionario/buscarSetor", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            id_empresa: varEmpresa
+        })
+    }).then(resposta => {
+        if (resposta.ok) {
+            return resposta.json(); // transforma a resposta em JSON
+        } else {
+            throw "Erro ao buscar funcionários.";
+        }
+    }).then(dados=> {
+        console.log(dados)
+        dados.forEach(dados => {
+            slc_setor.innerHTML+=`<option value='${dados.id_setor}'>${dados.nome}</option>`
+        });
+    })
     popup = document.getElementById(id)
     popup.style.display = "flex";
 }
@@ -69,7 +92,6 @@ function listar(dados) {
                         <th>Email</th>
                         <th>Setor</th>
                         <th>Ativo</th>
-                        <th>Ação</th>
                     </tr>`;
 
     dados.forEach(func => {
@@ -88,8 +110,17 @@ function listar(dados) {
 }
 
 function buscar() {
+    varEmpresa = sessionStorage.EMPRESA_USUARIO;
+    console.log(varEmpresa);
+    
     fetch("/funcionario/buscar", {
-        method: "GET"
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            id_empresa_server: varEmpresa
+        })
     })
     .then(resposta => {
         if (resposta.ok) {
@@ -119,8 +150,8 @@ function cadastrar() {
         body: JSON.stringify({
             nome: ipt_nome.value.trim(),
             email: ipt_email.value.trim(),
-            senha: ipt_senha.value,
-            setor: ipt_setor.value,
+            senha: ipt_senha.value.trim(),
+            setor: slc_setor.value,
             cargo: slc_cargo.value,
             empresa: varEmpresa
         })

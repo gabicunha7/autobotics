@@ -1,7 +1,7 @@
 var database = require("../database/config");
 
-function buscar() {
-    var sql = `SELECT * FROM funcionario;`
+function buscar(empresa) {
+    var sql = `SELECT * FROM funcionario WHERE fk_empresa = ${empresa};`
     return database.executar(sql)
 }
 
@@ -12,6 +12,11 @@ function buscarCargos() {
 
 function cadastrar(nome, email, senha, setor, cargo, empresa) {
     var sql = `INSERT INTO funcionario(nome, email, senha_hash, fk_empresa, fk_setor, fk_cargo) VALUES("${nome}", "${email}", SHA2('${senha}', 256), ${empresa}, ${setor}, ${cargo});`
+    return database.executar(sql)
+}
+
+function buscarSetor(empresa) {
+    var sql = `SELECT * FROM setor WHERE fk_empresa = ${empresa};`
     return database.executar(sql)
 }
 
@@ -30,5 +35,6 @@ module.exports = {
     cadastrar,
     excluir,
     buscarCargos,
+    buscarSetor,
     editar
 }

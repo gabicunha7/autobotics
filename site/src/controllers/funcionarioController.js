@@ -2,7 +2,9 @@ var funcionarioModel = require("../models/funcionarioModel");
 var database = require("../database/config");
 
 function buscar(req, res) {
-    funcionarioModel.buscar().then(function (resultado) {
+    id_empresa = req.body.id_empresa_server
+    console.log("CONTROLLER:" , id_empresa);
+    funcionarioModel.buscar(id_empresa).then(function (resultado) {
         res.status(200).json(resultado)
     })
 }
@@ -22,6 +24,15 @@ function cadastrar(req, res) {
     empresa = req.body.empresa
 
     funcionarioModel.cadastrar(nome, email, senha, setor, cargo, empresa).then(function (resultado) {
+        res.status(200).json(resultado)
+    })
+}
+
+function buscarSetor(req, res) {
+    id_empresa_server = req.body.id_empresa
+    
+
+    funcionarioModel.buscarSetor(id_empresa_server).then(function (resultado) {
         res.status(200).json(resultado)
     })
 }
@@ -52,5 +63,6 @@ module.exports = {
     cadastrar,
     excluir,
     buscarCargos,
+    buscarSetor,
     editar
 }
