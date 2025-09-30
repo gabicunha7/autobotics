@@ -25,7 +25,7 @@ function buscarPorEmail(email) {
     SELECT *
       FROM funcionario
      WHERE email = '${email}'
-       AND ativo = 1
+       AND ativo = 1 
   `;
     return database.executar(sql);
 }
@@ -37,7 +37,6 @@ function buscarPorEmailComStatus(email, senha) {
       f.id_funcionario,
       f.nome,
       f.email,
-      f.senha_hash = SHA2('${senha}', 256),
       f.fk_cargo,
       f.fk_empresa,
       f.ativo,
@@ -47,7 +46,7 @@ function buscarPorEmailComStatus(email, senha) {
     JOIN empresa    AS e
       ON f.fk_empresa = e.id_empresa
     WHERE f.email = '${email}'
-      AND f.ativo = 1
+      AND f.ativo = 1 and senha_hash = sha2('${senha}',256)
   `;
     return database.executar(sql);
 }
