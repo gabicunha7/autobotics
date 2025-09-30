@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setores</title>
+    <link rel="stylesheet" href="css/body.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/funcionario.css">
+</head>
+<body>
+    <aside>
+        <section>
+            <div class="sidebar-item">
+                <a href="">
+                    <p>Dashboard</p>
+                </a>
+            </div>
+            <div class="sidebar-item">
+                <a href="">
+                    <p>Usuários</p>
+                </a>
+            </div>
+        </section>
+    </aside>
+
+    <main>
+        <section class="container-func">
+            <h1 class="title">Setores</h1>
+            <div class="container-table">
+                <div class="top-options">
+                    <input type="text">
+                    <button onclick="abrirPopUpCadastro('cadastrar-setor')">Adicionar</button>
+                </div>
+                <table id="setor-table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Descrição</th>
+                        <th>Ação</th>
+                    </tr>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <div id="cadastrar-setor">
+        <h1>Cadastrar Setor</h1>
+        <p onclick="fecharPopUp('cadastrar-setor')">X</p>
+        <label for="ipt_nome">Nome do setor:</label>
+        <input type="text" id="ipt_nome">
+        <label for="ipt_descricao">Descrição:</label>
+        <input type="text" id="ipt_descricao">
+        <button onclick="cadastrar()">Cadastrar</button>
+    </div>
+
+    <div id="editar-setor">
+        <h1>Editar Setor</h1>
+        <p onclick="fecharPopUp('editar-setor')">X</p>
+        <label for="ipt_nome_editar">Nome do setor:</label>
+        <input type="text" id="ipt_nome_editar">
+        <label for="ipt_descricao_editar">Descrição:</label>
+        <input type="text" id="ipt_descricao_editar">
+        <button onclick="editar()">Editar</button>
+    </div>
+</body>
+<script src="js/gerenciarSetor.js"></script>
+</html>
