@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funcionario</title>
+    <link rel="stylesheet" href="css/body.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/funcionario.css">
+    <link rel="stylesheet" href="css/parametro.css">
+</head>
+<body>
+    <aside>
+        <section>
+            <div class="sidebar-item">
+                <a href="">
+                    <p>Dashboard</p>
+                </a>
+            </div>
+            <div class="sidebar-item">
+                <a href="">
+                    <p>Usuários</p>
+                </a>
+            </div>
+            <div class="sidebar-item">
+                <a href="setor.html">
+                    <p>Setores</p>
+                </a>
+            </div>
+        </section>
+    </aside>
+
+    <main>
+    
+        <section class="container-func" >
+            <h1 class="title">Funcionários</h1>
+            <div class="container-table">
+                <div class="top-options">
+                    <input type="text">
+        <select name="" id="slc_setor_parametro" onchange="buscarComponenteParametro()"><option value="" disabled selected>SELECIONE UM SETOR</option></select>
+        <select name="" id="slc_componente_parametro" onchange="buscarParametro()"><option value="" disabled selected>SELECIONE UM COMPONENTE</option></select>
+                </div>
+                <table id="parametro-table">
+                    <tr>
+                        <th>ID</th>
+                        <th>ID-Componente</th>
+                        <th>Valor</th>
+                        <th>Criticidade</th>
+                    </tr>
+                </table>
+            </div>
+        </section>
+    </main>
+</body>
+<script src="js/gerenciarParametros.js"></script>
+</html>
