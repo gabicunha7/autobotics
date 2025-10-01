@@ -75,3 +75,14 @@ button {
     gap: 15px;
     background-color: white;
 }
+
+
+#div_erros_login {
+    display: none;
+    position: fixed;
+    left: 1rem;
+    bottom: 1rem;
+    color: var(--corTextoPri);
+    background-color: #9b0202;
+    padding: 2rem;
+}

@@ -15,7 +15,7 @@ function buscarCargos(req, res) {
     })
 }
 
-function cadastrar(req, res) {
+async function cadastrar(req, res) {
     nome = req.body.nome
     email = req.body.email
     senha = req.body.senha
@@ -23,9 +23,18 @@ function cadastrar(req, res) {
     cargo = req.body.cargo
     empresa = req.body.empresa
 
-    funcionarioModel.cadastrar(nome, email, senha, setor, cargo, empresa).then(function (resultado) {
+    try{
+        await funcionarioModel.cadastrar(nome, email, senha, setor, cargo, empresa)
+        .then(function (resultado) {
         res.status(200).json(resultado)
-    })
+        })
+    } catch(e){
+        if(e.code == "ER_DUP_ENTRY"){
+            res.status(400).send("E-mail já cadastrado");
+        } else{
+            res.status(400).send("Erro no cadastro");
+        }
+    }
 }
 
 function buscarSetor(req, res) {
