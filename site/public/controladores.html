@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controladores</title>
+    <link rel="stylesheet" href="css/body.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/funcionario.css">
+</head>
+<body>
+    <aside>
+        <section>
+            <div class="sidebar-item">
+                <a href="">
+                    <p>Dashboard</p>
+                </a>
+            </div>
+            <div class="sidebar-item">
+                <a href="">
+                    <p>Usuários</p>
+                </a>
+            </div>
+            <div class="sidebar-item">
+                <a href="setor.html">
+                    <p>Setores</p>
+                </a>
+            </div>
+              <div class="sidebar-item">
+                <a href="controladores.html">
+                    <p>Controladores</p>
+                </a>
+            </div>
+        </section>
+    </aside>
+
+    <main>
+        <section class="container-func">
+            <h1 class="title">Controladores</h1>
+            <div class="container-table">
+                <div class="top-options">
+                    <input type="text">
+                    <button onclick="abrirPopUpCadastro('cadastrar-func')">Adicionar</button>
+                </div>
+                <table id="func-table">
+                    <tr>
+                        <th>ID</th>
+                        <th>Número Serial</th>
+                        <th>Status</th>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <div id="cadastrar-func">
+        <h1>Cadastrar controlador</h1>
+        <p onclick="fecharPopUp('cadastrar-func')">X</p>
+        <label for="">Número serial:</label>
+        <input id="ipt_numSerial" type="text">
+        <label for="">Selecione o setor do controlador a ser cadastrado:</label>
+        <select id="slc_setor">
+
+        </select>
+        <button onclick="cadastrar()">Cadastrar</button>
+    </div>
+
+    <div id="editar-func">
+        <h1>Editar controlador</h1>
+        <p onclick="fecharPopUp('editar-func')">X</p>
+        <label for="">Número serial:</label>
+        <input id="ipt_numSerial_editar" type="text">
+        <label for="">Status:</label>
+        <input id="ipt_status_editar" type="text">
+        <button onclick="editar()">Editar</button>
+    </div>
+</body>
+<script src="js/gerenciarControladores.js"></script>
+</html>
