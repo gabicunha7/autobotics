@@ -15,8 +15,26 @@ function buscarParametro(componente) {
     return database.executar(sql)
 }
 
+function cadastrar(id_componente, valor, criticidade) {
+    var sql = `INSERT INTO parametro(fk_componente, valor, criticidade) VALUES (${id_componente}, ${valor}, ${criticidade});`
+    return database.executar(sql)
+}
+
+function excluir(id) {
+    var sql = `DELETE FROM parametro WHERE id_parametro = ${id};` 
+    return database.executar(sql)
+}
+
+function editar(idParametro, valor, criticidade) {
+    var sql = `UPDATE parametro SET valor="${valor}", criticidade="${criticidade}" WHERE id_parametro=${idParametro};`
+    return database.executar(sql)
+}
+
 module.exports = {
     buscarSetorParametro,
     buscarComponenteParametro,
-    buscarParametro
+    buscarParametro,
+    cadastrar,
+    excluir,
+    editar
 }

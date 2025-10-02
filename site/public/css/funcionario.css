@@ -61,7 +61,7 @@ button {
 
 /* Cadastro de funcionario */
 
-#cadastrar-func, #editar-func, #cadastrar-setor, #editar-setor {
+#cadastrar-func, #cadastrar-parametro, #editar-par,#editar-func, #cadastrar-setor, #editar-setor {
     display: none;
     position: absolute;
     top: 50%;

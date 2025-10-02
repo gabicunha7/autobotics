@@ -26,8 +26,39 @@ function buscarParametro(req, res) {
     })
 }
 
+function cadastrar(req, res) {
+    id_componente = req.body.id_componente
+    valor = req.body.valor
+    criticidade = req.body.criticidade
+    parametrosModel.cadastrar(id_componente, valor, criticidade).then(function (resultado) {
+        res.status(200).json(resultado)
+    })
+}
+
+function excluir(req, res) {
+    id = req.body.id
+    parametrosModel.excluir(id).then(function (resultado) {
+        res.status(200).json(resultado)
+    })
+}
+
+function editar(req, res) {
+    idParametro = req.body.id_parametro
+    valor = req.body.valor
+    criticidade = req.body.criticidade
+    
+
+    parametrosModel.editar(idParametro, valor, criticidade).then(function (resultado) {
+        res.status(200).json(resultado)
+    })
+}
+
+
 module.exports = {
     buscarSetorParametro,
     buscarComponenteParametro,
-    buscarParametro
+    buscarParametro,
+    cadastrar,
+    excluir,
+    editar
 }

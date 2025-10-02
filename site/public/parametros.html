@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
     <link rel="stylesheet" href="css/funcionario.css">
     <link rel="stylesheet" href="css/parametro.css">
 </head>
+
 <body>
     <aside>
         <section>
@@ -31,14 +33,18 @@
     </aside>
 
     <main>
-    
-        <section class="container-func" >
-            <h1 class="title">Funcionários</h1>
+
+        <section class="container-func">
+            <h1 class="title">Parâmetros</h1>
             <div class="container-table">
                 <div class="top-options">
-                    <input type="text">
-        <select name="" id="slc_setor_parametro" onchange="buscarComponenteParametro()"><option value="" disabled selected>SELECIONE UM SETOR</option></select>
-        <select name="" id="slc_componente_parametro" onchange="buscarParametro()"><option value="" disabled selected>SELECIONE UM COMPONENTE</option></select>
+                    <select name="" id="slc_setor_parametro" onchange="buscarComponenteParametro()">
+                        <option value="" disabled selected>SELECIONE UM SETOR</option>
+                    </select>
+                    <select name="" id="slc_componente_parametro" onchange="buscarParametro()">
+                        <option value="" disabled selected>SELECIONE UM COMPONENTE</option>
+                    </select>
+                    <button onclick="abrirPopUpCadastro('cadastrar-parametro')">Adicionar</button>
                 </div>
                 <table id="parametro-table">
                     <tr>
@@ -51,6 +57,36 @@
             </div>
         </section>
     </main>
+
+    <div id="cadastrar-parametro">
+        <h1>Cadastrar parâmetro</h1>
+        <p onclick="fecharPopUp('cadastrar-parametro')">X</p>
+        <label for="">Valor:</label>
+        <input id="ipt_valor_cadastro" type="number">
+        <select name="Criticidade" id="slc_criticidade">
+            <option value="" disabled selected>Criticidade</option>
+            <option value="0">Baixo</option>
+            <option value="1">Médio</option>
+            <option value="2">Alto</option>
+        </select>
+        <button onclick="cadastrar()">Cadastrar</button>
+    </div>
+
+    <div id="editar-par">
+        <h1>Cadastrar parâmetro</h1>
+        <p onclick="fecharPopUp('cadastrar-parametro')">X</p>
+        <label for="">Valor:</label>
+        <input id="ipt_valor_editar" type="number">
+        <select name="Criticidade" id="slc_criticidade_editar">
+            <option value="" disabled selected>Criticidade</option>
+            <option value="0">Baixo</option>
+            <option value="1">Médio</option>
+            <option value="2">Alto</option>
+        </select>
+        <button onclick="editar()">Cadastrar</button>
+    </div>
+
 </body>
 <script src="js/gerenciarParametros.js"></script>
+
 </html>

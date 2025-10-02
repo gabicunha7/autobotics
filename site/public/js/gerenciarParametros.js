@@ -1,3 +1,5 @@
+parametroId = null;
+
 function buscarSetorParametro(){
     varEmpresa = sessionStorage.EMPRESA_USUARIO;
     fetch("/parametros/buscarSetorParametro", {
@@ -79,7 +81,14 @@ function buscarParametro(){
 }
 
 function listarParametro(dados){
-tabela = document.getElementById('parametro-table');
+const tabela = document.getElementById('parametro-table');
+
+tabela.innerHTML = `<tr>
+                        <th>ID</th>
+                        <th>ID_Componente</th>
+                        <th>Valor</th>
+                        <th>Criticidade</th>
+                    </tr>`;
     dados.forEach(par => {
         tabela.innerHTML += `
             <tr>
@@ -93,6 +102,90 @@ tabela = document.getElementById('parametro-table');
         `;
     });
 
+}
+
+function fecharPopUp(id) {
+    popup = document.getElementById(id)
+    popup.style.display = "none";
+}
+
+function abrirPopUpCadastro(id) {
+    popup = document.getElementById(id)
+    popup.style.display = "flex";
+}
+
+function cadastrar(){
+    console.log("Testando:", slc_componente_parametro.value);
+    
+
+    fetch("/parametros/cadastrar", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            id_componente: slc_componente_parametro.value,
+            valor: ipt_valor_cadastro.value,
+            criticidade: slc_criticidade.value
+            })
+    })
+    .then(function (resposta) {
+        console.log(resposta);
+        
+        if (resposta.ok) {
+            fecharPopUp('cadastrar-parametro')
+            buscarParametro()            
+        }
+    })
+}
+
+function excluir(id) {
+    fetch("/parametros/excluir", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            id:id
+        })
+    })
+    .then(function (resposta) {
+        console.log(resposta);
+        
+        if (resposta.ok) {
+            buscarParametro()
+        }
+    })
+}
+
+function abrirPopUpEditar(idPopUp, idPar) {
+    parametroId = idPar
+    popup = document.getElementById(idPopUp)
+    popup.style.display = "flex";
+}
+
+function editar() {
+    varEmpresa = sessionStorage.EMPRESA_USUARIO;
+    fetch("/parametros/editar", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            id_parametro: parametroId,
+            valor: ipt_valor_editar.value,
+            criticidade: slc_criticidade_editar.value
+        })
+    })
+    .then(function (resposta) {
+        console.log(resposta);
+        
+        if (resposta.ok) {
+            fecharPopUp('editar-par')
+            buscarParametro()
+
+        }
+    })
 }
 
 buscarSetorParametro();

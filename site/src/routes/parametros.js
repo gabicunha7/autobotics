@@ -15,4 +15,16 @@ router.post("/buscarParametro", function (req, res) {
     parametrosController.buscarParametro(req, res);
 });
 
+router.post("/cadastrar", function (req, res) {
+    parametrosController.cadastrar(req, res);
+});
+
+router.post("/excluir", function (req, res) {
+    parametrosController.excluir(req, res);
+})
+
+router.post("/editar", function (req, res) {
+    parametrosController.editar(req, res);
+})
+
 module.exports = router;
