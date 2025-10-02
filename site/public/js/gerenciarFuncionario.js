@@ -3,6 +3,7 @@ function fecharPopUp(id) {
     popup = document.getElementById(id)
     popup.style.display = "none";
 }
+
 // Funciona para editar e cadastro
 function abrirPopUpCadastro(id) {
     fetch("/funcionario/buscarCargos", {
@@ -12,11 +13,10 @@ function abrirPopUpCadastro(id) {
         if (resposta.ok) {
             return resposta.json(); // transforma a resposta em JSON
         } else {
-            throw "Erro ao buscar funcionários.";
+            throw "Erro ao buscar cargos.";
         }
     })
     .then(dados => {
-        console.log(dados);
         
         select = document.getElementById("slc_cargo")
         dados.forEach(dado => {
@@ -37,18 +37,18 @@ function abrirPopUpCadastro(id) {
         body: JSON.stringify({
             id_empresa: varEmpresa
         })
-    }).then(resposta => {
-        if (resposta.ok) {
-            return resposta.json(); // transforma a resposta em JSON
+    }).then(response => {
+        if (response.ok) {
+            return response.json(); // transforma a resposta em JSON
         } else {
-            throw "Erro ao buscar funcionários.";
+            throw "Erro ao buscar setores.";
         }
     }).then(dados=> {
-        console.log(dados)
-        dados.forEach(dados => {
-            slc_setor.innerHTML+=`<option value='${dados.id_setor}'>${dados.nome}</option>`
+
+        dados.forEach(dado => {
+            slc_setor.innerHTML+=`<option value='${dado.id_setor}'>${dado.nome}</option>`
         });
-    })
+    }) 
     popup = document.getElementById(id)
     popup.style.display = "flex";
 }
@@ -83,8 +83,6 @@ function abrirPopUpEditar(idPopUp, idFunc) {
 function listar(dados) {
     const tabela = document.getElementById('func-table');
 
-    console.log("TESTE");
-    console.log(dados);
 
     tabela.innerHTML = `<tr>
                         <th>ID</th>
@@ -111,7 +109,6 @@ function listar(dados) {
 
 function buscar() {
     varEmpresa = sessionStorage.EMPRESA_USUARIO;
-    console.log(varEmpresa);
     
     fetch("/funcionario/buscar", {
         method: "POST",
@@ -140,33 +137,41 @@ function buscar() {
 
 function cadastrar() {
     varEmpresa = sessionStorage.EMPRESA_USUARIO;
-    alert(varEmpresa);
 
-    fetch("/funcionario/cadastrar", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            nome: ipt_nome.value.trim(),
-            email: ipt_email.value.trim(),
-            senha: ipt_senha.value.trim(),
-            setor: slc_setor.value,
-            cargo: slc_cargo.value,
-            empresa: varEmpresa
-        })
+    if(ipt_nome.value == ""){
+        erros("preencha o campo de nome")
+    } else if (ipt_email.value == ""){
+        erros("preencha o campo de email")
+    } else if (ipt_senha.value == ""){
+        erros("preencha o campo de senha")
+    } else {
+        fetch("/funcionario/cadastrar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    nome: ipt_nome.value.trim(),
+                    email: ipt_email.value.trim(),
+                    senha: ipt_senha.value.trim(),
+                    setor: slc_setor.value,
+                    cargo: slc_cargo.value,
+                    empresa: varEmpresa
+                })
+            })
+            .then(function (resposta) {
+                console.log(resposta);
+                
+                if (resposta.ok) {
+                    popup = document.getElementById("cadastrar-func")
+
+                    popup.style.display = "none";
+                    buscar()            
+                } else {
+                    erros("Inserir um email válido, este já está sendo usado");
+                }
     })
-    .then(function (resposta) {
-        console.log(resposta);
-        
-        if (resposta.ok) {
-            popup = document.getElementById("cadastrar-func")
-
-            popup.style.display = "none";
-            buscar()            
-        }
-    })
-
+    }
 }
 
 function excluir(id) {
@@ -217,5 +222,19 @@ function editar() {
         }
     })
 }
+
+
+function erros(texto){
+    var divErrosLogin = document.getElementById("div_erros_login");
+    if (texto) {
+        divErrosLogin.style.display = "flex";
+        divErrosLogin.innerHTML = texto;
+
+        setTimeout(() => {
+            divErrosLogin.style.display = 'none';
+        }, 4000);
+    }
+}
+
 
 buscar()
