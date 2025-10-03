@@ -35,12 +35,12 @@
     </aside>
 
     <main>
-        <section class="container-func">
+        <section class="container-control">
             <h1 class="title">Controladores</h1>
             <div class="container-table">
                 <div class="top-options">
                     <input type="text">
-                    <button onclick="abrirPopUpCadastro('cadastrar-func')">Adicionar</button>
+                    <button onclick="abrirPopUpCadastro('cadastrar-control')">Adicionar</button>
                 </div>
                 <table id="func-table">
                     <tr>
@@ -52,9 +52,9 @@
         </section>
     </main>
 
-    <div id="cadastrar-func">
+    <div id="cadastrar-control">
         <h1>Cadastrar controlador</h1>
-        <p onclick="fecharPopUp('cadastrar-func')">X</p>
+        <p onclick="fecharPopUp('cadastrar-control')">X</p>
         <label for="">Número serial:</label>
         <input id="ipt_numSerial" type="text">
         <label for="">Selecione o setor do controlador a ser cadastrado:</label>
@@ -64,9 +64,9 @@
         <button onclick="cadastrar()">Cadastrar</button>
     </div>
 
-    <div id="editar-func">
+    <div id="editar-control">
         <h1>Editar controlador</h1>
-        <p onclick="fecharPopUp('editar-func')">X</p>
+        <p onclick="fecharPopUp('editar-control')">X</p>
         <label for="">Número serial:</label>
         <input id="ipt_numSerial_editar" type="text">
         <label for="">Status:</label>

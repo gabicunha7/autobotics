@@ -77,7 +77,7 @@ function listar(dados) {
                 <td>${func.numSerial}</td>
                 <td>${func.status}</td>
                 <td onclick="excluir(${func.id_controlador})">X</td>
-                <td onclick="abrirPopUpEditar('editar-func', ${func.id_controlador})">E</td>
+                <td onclick="abrirPopUpEditar('editar-control', ${func.id_controlador})">E</td>
             </tr>
         `;
     });
@@ -116,8 +116,8 @@ function cadastrar() {
 
     if(ipt_numero_serial.value == ""){
         erros("preencha o campo de nome")
-    } else if (ipt_status.value == ""){
-        erros("preencha o campo de email")
+   // } else if (ipt_status.value == ""){
+    //    erros("preencha o campo de status")
     } else {
         fetch("/controlador/cadastrar", {
                 method: "POST",
@@ -181,7 +181,7 @@ function editar() {
         
         if (resposta.ok) {
             buscar()
-            popup = document.getElementById("editar-func")
+            popup = document.getElementById("editar-control")
 
             popup.style.display = "none";
             buscar()      
