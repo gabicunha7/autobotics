@@ -1,10 +1,14 @@
 var express = require("express");
 var router = express.Router();
 
-var funcionarioController = require("../controllers/controladoresController");
+var controladoresController = require("../controllers/controladoresController");
 
 router.post("/cadastrar", function (req, res) {
     controladoresController.cadastrar(req, res);
+});
+
+router.post("/buscarControlador", function (req, res) {
+    controladoresController.buscarControlador(req, res);
 });
 
 router.post("/buscarSetor", function (req, res) {

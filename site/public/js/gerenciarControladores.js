@@ -1,34 +1,13 @@
 funcionarioId = null
+setorId = null
+
 function fecharPopUp(id) {
     popup = document.getElementById(id)
     popup.style.display = "none";
 }
 
 // Funciona para editar e cadastro
-function abrirPopUpCadastro(id) {
-    
-    varEmpresa = sessionStorage.EMPRESA_USUARIO;
-
-    fetch("/controlador/buscarSetor", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            id_empresa: varEmpresa
-        })
-    }).then(response => {
-        if (response.ok) {
-            return response.json(); // transforma a resposta em JSON
-        } else {
-            throw "Erro ao buscar setores.";
-        }
-    }).then(dados=> {
-
-        dados.forEach(dado => {
-            slc_setor.innerHTML+=`<option value='${dado.id_setor}'>${dado.nome}</option>`
-        });
-    }) 
+function abrirPopUpCadastro(id) { 
     popup = document.getElementById(id)
     popup.style.display = "flex";
 }
@@ -61,7 +40,7 @@ function abrirPopUpEditar(idPopUp, idFunc) {
 }
 */
 function listar(dados) {
-    const tabela = document.getElementById('func-table');
+    const tabela = document.getElementById('controlador-table');
 
 
     tabela.innerHTML = `<tr>
@@ -70,40 +49,42 @@ function listar(dados) {
                         <th>Status</th>
                     </tr>`;
 
-    dados.forEach(func => {
+    dados.forEach(controlador => {
         tabela.innerHTML += `
             <tr>
-                <td>${func.id_controlador}</td>
-                <td>${func.numSerial}</td>
-                <td>${func.status}</td>
-                <td onclick="excluir(${func.id_controlador})">X</td>
-                <td onclick="abrirPopUpEditar('editar-control', ${func.id_controlador})">E</td>
+                <td>${controlador.id_controlador}</td>
+                <td>${controlador.numero_serial}</td>
+                <td>${controlador.status}</td>
+                <td onclick="excluir(${controlador.id_controlador})">X</td>
+                <td onclick="abrirPopUpEditar('editar-func', ${controlador.id_controlador})">E</td>
             </tr>
         `;
     });
 }
 
-function buscar() {
+function buscarControlador() {
     varEmpresa = sessionStorage.EMPRESA_USUARIO;
+    setorId = slc_setor_parametro.value;
     
-    fetch("/controlador/buscar", {
+    fetch("/controladores/buscarControlador", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            id_empresa_server: varEmpresa
+            id_empresa_server: varEmpresa,
+
         })
     })
     .then(resposta => {
         if (resposta.ok) {
-            return resposta.json(); // transforma a resposta em JSON
+            return resposta.json(); 
         } else {
-            throw "Erro ao buscar funcionários.";
+            throw "Erro ao buscar controladores.";
         }
     })
     .then(dados => {
-        listar(dados); // chama listar já com os dados prontos
+        listar(dados); 
     })
     .catch(erro => {
         console.error(erro);
@@ -112,21 +93,23 @@ function buscar() {
 
 
 function cadastrar() {
+    setorId = slc_setor_parametro.value;
     varEmpresa = sessionStorage.EMPRESA_USUARIO;
 
-    if(ipt_numero_serial.value == ""){
+    if(ipt_numSerial.value == ""){
         erros("preencha o campo de nome")
    // } else if (ipt_status.value == ""){
     //    erros("preencha o campo de status")
     } else {
-        fetch("/controlador/cadastrar", {
+        fetch("/controladores/cadastrar", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
                     numero_serial: ipt_numSerial.value.trim(),
-                    status: ipt_status.value.trim(),
+                    idsetor: setorId,
+                    idEmpresa: varEmpresa
 
                 })
             })
@@ -164,7 +147,7 @@ function excluir(id) {
 
 function editar() {
     varEmpresa = sessionStorage.EMPRESA_USUARIO;
-    fetch("/controlador/editar", {
+    fetch("/controladores/editar", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -181,7 +164,7 @@ function editar() {
         
         if (resposta.ok) {
             buscar()
-            popup = document.getElementById("editar-control")
+            popup = document.getElementById("editar-func")
 
             popup.style.display = "none";
             buscar()      
@@ -202,5 +185,34 @@ function erros(texto){
     }
 }
 
+function buscarSetorParametro(){
+    varEmpresa = sessionStorage.EMPRESA_USUARIO;
+    fetch("/parametros/buscarSetorParametro", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            id_empresa: varEmpresa
+        })
+    }).then(resposta => {
+        if (resposta.ok) {
+            return resposta.json(); // transforma a resposta em JSON
+        } else {
+            throw "Erro ao buscar setor.";
+        }
+    }).then(dados=> {
+        console.log(dados)
+        dados.forEach(dados => {
+            slc_setor_parametro.innerHTML+=`<option value='${dados.id_setor}'>${dados.nome}</option>`
+        });
+    })
+    
+}
 
-buscar()
+
+
+
+buscarSetorParametro()
+
+buscarControlador()

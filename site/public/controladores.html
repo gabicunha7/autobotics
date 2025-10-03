@@ -35,14 +35,17 @@
     </aside>
 
     <main>
-        <section class="container-control">
+        <section class="container-func">
             <h1 class="title">Controladores</h1>
             <div class="container-table">
                 <div class="top-options">
                     <input type="text">
-                    <button onclick="abrirPopUpCadastro('cadastrar-control')">Adicionar</button>
+                    <select name="" id="slc_setor_parametro">
+                        <option value="" disabled selected>SELECIONE UM SETOR</option>
+                    </select>
+                    <button onclick="abrirPopUpCadastro('cadastrar-func')">Adicionar</button>
                 </div>
-                <table id="func-table">
+                <table id="controlador-table">
                     <tr>
                         <th>ID</th>
                         <th>Número Serial</th>
@@ -52,21 +55,17 @@
         </section>
     </main>
 
-    <div id="cadastrar-control">
+    <div id="cadastrar-func">
         <h1>Cadastrar controlador</h1>
-        <p onclick="fecharPopUp('cadastrar-control')">X</p>
+        <p onclick="fecharPopUp('cadastrar-func')">X</p>
         <label for="">Número serial:</label>
         <input id="ipt_numSerial" type="text">
-        <label for="">Selecione o setor do controlador a ser cadastrado:</label>
-        <select id="slc_setor">
-
-        </select>
         <button onclick="cadastrar()">Cadastrar</button>
     </div>
 
-    <div id="editar-control">
+    <div id="editar-func">
         <h1>Editar controlador</h1>
-        <p onclick="fecharPopUp('editar-control')">X</p>
+        <p onclick="fecharPopUp('editar-func')">X</p>
         <label for="">Número serial:</label>
         <input id="ipt_numSerial_editar" type="text">
         <label for="">Status:</label>
