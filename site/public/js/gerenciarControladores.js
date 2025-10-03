@@ -11,34 +11,26 @@ function abrirPopUpCadastro(id) {
     popup = document.getElementById(id)
     popup.style.display = "flex";
 }
- /*
-function abrirPopUpEditar(idPopUp, idFunc) {
-    fetch("/controlador/buscarCargos", {
-        method: "GET"
+
+function excluir(id) {
+    fetch("/controladores/excluir", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            id:id
+        })
     })
-    .then(resposta => {
+    .then(function (resposta) {
+        console.log(resposta);
+        
         if (resposta.ok) {
-            return resposta.json(); // transforma a resposta em JSON
-        } else {
-            throw "Erro ao buscar funcionários.";
+            buscarControlador()
         }
     })
-    .then(dados => {
-        console.log(dados);
-        
-        select = document.getElementById("slc_cargo_editar")
-        dados.forEach(dado => {
-            select.innerHTML+=`<option value='${dado.id_cargo}'>${dado.nome}</option>`
-        });
-    })
-    .catch(erro => {
-        console.error(erro);
-    });
-    funcionarioId = idFunc
-    popup = document.getElementById(idPopUp)
-    popup.style.display = "flex";
 }
-*/
+
 function listar(dados) {
     const tabela = document.getElementById('controlador-table');
 
@@ -126,27 +118,9 @@ function cadastrar() {
     }
 }
 
-function excluir(id) {
-    fetch("/controlador/excluir", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            id:id
-        })
-    })
-    .then(function (resposta) {
-        console.log(resposta);
-        
-        if (resposta.ok) {
-            buscar()
-        }
-    })
-}
-
 function editar() {
     varEmpresa = sessionStorage.EMPRESA_USUARIO;
+    
     fetch("/controladores/editar", {
         method: "POST",
         headers: {

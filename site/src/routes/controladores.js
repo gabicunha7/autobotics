@@ -15,4 +15,12 @@ router.post("/buscarSetor", function (req, res) {
     controladoresController.buscarSetor(req, res);
 });
 
+router.post("/excluir", function (req, res) {
+    controladoresController.excluir(req, res);
+});
+
+router.post("/editar", function (req, res) {
+    controladoresController.editar(req, res);
+});
+
 module.exports = router;

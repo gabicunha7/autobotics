@@ -13,17 +13,35 @@ function cadastrar(req, res) {
 
 function buscarControlador(req, res) {
     idEmpresa = req.body.id_empresa_server
-    console.log("Testando o id",idEmpresa)
     controladoresModel.buscarControlador(idEmpresa).then(function (resultado) {
         res.status(200).json(resultado)
     })
 }
 
+function excluir(req, res) {
+    id = req.body.id
+    controladoresModel.excluir(id).then(function (resultado) {
+        res.status(200).json(resultado)
+    })
+}
+
+
 function buscarSetor(req, res) {
     id_empresa_server = req.body.id_empresa
-    
 
     controladoresModel.buscarSetor(id_empresa_server).then(function (resultado) {
+        res.status(200).json(resultado)
+    })
+}
+
+function editar(req, res) {
+    id = req.body.id
+    setor = req.body.setor
+    empresa = req.body.empresa
+    numero_serial = req.body.numero_serial
+
+
+    funcionarioModel.editar(id, numero_serial, setor, empresa).then(function (resultado) {
         res.status(200).json(resultado)
     })
 }
@@ -32,4 +50,6 @@ module.exports = {
     cadastrar,
     buscarSetor,
     buscarControlador,
+    excluir,
+    editar
 }

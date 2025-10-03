@@ -16,8 +16,20 @@ function buscarSetor(empresa) {
     return database.executar(sql)
 }
 
+function excluir(id) {
+    var sql = `DELETE FROM controlador WHERE id_controlador = ` + id
+    return database.executar(sql)
+}
+
+function editar(id, setor, numero_serial, empresa) {
+    var sql = `UPDATE funcionario SET numero_serial="${numero_serial}", fk_setor=${setor}, fk_empresa=${empresa} WHERE id_controlador=${id};`
+    return database.executar(sql)
+}
+
 module.exports = {
     cadastrar,
     buscarControlador,
     buscarSetor,
+    excluir,
+    editar
 }
