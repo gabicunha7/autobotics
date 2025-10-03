@@ -41,7 +41,7 @@ function editar(req, res) {
     numero_serial = req.body.numero_serial
 
 
-    funcionarioModel.editar(id, numero_serial, setor, empresa).then(function (resultado) {
+    controladoresModel.editar(id, numero_serial, setor, empresa).then(function (resultado) {
         res.status(200).json(resultado)
     })
 }

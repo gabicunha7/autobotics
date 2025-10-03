@@ -53,6 +53,11 @@ function listar(dados) {
         `;
     });
 }
+function abrirPopUpEditar(idPopUp, idControlador) {
+    controladorId = idControlador
+    popup = document.getElementById(idPopUp)
+    popup.style.display = "flex";
+}
 
 function buscarControlador() {
     varEmpresa = sessionStorage.EMPRESA_USUARIO;
@@ -112,7 +117,9 @@ function cadastrar() {
                     popup = document.getElementById("cadastrar-func")
 
                     popup.style.display = "none";
-                    buscar()            
+                    buscarControlador()    
+                    fecharPopUp()
+                           
                 }
     })
     }
@@ -120,7 +127,8 @@ function cadastrar() {
 
 function editar() {
     varEmpresa = sessionStorage.EMPRESA_USUARIO;
-    
+    setorId = slc_setor_parametro_editar.value;
+
     fetch("/controladores/editar", {
         method: "POST",
         headers: {
@@ -128,8 +136,9 @@ function editar() {
         },
         body: JSON.stringify({
             id:controladorId,
-            numero_serial: ipt_numSerial.value.trim(),
-            status: ipt_status.value.trim(),
+            numero_serial: ipt_numSerial_editar.value.trim(),
+            setor: setorId,
+            empresa: varEmpresa
          
         })
     })
@@ -137,11 +146,10 @@ function editar() {
         console.log(resposta);
         
         if (resposta.ok) {
-            buscar()
             popup = document.getElementById("editar-func")
-
             popup.style.display = "none";
-            buscar()      
+             buscarControlador()    
+             fecharPopUp()    
         }
     })
 }
@@ -179,6 +187,8 @@ function buscarSetorParametro(){
         console.log(dados)
         dados.forEach(dados => {
             slc_setor_parametro.innerHTML+=`<option value='${dados.id_setor}'>${dados.nome}</option>`
+            slc_setor_parametro_editar.innerHTML+=`<option value='${dados.id_setor}'>${dados.nome}</option>`
+
         });
     })
     
@@ -188,5 +198,4 @@ function buscarSetorParametro(){
 
 
 buscarSetorParametro()
-
 buscarControlador()

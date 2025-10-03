@@ -21,8 +21,8 @@ function excluir(id) {
     return database.executar(sql)
 }
 
-function editar(id, setor, numero_serial, empresa) {
-    var sql = `UPDATE funcionario SET numero_serial="${numero_serial}", fk_setor=${setor}, fk_empresa=${empresa} WHERE id_controlador=${id};`
+function editar(id,numero_serial, setor, empresa) {
+    var sql = `UPDATE controlador SET numero_serial="${numero_serial}", fk_setor= ${setor}, fk_empresa=${empresa} WHERE id_controlador=${id};`
     return database.executar(sql)
 }
 

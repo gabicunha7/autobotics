@@ -40,9 +40,6 @@
             <div class="container-table">
                 <div class="top-options">
                     <input type="text">
-                    <select name="" id="slc_setor_parametro">
-                        <option value="" disabled selected>SELECIONE UM SETOR</option>
-                    </select>
                     <button onclick="abrirPopUpCadastro('cadastrar-func')">Adicionar</button>
                 </div>
                 <table id="controlador-table">
@@ -58,18 +55,22 @@
     <div id="cadastrar-func">
         <h1>Cadastrar controlador</h1>
         <p onclick="fecharPopUp('cadastrar-func')">X</p>
+        <select name="" id="slc_setor_parametro">
+            <option value="" disabled selected>SELECIONE UM SETOR</option>
+        </select>
         <label for="">Número serial:</label>
         <input id="ipt_numSerial" type="text">
         <button onclick="cadastrar()">Cadastrar</button>
     </div>
 
-    <div id="editar-func">
-        <h1>Editar controlador</h1>
+     <div id="editar-func">
+        <h1>Editar Controlador</h1>
         <p onclick="fecharPopUp('editar-func')">X</p>
-        <label for="">Número serial:</label>
-        <input id="ipt_numSerial_editar" type="text">
-        <label for="">Status:</label>
-        <input id="ipt_status_editar" type="text">
+        <select name="" id="slc_setor_parametro_editar">
+            <option value="" disabled selected>SELECIONE UM SETOR</option>
+        </select>
+        <label for="ipt_numSerial_editar">Número Serial:</label>
+        <input type="text" id="ipt_numSerial_editar">
         <button onclick="editar()">Editar</button>
     </div>
 </body>
