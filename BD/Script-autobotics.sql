@@ -61,6 +61,7 @@ CREATE TABLE funcionario (
 -- Controlador (pertence a um setor;)
 CREATE TABLE controlador (
   id_controlador INT AUTO_INCREMENT PRIMARY KEY,
+  modelo VARCHAR(120) NOT NULL,
   numero_serial VARCHAR(120) UNIQUE,
   status VARCHAR(30) DEFAULT 'ativo',
   fk_empresa INT NOT NULL,
@@ -76,12 +77,12 @@ create table componente (
 	CONSTRAINT fk_componente_setor FOREIGN KEY (fk_setor, fk_empresa) REFERENCES setor(id_setor, fk_empresa)
 );
 -- Parametrização dos alertas
-CREATE TABLE parametrizacao(
-  id_parametro int auto_increment primary key,
+CREATE TABLE parametro(
+  id_parametro int auto_increment,
   fk_componente INT NOT NULL,
-  regras JSON,
-  min int,
-  max int,
+  valor DOUBLE,
+  criticidade TINYINT(2),
+  PRIMARY KEY(id_parametro, fk_componente),
   CONSTRAINT fk_parametro_componente FOREIGN KEY (fk_componente) REFERENCES componente(id_componente)
 );
 
@@ -117,3 +118,7 @@ values ("SETOR DE TESTES", "Este setor é um exemplo de um teste a ser utilizado
 
 insert into funcionario (nome, email, fk_setor, fk_empresa, ativo, fk_cargo, senha_hash)
 values ("teste", "teste@gmail.com", 1, 1, 1, 2, SHA2("senha123", 256));
+
+insert into parametro(fk_componente, valor, criticidade) values(1, 35.5, 3);
+
+select * from componente;
