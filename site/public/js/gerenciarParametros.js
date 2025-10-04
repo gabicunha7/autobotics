@@ -115,28 +115,41 @@ function abrirPopUpCadastro(id) {
 }
 
 function cadastrar(){
-    console.log("Testando:", slc_componente_parametro.value);
-    
-
-    fetch("/parametros/cadastrar", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            id_componente: slc_componente_parametro.value,
-            valor: ipt_valor_cadastro.value,
-            criticidade: slc_criticidade.value
+    if(slc_componente_parametro.value == ""){
+        erros("preencha o campo de componente")
+    } else if (ipt_valor_cadastro.value == ""){
+        erros("preencha o campo de valor")
+    } else if (slc_criticidade.value == ""){
+        erros("preencha o campo de criticidade")
+    }else{
+        fetch("/parametros/cadastrar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    id_componente: slc_componente_parametro.value,
+                    valor: ipt_valor_cadastro.value,
+                    criticidade: slc_criticidade.value
+                    })
             })
-    })
-    .then(function (resposta) {
-        console.log(resposta);
-        
-        if (resposta.ok) {
-            fecharPopUp('cadastrar-parametro')
-            buscarParametro()            
-        }
-    })
+            .then(function (resposta) {
+                console.log(resposta);
+                
+                if (resposta.ok) {
+                
+                }
+
+                if (resposta.ok) {
+                            fecharPopUp('cadastrar-parametro')
+                            buscarParametro() 
+                
+                        } else {
+                            erros("Este componente já tem parâmetro definido");
+                        }
+            }
+        )
+    }   
 }
 
 function excluir(id) {
@@ -187,5 +200,18 @@ function editar() {
         }
     })
 }
+
+function erros(texto){
+    var divErrosLogin = document.getElementById("div_erros_login");
+    if (texto) {
+        divErrosLogin.style.display = "flex";
+        divErrosLogin.innerHTML = texto;
+
+        setTimeout(() => {
+            divErrosLogin.style.display = 'none';
+        }, 4000);
+    }
+}
+
 
 buscarSetorParametro();

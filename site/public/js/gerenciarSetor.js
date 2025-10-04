@@ -2,8 +2,13 @@ funcionarioId = null
 
 function cadastrar(){
     varEmpresa = sessionStorage.EMPRESA_USUARIO;
-    
-    fetch("/setor/cadastrar", {
+
+    if(ipt_nome.value == ""){
+        erros("preencha o campo de nome")
+    } else if (ipt_descricao.value == ""){
+        erros("preencha o campo de descrição")
+    } else{
+        fetch("/setor/cadastrar", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -13,12 +18,12 @@ function cadastrar(){
             descricao: ipt_descricao.value.trim(),
             empresa: varEmpresa
         })
-    })
-    .then(function (resposta) {
-        console.log(resposta);
-        fecharPopUp("cadastrar-setor")
-    })
-    
+        })
+        .then(function (resposta) {
+            console.log(resposta);
+            fecharPopUp("cadastrar-setor")
+        }
+    )}   
 }
 
 function abrirPopUpCadastro(id) {
@@ -131,5 +136,18 @@ function buscarSetor() {
         console.error(erro);
     });
 }
+
+function erros(texto){
+    var divErrosLogin = document.getElementById("div_erros_login");
+    if (texto) {
+        divErrosLogin.style.display = "flex";
+        divErrosLogin.innerHTML = texto;
+
+        setTimeout(() => {
+            divErrosLogin.style.display = 'none';
+        }, 4000);
+    }
+}
+
 
 buscarSetor()

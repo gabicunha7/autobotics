@@ -26,13 +26,24 @@ function buscarParametro(req, res) {
     })
 }
 
-function cadastrar(req, res) {
+async function cadastrar(req, res) {
     id_componente = req.body.id_componente
     valor = req.body.valor
     criticidade = req.body.criticidade
-    parametrosModel.cadastrar(id_componente, valor, criticidade).then(function (resultado) {
+   
+
+     try{
+        await parametrosModel.cadastrar(id_componente, valor, criticidade)
+        .then(function (resultado) {
         res.status(200).json(resultado)
-    })
+        })
+    } catch(e){
+        if(e.code == "ER_DUP_ENTRY"){
+            res.status(400).send("Parâmetro já cadastrado");
+        } else{
+            res.status(400).send("Erro no cadastro");
+        }
+    }
 }
 
 function excluir(req, res) {

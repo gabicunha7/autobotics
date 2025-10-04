@@ -5,8 +5,13 @@ function fecharPopUp(id) {
 }
 
 // Funciona para editar e cadastro
-function abrirPopUpCadastro(id) {
-    fetch("/funcionario/buscarCargos", {
+function abrirPopUpCadastro(id) {  
+    popup = document.getElementById(id)
+    popup.style.display = "flex";
+}
+
+function buscarCargos(){
+        fetch("/funcionario/buscarCargos", {
         method: "GET"
     })
     .then(resposta => {
@@ -21,13 +26,16 @@ function abrirPopUpCadastro(id) {
         select = document.getElementById("slc_cargo")
         dados.forEach(dado => {
             select.innerHTML+=`<option value='${dado.id_cargo}'>${dado.nome}</option>`
+            slc_cargo_editar.innerHTML+=`<option value='${dado.id_cargo}'>${dado.nome}</option>`
         });
     })
     .catch(erro => {
         console.error(erro);
     });
-    
-    varEmpresa = sessionStorage.EMPRESA_USUARIO;
+}
+
+function buscarSetor(){
+      varEmpresa = sessionStorage.EMPRESA_USUARIO;
 
     fetch("/funcionario/buscarSetor", {
         method: "POST",
@@ -47,34 +55,12 @@ function abrirPopUpCadastro(id) {
 
         dados.forEach(dado => {
             slc_setor.innerHTML+=`<option value='${dado.id_setor}'>${dado.nome}</option>`
+            slc_setor_editar.innerHTML+=`<option value='${dado.id_setor}'>${dado.nome}</option>`
         });
     }) 
-    popup = document.getElementById(id)
-    popup.style.display = "flex";
 }
 
 function abrirPopUpEditar(idPopUp, idFunc) {
-    fetch("/funcionario/buscarCargos", {
-        method: "GET"
-    })
-    .then(resposta => {
-        if (resposta.ok) {
-            return resposta.json(); // transforma a resposta em JSON
-        } else {
-            throw "Erro ao buscar funcionários.";
-        }
-    })
-    .then(dados => {
-        console.log(dados);
-        
-        select = document.getElementById("slc_cargo_editar")
-        dados.forEach(dado => {
-            select.innerHTML+=`<option value='${dado.id_cargo}'>${dado.nome}</option>`
-        });
-    })
-    .catch(erro => {
-        console.error(erro);
-    });
     funcionarioId = idFunc
     popup = document.getElementById(idPopUp)
     popup.style.display = "flex";
@@ -137,6 +123,12 @@ function buscar() {
 
 function cadastrar() {
     varEmpresa = sessionStorage.EMPRESA_USUARIO;
+    cargo = slc_cargo.value;
+    setor = slc_setor.value;
+
+    if(cargo == 2){
+        setor = null;
+    }
 
     if(ipt_nome.value == ""){
         erros("preencha o campo de nome")
@@ -154,8 +146,8 @@ function cadastrar() {
                     nome: ipt_nome.value.trim(),
                     email: ipt_email.value.trim(),
                     senha: ipt_senha.value.trim(),
-                    setor: slc_setor.value,
-                    cargo: slc_cargo.value,
+                    setor: setor,
+                    cargo: cargo,
                     empresa: varEmpresa
                 })
             })
@@ -238,3 +230,5 @@ function erros(texto){
 
 
 buscar()
+buscarCargos()
+buscarSetor()

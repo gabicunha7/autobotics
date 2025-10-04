@@ -94,9 +94,9 @@ function cadastrar() {
     varEmpresa = sessionStorage.EMPRESA_USUARIO;
 
     if(ipt_numSerial.value == ""){
-        erros("preencha o campo de nome")
-   // } else if (ipt_status.value == ""){
-    //    erros("preencha o campo de status")
+        erros("preencha o campo de número serial")
+    } else if (setorId == ""){
+        erros("preencha o campo de parâmetro")
     } else {
         fetch("/controladores/cadastrar", {
                 method: "POST",
@@ -107,7 +107,6 @@ function cadastrar() {
                     numero_serial: ipt_numSerial.value.trim(),
                     idsetor: setorId,
                     idEmpresa: varEmpresa
-
                 })
             })
             .then(function (resposta) {
