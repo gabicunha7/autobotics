@@ -55,6 +55,8 @@ function excluir(id) {
         
         if (resposta.ok) {
             buscarSetor()
+        }else {
+            erros("Você tem parãmetros  neste setor, delete eles para excluir");
         }
     })
 }
@@ -119,8 +121,16 @@ function listar(dados) {
 
 
 function buscarSetor() {
+    varEmpresa = sessionStorage.EMPRESA_USUARIO;
+
     fetch("/setor/buscarSetor", {
-        method: "GET"
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+         body: JSON.stringify({
+            id_empresa_server: varEmpresa
+        })
     })
     .then(resposta => {
         if (resposta.ok) {

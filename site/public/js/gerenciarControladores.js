@@ -96,7 +96,7 @@ function cadastrar() {
     if(ipt_numSerial.value == ""){
         erros("preencha o campo de número serial")
     } else if (setorId == ""){
-        erros("preencha o campo de parâmetro")
+        erros("preencha o campo de setor")
     } else {
         fetch("/controladores/cadastrar", {
                 method: "POST",
@@ -128,29 +128,35 @@ function editar() {
     varEmpresa = sessionStorage.EMPRESA_USUARIO;
     setorId = slc_setor_parametro_editar.value;
 
-    fetch("/controladores/editar", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            id:controladorId,
-            numero_serial: ipt_numSerial_editar.value.trim(),
-            setor: setorId,
-            empresa: varEmpresa
-         
+    if(ipt_numSerial_editar.value == ""){
+        erros("preencha o campo de número serial")
+    } else if (setorId == ""){
+        erros("preencha o campo de setor")
+    } else{
+        fetch("/controladores/editar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                id:controladorId,
+                numero_serial: ipt_numSerial_editar.value.trim(),
+                setor: setorId,
+                empresa: varEmpresa
+            
+            })
         })
-    })
-    .then(function (resposta) {
-        console.log(resposta);
-        
-        if (resposta.ok) {
-            popup = document.getElementById("editar-func")
-            popup.style.display = "none";
-             buscarControlador()    
-             fecharPopUp()    
-        }
-    })
+        .then(function (resposta) {
+            console.log(resposta);
+            
+            if (resposta.ok) {
+                popup = document.getElementById("editar-func")
+                popup.style.display = "none";
+                buscarControlador()    
+                fecharPopUp()    
+            }
+        })
+    }
 }
 
 

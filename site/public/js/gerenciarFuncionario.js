@@ -167,6 +167,11 @@ function cadastrar() {
 }
 
 function excluir(id) {
+    if(id == sessionStorage.ID_FUNCIONARIO){
+        sessionStorage.clear();
+        window.location = "index.html";
+    }
+
     fetch("/funcionario/excluir", {
         method: "POST",
         headers: {
@@ -186,33 +191,49 @@ function excluir(id) {
 }
 
 function editar() {
+    console.log(funcionarioId)
     varEmpresa = sessionStorage.EMPRESA_USUARIO;
-    fetch("/funcionario/editar", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            id:funcionarioId,
-            nome: ipt_nome_editar.value.trim(),
-            email: ipt_email_editar.value.trim(),
-            senha: ipt_senha_editar.value,
-            setor: ipt_setor_editar.value,
-            cargo: slc_cargo_editar.value,
-            empresa: varEmpresa
-        })
-    })
-    .then(function (resposta) {
-        console.log(resposta);
-        
-        if (resposta.ok) {
-            buscar()
-            popup = document.getElementById("editar-func")
+    cargo = slc_cargo_editar.value;
+    setor = slc_setor_editar.value;
 
-            popup.style.display = "none";
-            buscar()      
-        }
-    })
+    if(cargo == 2){
+        setor = null;
+    }
+
+    if(ipt_nome_editar.value == ""){
+        erros("preencha o campo de nome")
+    } else if (ipt_email_editar.value == ""){
+        erros("preencha o campo de email")
+    } else if (ipt_senha_editar.value == ""){
+        erros("preencha o campo de senha")
+    } else{
+        fetch("/funcionario/editar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                id:funcionarioId,
+                nome: ipt_nome_editar.value.trim(),
+                email: ipt_email_editar.value.trim(),
+                senha: ipt_senha_editar.value,
+                setor: setor,
+                cargo: cargo,
+                empresa: varEmpresa
+            })
+        })
+        .then(function (resposta) {
+            console.log(resposta);
+            
+            if (resposta.ok) {
+                buscar()
+                popup = document.getElementById("editar-func")
+
+                popup.style.display = "none";
+                buscar()      
+            }
+        })
+    }
 }
 
 

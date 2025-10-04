@@ -7,7 +7,7 @@ router.post("/cadastrar", function (req, res) {
     setorController.cadastrar(req, res);
 });
 
-router.get("/buscarSetor", function (req, res) {
+router.post("/buscarSetor", function (req, res) {
     setorController.buscarSetor(req, res);
 })
 

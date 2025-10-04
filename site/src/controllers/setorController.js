@@ -2,7 +2,9 @@ var setorModel = require("../models/setorModel")
 var database = require("../database/config")
 
 function buscarSetor(req, res) {
-    setorModel.buscarSetor().then(function (resultado) {
+    var idEmpresa = req.body.id_empresa_server
+    
+    setorModel.buscarSetor(idEmpresa).then(function (resultado) {
         res.status(200).json(resultado)
     })
 }
@@ -17,12 +19,20 @@ function cadastrar(req, res) {
     })
 }
 
-function excluir(req, res) {
+async function excluir(req, res) {
     id = req.body.id
     empresa = req.body.empresa
-    setorModel.excluir(id, empresa).then(function (resultado) {
+
+    try{
+        resultado = await setorModel.excluir(id, empresa);
         res.status(200).json(resultado)
-    })
+    } catch(error){
+            if(error.code == "ER_ROW_IS_REFERENCED_2"){
+            res.status(400).send("Você tem parãmetros neste setor, delete eles para excluir");
+        } else{
+            res.status(400).send("Erro na exclusão");
+        }
+    }
 }
 
 function editar(req, res) {
