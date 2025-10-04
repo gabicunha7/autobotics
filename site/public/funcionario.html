@@ -6,8 +6,9 @@
     <title>Funcionario</title>
     <link rel="stylesheet" href="css/body.css">
     <link rel="stylesheet" href="css/sidebar.css">
-    <link rel="stylesheet" href="css/funcionario.css">
-    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/teste.css">
+    <link rel="shortcut icon" href="assets\logo\LOGO_CURTA.png" type="image/x-icon">
+
 </head>
 <body>
 <aside>
@@ -30,7 +31,7 @@
                 </a>
                 <a class="a-pagina" href="">
                     <img class="icon-pagina" src="assets/icones/info_icon.png" alt="">
-                    Informacoes
+                    informações
                 </a>
                 <a class="a-pagina" href="setor.html">
                     <img class="icon-pagina" src="assets/icones/setor_icon.png" alt="">
@@ -52,70 +53,89 @@
               Sair
             </button>
         </a>
-    </aside>
+</aside>
 
-    <main>
-        <section class="container-func">
+<main>
+
+        <section class="superior">
             <h1 class="title">Funcionários</h1>
-            <div class="container-table">
-                <div class="top-options">
-                    <input type="text">
-                    <button onclick="abrirPopUpCadastro('cadastrar-func')">Adicionar</button>
+            <div class="div-usuario">
+                <div class="div-img-usuario">
+                    <img src="assets/icones/foto_usuario.png" alt="">
                 </div>
-                <table id="func-table">
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome</th>
-                        <th>Email</th>
-                        <th>Setor</th>
-                        <th>Ativo</th>
-                        <th>Ação</th>
-                    </tr>
-                </table>
+                <div class="div-dados-usuario">
+                    <h6 id="nome-usuario"></h6>
+                    <p id="email-usuario"></p>
+                </div>
             </div>
-            <div id="div_erros_login"></div>
         </section>
-    </main>
+        <section class="container-func">
+                <div class="container-table">
+                    <div class="top-options">
+                        <div class="search-bar">                        
+                            <label for="pesquisa">Pesquisar: </label>
+                            <input type="text" id="pesquisa">
+                        </div>
+                        <button onclick="abrirPopUpCadastro('cadastrar-func')" class="cadastrar">Adicionar Funcionário +</button>
+                    </div>
+                    <table id="func-table" class="tabela">
+                        <tr>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Setor</th>
+                            <th>Status</th>
+                            <th>Ação</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </table>
+                </div>
+                <div id="div_erros_login"></div>
+        </section>
+    
 
-    <div id="cadastrar-func">
-        <h1>Cadastrar funcionário</h1>
-        <p onclick="fecharPopUp('cadastrar-func')">X</p>
-        <label for="">Nome:</label>
-        <input id="ipt_nome" type="text">
-        <label for="">Email:</label>
-        <input id="ipt_email" type="text">
-        <label for="">Senha:</label>
-        <input id="ipt_senha" type="password">
-        <label for="">Setor:</label>
-        <select id="slc_setor">
+        <div id="cadastrar-func">
+            <h1>Cadastrar funcionário</h1>
+            <p onclick="fecharPopUp('cadastrar-func')">X</p>
+            <label for="">Nome:</label>
+            <input id="ipt_nome" type="text">
+            <label for="">Email:</label>
+            <input id="ipt_email" type="text">
+            <label for="">Senha:</label>
+            <input id="ipt_senha" type="password">
+            <label for="">Setor:</label>
+            <select id="slc_setor">
 
-        </select>
-        <label for="">Cargo:</label>
-        <select name="Cargos" id="slc_cargo">
-            
-        </select>
-        <button onclick="cadastrar()">Cadastrar</button>
-    </div>
+            </select>
+            <label for="">Cargo:</label>
+            <select name="Cargos" id="slc_cargo">
+                
+            </select>
+            <button onclick="cadastrar()">Cadastrar</button>
+        </div>
 
-    <div id="editar-func">
-        <h1>Editar funcionário</h1>
-        <p onclick="fecharPopUp('editar-func')">X</p>
-        <label for="">Nome:</label>
-        <input id="ipt_nome_editar" type="text">
-        <label for="">Email:</label>
-        <input id="ipt_email_editar" type="text">
-        <label for="">Senha:</label>
-        <input id="ipt_senha_editar" type="password">
-        <label for="">Setor:</label>
-        <select id="slc_setor_editar">
+        <div id="editar-func">
+            <h1>Editar funcionário</h1>
+            <p onclick="fecharPopUp('editar-func')">X</p>
+            <label for="">Nome:</label>
+            <input id="ipt_nome_editar" type="text">
+            <label for="">Email:</label>
+            <input id="ipt_email_editar" type="text">
+            <label for="">Senha:</label>
+            <input id="ipt_senha_editar" type="password">
+            <label for="">Setor:</label>
+            <select id="slc_setor_editar">
 
-        </select>
-        <label for="">Cargo:</label>
-        <select name="Cargos" id="slc_cargo_editar">
-            
-        </select>
-        <button onclick="editar()">Editar</button>
-    </div>
+            </select>
+            <label for="">Cargo:</label>
+            <select name="Cargos" id="slc_cargo_editar">
+                
+            </select>
+            <button onclick="editar()">Editar</button>
+        </div>
+</main>
+        
+           
 </body>
 <script src="js/gerenciarFuncionario.js"></script>
 <script src="js/sessao.js"></script>

@@ -46,7 +46,7 @@ function buscarSetor(req, res) {
     })
 }
 
-function editar(req, res) {
+async function editar(req, res) {
     id = req.body.id
     nome = req.body.nome
     email = req.body.email
@@ -54,10 +54,19 @@ function editar(req, res) {
     setor = req.body.setor
     cargo = req.body.cargo
     empresa = req.body.empresa
-
-    funcionarioModel.editar(id, nome, email, senha, setor, cargo, empresa).then(function (resultado) {
+    try{
+        await funcionarioModel.editar(id, nome, email, senha, setor, cargo, empresa)
+        .then(function (resultado) {
         res.status(200).json(resultado)
-    })
+        })
+    } catch(e){
+        if(e.code == "ER_DUP_ENTRY"){
+            res.status(400).send("E-mail já cadastrado");
+        } else{
+            res.status(400).send("Erro ao editar");
+        }
+    }
+
 }
 
 function excluir(req, res) {

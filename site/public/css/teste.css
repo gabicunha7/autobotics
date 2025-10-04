@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+
+.superior {
+    display: flex;
+    width: 100%;
+    height: 20%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.div-dados-usuario{
+    margin-right: 2rem;
+
+}
+
+.div-usuario{
+    display: flex;
+    background-color: #D9D9D9;
+    border-radius: 70px;
+    padding: 1rem;
+    margin-right: 3rem;
+}
+
+
+.div-usuario h6{
+    font-size: 23px;
+}
+
+.div-img-usuario{
+    margin-right: 1rem;
+    margin-left: 1rem;
+}
+
+body {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+
+#cadastrar-func, #cadastrar-parametro, #editar-par,#editar-func, #cadastrar-setor, #editar-setor {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    height: 85%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    background-color: white;
+}
+
+main{
+    width: 100%;
+}
+
+.title{
+    margin-left: 4.5rem;
+    font-size: 40px;
+}
+
+.container-func{
+    display: flex;
+    justify-content: center;
+}
+
+.container-table{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    width: 98%;
+    background-color: #D9D9D9;
+    height: 98%;
+}
+
+.top-options{
+    width: 95%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.search-bar label{
+    font-size: 25px;
+}
+
+.search-bar input{
+    height: 2rem;
+    padding: 1rem;
+    font-size: 20px;
+    border: 3px black solid;
+    border-radius: 10px;
+}
+
+.cadastrar{
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 3rem 0.5rem 5rem;
+    border-radius: 10px;
+    height: fit-content;
+    background-color: #E78433;
+    font-size: 25px;
+    border: none;
+    cursor: pointer;
+}
+
+.cadastrar:hover{
+    background-color: #a05b23;
+    color: white;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.tabela{
+    margin-top: 2rem;
+    width: 95%;
+}
+
+.tabela tr{
+    background-color: #E78433;
+    border: none;
+    font-size: 22px;
+}
+
+.tabela td{
+    text-align: center;
+    height: fit-content;
+    background-color: #fff;
+
+}
+
+.tabela td img {
+    width: 2.5rem;
+    cursor: pointer;
+}
+
+.tabela .teste{
+    padding: 3rem 0rem 0rem 10rem;
+}
+
+#div_erros_login {
+    display: none;
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    color: var(--corTextoPri);
+    background-color: #9b0202;
+    padding: 2rem;
+}

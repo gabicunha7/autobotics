@@ -1,4 +1,5 @@
 funcionarioId = null
+
 function fecharPopUp(id) {
     popup = document.getElementById(id)
     popup.style.display = "none";
@@ -70,31 +71,34 @@ function listar(dados) {
     const tabela = document.getElementById('func-table');
 
 
-    tabela.innerHTML = `<tr>
-                        <th>ID</th>
+    tabela.innerHTML = `<tr class= "teste">
                         <th>Nome</th>
                         <th>Email</th>
                         <th>Setor</th>
-                        <th>Ativo</th>
+                        <th>Status</th>
+                        <th>Excluir</th>
+                        <th>Editar</th>
                     </tr>`;
 
     dados.forEach(func => {
         tabela.innerHTML += `
-            <tr>
-                <td>${func.id_funcionario}</td>
+            <tr class="teste2">
                 <td>${func.nome}</td>
                 <td>${func.email}</td>
                 <td>${func.fk_setor}</td>
                 <td>${func.ativo}</td>
-                <td onclick="excluir(${func.id_funcionario})">X</td>
-                <td onclick="abrirPopUpEditar('editar-func', ${func.id_funcionario})">E</td>
+                <td onclick="excluir(${func.id_funcionario})"><img src="assets/icones/lixeira_icon.png"></td>
+                <td onclick="abrirPopUpEditar('editar-func', ${func.id_funcionario})"><img src="assets/icones/editar_icon.png"></td>
             </tr>
         `;
     });
 }
 
 function buscar() {
-    varEmpresa = sessionStorage.EMPRESA_USUARIO;
+document.getElementById("nome-usuario").innerHTML = sessionStorage.NOME_USUARIO;
+document.getElementById("email-usuario").innerHTML = sessionStorage.EMAIL_USUARIO;
+
+varEmpresa = sessionStorage.EMPRESA_USUARIO;
     
     fetch("/funcionario/buscar", {
         method: "POST",
@@ -191,7 +195,6 @@ function excluir(id) {
 }
 
 function editar() {
-    console.log(funcionarioId)
     varEmpresa = sessionStorage.EMPRESA_USUARIO;
     cargo = slc_cargo_editar.value;
     setor = slc_setor_editar.value;
@@ -226,11 +229,19 @@ function editar() {
             console.log(resposta);
             
             if (resposta.ok) {
+                    if(funcionarioId == sessionStorage.ID_FUNCIONARIO){
+                        sessionStorage.NOME_USUARIO = ipt_nome_editar.value;
+                        sessionStorage.EMAIL_USUARIO = ipt_email_editar.value;
+                        document.getElementById("nome-usuario").innerHTML = sessionStorage.NOME_USUARIO;
+                        document.getElementById("email-usuario").innerHTML = sessionStorage.EMAIL_USUARIO;
+                    }
                 buscar()
                 popup = document.getElementById("editar-func")
 
                 popup.style.display = "none";
                 buscar()      
+            } else {
+                erros("Inserir um email válido, este já está sendo usado");
             }
         })
     }
