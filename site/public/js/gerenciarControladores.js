@@ -36,19 +36,21 @@ function listar(dados) {
 
 
     tabela.innerHTML = `<tr>
-                        <th>ID</th>
                         <th>Número Serial</th>
+                        <th>Setor</th>
                         <th>Status</th>
+                        <th>Excluir</th>
+                        <th>Editar</th>
                     </tr>`;
 
     dados.forEach(controlador => {
         tabela.innerHTML += `
             <tr>
-                <td>${controlador.id_controlador}</td>
                 <td>${controlador.numero_serial}</td>
+                <td>${controlador.nome}</td>
                 <td>${controlador.status}</td>
-                <td onclick="excluir(${controlador.id_controlador})">X</td>
-                <td onclick="abrirPopUpEditar('editar-func', ${controlador.id_controlador})">E</td>
+                <td onclick="excluir(${controlador.id_controlador})"><img src="assets/icones/lixeira_icon.png"></td>
+                <td onclick="abrirPopUpEditar('editar-func', ${controlador.id_controlador})"><img src="assets/icones/editar_icon.png"></td>
             </tr>
         `;
     });
@@ -60,6 +62,8 @@ function abrirPopUpEditar(idPopUp, idControlador) {
 }
 
 function buscarControlador() {
+    document.getElementById("nome-usuario").innerHTML = sessionStorage.NOME_USUARIO;
+    document.getElementById("email-usuario").innerHTML = sessionStorage.EMAIL_USUARIO;
     varEmpresa = sessionStorage.EMPRESA_USUARIO;
     setorId = slc_setor_parametro.value;
     

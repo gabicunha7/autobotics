@@ -7,7 +7,12 @@ function cadastrar(numero_serial, idempresa, idsetor) {
 }
 
 function buscarControlador(idEmpresa) {
-    var sql = `SELECT * FROM controlador where fk_empresa = ${idEmpresa};`
+    var sql = `SELECT numero_serial, id_controlador, 
+                status, s.nome
+                FROM controlador c
+                left join setor s
+                on c.fk_setor = s.id_setor
+                where c.fk_empresa = ${idEmpresa};`
     return database.executar(sql)
 }
 

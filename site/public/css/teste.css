@@ -86,7 +86,8 @@ main{
     padding: 1rem;
     width: 98%;
     background-color: #D9D9D9;
-    height: 98%;
+    border-radius: 20px;
+    height: fit-content;
 }
 
 .top-options{
@@ -193,7 +194,6 @@ main{
     font-size: 20px;
     border: 3px black solid;
     border-radius: 10px;
-    background-color: #fff;
 }
 
 .campos div {

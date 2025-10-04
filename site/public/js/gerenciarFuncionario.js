@@ -85,8 +85,8 @@ function listar(dados) {
             <tr class="teste2">
                 <td>${func.nome}</td>
                 <td>${func.email}</td>
-                <td>${func.fk_setor}</td>
-                <td>${func.ativo}</td>
+                <td>${func.nome_setor != null ? func.nome_setor : "Nenhum setor"}</td>
+                <td>${func.ativo == 1 ? "Ativo" : "Inativo"}</td>
                 <td onclick="excluir(${func.id_funcionario})"><img src="assets/icones/lixeira_icon.png"></td>
                 <td onclick="abrirPopUpEditar('editar-func', ${func.id_funcionario})"><img src="assets/icones/editar_icon.png"></td>
             </tr>

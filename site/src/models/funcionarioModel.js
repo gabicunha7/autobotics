@@ -1,7 +1,11 @@
 var database = require("../database/config");
 
 function buscar(empresa) {
-    var sql = `SELECT * FROM funcionario WHERE fk_empresa = ${empresa};`
+    var sql = `SELECT f.nome, email, ativo, s.nome nome_setor, id_funcionario
+        FROM funcionario f
+        left join setor s
+        on s.id_setor = f.fk_setor
+        WHERE f.fk_empresa = ${empresa};`
     return database.executar(sql)
 }
 
