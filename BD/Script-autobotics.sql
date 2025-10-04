@@ -61,7 +61,6 @@ CREATE TABLE funcionario (
 -- Controlador (pertence a um setor;)
 CREATE TABLE controlador (
   id_controlador INT AUTO_INCREMENT PRIMARY KEY,
-  modelo VARCHAR(120) NOT NULL,
   numero_serial VARCHAR(120) UNIQUE,
   status VARCHAR(30) DEFAULT 'ativo',
   fk_empresa INT NOT NULL,

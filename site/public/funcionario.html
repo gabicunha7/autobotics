@@ -7,26 +7,51 @@
     <link rel="stylesheet" href="css/body.css">
     <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet" href="css/funcionario.css">
+    <link rel="stylesheet" href="css/sidebar.css">
 </head>
 <body>
-    <aside>
-        <section>
-            <div class="sidebar-item">
-                <a href="">
-                    <p>Dashboard</p>
+<aside>
+ <section class="menu-container">
+            <img class="img-logo-curta" src="assets/logo/LOGO_CURTA.png" alt="">
+            <h1>MENU</h1>
+
+            <div class="paginas-container">
+                <a class="a-pagina" href="dashboard.html">
+                    <img class="icon-pagina" src="assets/icones/dash_icon.png" alt="">
+                    Dashboard
                 </a>
-            </div>
-            <div class="sidebar-item">
-                <a href="">
-                    <p>Usuários</p>
+                <a class="a-pagina" href="">
+                    <img class="icon-pagina" src="assets/icones/alerta_icon.png" alt="">
+                    Alertas
                 </a>
-            </div>
-            <div class="sidebar-item">
-                <a href="setor.html">
-                    <p>Setores</p>
+                <a class="a-pagina" href="parametros.html">
+                    <img class="icon-pagina" src="assets/icones/parametros_icon.png" alt="">
+                    Parâmetros
+                </a>
+                <a class="a-pagina" href="">
+                    <img class="icon-pagina" src="assets/icones/info_icon.png" alt="">
+                    Informacoes
+                </a>
+                <a class="a-pagina" href="setor.html">
+                    <img class="icon-pagina" src="assets/icones/setor_icon.png" alt="">
+                    Setores
+                </a>
+                <a class="a-pagina" href="controladores.html">
+                    <img class="icon-pagina" src="assets/icones/controlador_icon.png" alt="">
+                    Controladores
+                </a>
+                <a class="a-pagina" href="funcionario.html">
+                    <img class="icon-pagina" src="assets/icones/userImg.png" alt="">
+                    Funcionários
                 </a>
             </div>
         </section>
+        <a href="">
+            <button id="btn-sair" onclick="limparSessao()">
+            <img class="icon-sair" src="assets/icones/sair_icon.png" alt="">
+              Sair
+            </button>
+        </a>
     </aside>
 
     <main>
@@ -91,4 +116,5 @@
     </div>
 </body>
 <script src="js/gerenciarFuncionario.js"></script>
+<script src="js/sessao.js"></script>
 </html>
