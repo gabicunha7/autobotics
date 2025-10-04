@@ -4,39 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Autobotics | Dashboard</title>
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/dash_manutencao.css">
 </head>
 <body>
     <aside>
         <section class="menu-container">
+            <img class="img-logo-curta" src="assets/logo/LOGO_CURTA.png" alt="">
             <h1>MENU</h1>
-            <a href="dashboard.html">
-                Dashboard
-            </a>
-            <a href="">
-                Alertas
-            </a>
-            <a href="parametros.html">
-                Parâmetros
-            </a>
-            <a href="">
-                Informacoes
-            </a>
-            <a href="setor.html">
-                Setores
-            </a>
-            <a href="controladores.html">
-                Controladores
-            </a>
 
-            <div>
-                <a href="">
-                <button>
-                    Sair
-                </button>
-            </a>
+            <div class="paginas-container">
+                <a class="a-pagina" href="dashboard.html">
+                    <img class="icon-pagina" src="assets/icones/dash_icon.png" alt="">
+                    Dashboard
+                </a>
+                <a class="a-pagina" href="">
+                    <img class="icon-pagina" src="assets/icones/alerta_icon.png" alt="">
+                    Alertas
+                </a>
+                <a class="a-pagina" href="parametros.html">
+                    <img class="icon-pagina" src="assets/icones/parametros_icon.png" alt="">
+                    Parâmetros
+                </a>
+                <a class="a-pagina" href="">
+                    <img class="icon-pagina" src="assets/icones/info_icon.png" alt="">
+                    Informacoes
+                </a>
+                <a class="a-pagina" href="setor.html">
+                    <img class="icon-pagina" src="assets/icones/setor_icon.png" alt="">
+                    Setores
+                </a>
+                <a class="a-pagina" href="controladores.html">
+                    <img class="icon-pagina" src="assets/icones/controlador_icon.png" alt="">
+                    Controladores
+                </a>
             </div>
-            
         </section>
+        <a href="">
+            <button id="btn-sair">
+            <img class="icon-sair" src="assets/icones/sair_icon.png" alt="">
+              Sair
+            </button>
+        </a>
     </aside>
 </body>
 </html>
