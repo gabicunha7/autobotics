@@ -95,44 +95,69 @@
     
 
         <div id="cadastrar-func">
-            <h1>Cadastrar funcionário</h1>
-            <p onclick="fecharPopUp('cadastrar-func')">X</p>
-            <label for="">Nome:</label>
-            <input id="ipt_nome" type="text">
-            <label for="">Email:</label>
-            <input id="ipt_email" type="text">
-            <label for="">Senha:</label>
-            <input id="ipt_senha" type="password">
-            <label for="">Setor:</label>
-            <select id="slc_setor">
-
-            </select>
-            <label for="">Cargo:</label>
-            <select name="Cargos" id="slc_cargo">
-                
-            </select>
-            <button onclick="cadastrar()">Cadastrar</button>
+            <div class="topo">
+                <p onclick="fecharPopUp('cadastrar-func')"><img src="assets/icones/x_icon.png"></p>
+            </div>
+            <div class="campos">
+                <h1>Cadastrar</h1>
+                <div>
+                    <label for="">Nome:</label>
+                    <input id="ipt_nome" type="text">
+                </div>
+                <div>
+                    <label for="">Email:</label>
+                    <input id="ipt_email" type="text">
+                </div>
+                <div>
+                    <label for="">Senha:</label>
+                    <input id="ipt_senha" type="password">
+                </div>
+                <div>
+                    <label for="">Setor:</label>
+                    <select id="slc_setor">
+                    </select>
+                </div>
+                <div>
+                    <label for="">Cargo:</label>
+                    <select name="Cargos" id="slc_cargo">
+                    </select>
+                </div>
+                <button onclick="cadastrar()">Cadastrar</button>
+            </div>               
         </div>
 
         <div id="editar-func">
-            <h1>Editar funcionário</h1>
-            <p onclick="fecharPopUp('editar-func')">X</p>
-            <label for="">Nome:</label>
-            <input id="ipt_nome_editar" type="text">
-            <label for="">Email:</label>
-            <input id="ipt_email_editar" type="text">
-            <label for="">Senha:</label>
-            <input id="ipt_senha_editar" type="password">
-            <label for="">Setor:</label>
-            <select id="slc_setor_editar">
-
-            </select>
-            <label for="">Cargo:</label>
-            <select name="Cargos" id="slc_cargo_editar">
-                
-            </select>
-            <button onclick="editar()">Editar</button>
-        </div>
+            <div class="topo">
+                <p onclick="fecharPopUp('editar-func')"><img src="assets/icones/x_icon.png"></p>
+            </div>
+            <div class="campos">
+                <h1>Editar</h1>
+                <div>
+                    <label for="">Nome:</label>
+                    <input id="ipt_nome_editar" type="text">
+                </div>
+                <div>
+                    <label for="">Email:</label>
+                    <input id="ipt_email_editar" type="text">
+                </div>
+                <div>
+                    <label for="">Senha:</label>
+                    <input id="ipt_senha_editar" type="password">
+                </div>
+                <div>
+                    <label for="">Setor:</label>
+                    <select id="slc_setor_editar">
+                    </select>
+                </div>
+            
+                <div>
+                    <label for="">Cargo:</label>
+                    <select name="Cargos" id="slc_cargo_editar">
+                    </select>
+                </div>
+                <button onclick="editar()">Editar</button>
+            </div>               
+        </div>  
 </main>
         
            

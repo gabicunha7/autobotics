@@ -47,13 +47,22 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 50%;
-    height: 85%;
+    width: 60%;
+    height: fit-content;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    background-color: white;
+    background-color: #D9D9D9;
+    border-radius: 10px;
+}
+
+.topo{
+    margin: 2rem 2rem;
+    font-size: 20px;
+    cursor: pointer;
+    align-self: flex-end;
+}
+
+.topo img{
+    width: 2rem;
 }
 
 main{
@@ -155,3 +164,68 @@ main{
     background-color: #9b0202;
     padding: 2rem;
 }
+
+.campos {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.campos label {
+    width: 20%;
+    font-size: 20px;
+}
+
+.campos input{
+    width: 80%;
+    height: 2rem;
+    padding: 1rem;
+    font-size: 20px;
+    border: 3px black solid;
+    border-radius: 10px;
+}
+
+.campos select {
+    width: 80%;
+    height: 2rem;
+    padding: 1rem;
+    font-size: 20px;
+    border: 3px black solid;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
+.campos div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 50%;
+}
+
+.campos button {
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    border-radius: 10px;
+    height: fit-content;
+    background-color: #E78433;
+    font-size: 25px;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 4rem;
+}
+
+.campos button:hover{
+    background-color: #a05b23;
+    color: white;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+.campos h1{
+    font-size: 40px;
+}
+
