@@ -1,6 +1,9 @@
 parametroId = null;
 
 function buscarSetorParametro(){
+    document.getElementById("nome-usuario").innerHTML = sessionStorage.NOME_USUARIO;
+    document.getElementById("email-usuario").innerHTML = sessionStorage.EMAIL_USUARIO;
+
     varEmpresa = sessionStorage.EMPRESA_USUARIO;
     fetch("/parametros/buscarSetorParametro", {
         method: "POST",
@@ -88,6 +91,8 @@ tabela.innerHTML = `<tr>
                         <th>ID_Componente</th>
                         <th>Valor</th>
                         <th>Criticidade</th>
+                        <th>Excluir</th>
+                        <th>Editar</th>
                     </tr>`;
     dados.forEach(par => {
         tabela.innerHTML += `
@@ -95,9 +100,9 @@ tabela.innerHTML = `<tr>
                 <td>${par.id_parametro}</td>
                 <td>${par.fk_componente}</td>
                 <td>${par.valor}</td>
-                <td>${par.criticidade}</td>
-                <td onclick="excluir(${par.id_parametro})">X</td>
-                <td onclick="abrirPopUpEditar('editar-par', ${par.id_parametro})">E</td>
+                <td>${par.criticidade == 0 ? "Baixo" : par.criticidade == 1 ? "Médio" : "Alto"}</td>
+                <td onclick="excluir(${par.id_parametro})"><img src="assets/icones/lixeira_icon.png"></td>
+                <td onclick="abrirPopUpEditar('editar-par', ${par.id_parametro})"><img src="assets/icones/editar_icon.png"></td>
             </tr>
         `;
     });
@@ -134,19 +139,14 @@ function cadastrar(){
                     })
             })
             .then(function (resposta) {
-                console.log(resposta);
-                
-                if (resposta.ok) {
-                
-                }
 
                 if (resposta.ok) {
-                            fecharPopUp('cadastrar-parametro')
-                            buscarParametro() 
+                    fecharPopUp('cadastrar-parametro')
+                    buscarParametro() 
                 
-                        } else {
-                            erros("Este componente já tem parâmetro definido");
-                        }
+                } else {
+                    erros("Este componente já tem parâmetro definido");
+                }
             }
         )
     }   
@@ -163,7 +163,6 @@ function excluir(id) {
         })
     })
     .then(function (resposta) {
-        console.log(resposta);
         
         if (resposta.ok) {
             buscarParametro()
@@ -191,7 +190,6 @@ function editar() {
         })
     })
     .then(function (resposta) {
-        console.log(resposta);
         
         if (resposta.ok) {
             fecharPopUp('editar-par')
