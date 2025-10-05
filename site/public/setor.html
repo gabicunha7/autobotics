@@ -6,7 +6,7 @@
     <title>Setores</title>
     <link rel="stylesheet" href="css/body.css">
     <link rel="stylesheet" href="css/sidebar.css">
-    <link rel="stylesheet" href="css/funcionario.css">
+    <link rel="stylesheet" href="css/teste.css">
     <link rel="shortcut icon" href="assets\logo\LOGO_CURTA.png" type="image/x-icon">
 
 </head>
@@ -58,47 +58,78 @@
     </aside>
 
     <main>
-        <section class="container-func">
+         <section class="superior">
             <h1 class="title">Setores</h1>
+            <div class="div-usuario">
+                <div class="div-img-usuario">
+                    <img src="assets/icones/foto_usuario.png" alt="">
+                </div>
+                <div class="div-dados-usuario">
+                    <h6 id="nome-usuario"></h6>
+                    <p id="email-usuario"></p>
+                </div>
+            </div>
+        </section>
+        <section class="container-func">
             <div class="container-table">
                 <div class="top-options">
-                    <input type="text">
-                    <button onclick="abrirPopUpCadastro('cadastrar-setor')">Adicionar</button>
+                      <div class="search-bar">                        
+                            <label for="pesquisa">Pesquisar: </label>
+                            <input type="text" id="pesquisa">
+                        </div>
+                    <button onclick="abrirPopUpCadastro('cadastrar-setor')" class="cadastrar">Adicionar setor +</button>
                 </div>
-                <table id="setor-table">
+                <table id="setor-table" class="tabela">
                     <tr>
-                        <th>ID</th>
                         <th>Nome</th>
                         <th>Descrição</th>
-                        <th>Ação</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </table>
-                </div>
+            </div>
             <div id="div_erros_login"></div>
             </div>
         </section>
     </main>
 
     <div id="cadastrar-setor">
-        <h1>Cadastrar Setor</h1>
-        <p onclick="fecharPopUp('cadastrar-setor')">X</p>
-        <label for="ipt_nome">Nome do setor:</label>
-        <input type="text" id="ipt_nome">
-        <label for="ipt_descricao">Descrição:</label>
-        <input type="text" id="ipt_descricao">
-        <button onclick="cadastrar()">Cadastrar</button>
+        <div class="topo">
+            <p onclick="fecharPopUp('cadastrar-setor')"><img src="assets/icones/x_icon.png"></p>
+        </div>
+        <div class="campos">
+            <h1>Cadastrar</h1>
+            <div>
+                <label for="ipt_nome">Nome:</label>
+                <input type="text" id="ipt_nome">
+            </div>
+            <div>
+                <label for="ipt_descricao">Descrição:</label>
+                <textarea name="" id="ipt_descricao" maxlength="75"></textarea>
+            </div>
+            <button onclick="cadastrar()">Cadastrar</button>
+        </div>
     </div>
 
     <div id="editar-setor">
-        <h1>Editar Setor</h1>
-        <p onclick="fecharPopUp('editar-setor')">X</p>
-        <label for="ipt_nome_editar">Nome do setor:</label>
-        <input type="text" id="ipt_nome_editar">
-        <label for="ipt_descricao_editar">Descrição:</label>
-        <input type="text" id="ipt_descricao_editar">
-        <button onclick="editar()">Editar</button>
+        <div class="topo">
+            <p onclick="fecharPopUp('editar-setor')"><img src="assets/icones/x_icon.png"></p>
+        </div>
+        <div class="campos">
+            <h1>Editar</h1>
+            <div>
+                <label for="ipt_nome_editar">Nome:</label>
+                <input type="text" id="ipt_nome_editar">
+            </div>
+            <div>
+                <label for="ipt_descricao_editar">Descrição:</label>
+                <textarea name="" id="ipt_descricao_editar" maxlength="75"></textarea>
+            </div>
+            <button onclick="editar()">Editar</button>
+        </div>
     </div>
 </body>
 <script src="js/gerenciarSetor.js"></script>
 <script src="js/sessao.js"></script>
 </html>
+

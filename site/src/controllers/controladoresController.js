@@ -1,14 +1,23 @@
 var controladoresModel = require("../models/controladoresModel");
 var database = require("../database/config");
 
-function cadastrar(req, res) {
+async function cadastrar(req, res) {
     numero_serial = req.body.numero_serial
     idsetor = req.body.idsetor
     idempresa = req.body.idEmpresa
-
-    controladoresModel.cadastrar(numero_serial, idsetor, idempresa).then(function (resultado) {
+    
+    try{
+        await controladoresModel.cadastrar(numero_serial, idsetor, idempresa)
+        .then(function (resultado) {
         res.status(200).json(resultado)
-    })
+        })
+    } catch(e){
+        if(e.code == "ER_DUP_ENTRY"){
+            res.status(400).send("Número serial já cadastrado");
+        } else{
+            res.status(400).send("Erro no cadastro");
+        }
+    }
 }
 
 function buscarControlador(req, res) {
@@ -34,16 +43,24 @@ function buscarSetor(req, res) {
     })
 }
 
-function editar(req, res) {
+async function editar(req, res) {
     id = req.body.id
     setor = req.body.setor
     empresa = req.body.empresa
     numero_serial = req.body.numero_serial
 
-
-    controladoresModel.editar(id, numero_serial, setor, empresa).then(function (resultado) {
+    try{
+        await controladoresModel.editar(id, numero_serial, setor, empresa)
+        .then(function (resultado) {
         res.status(200).json(resultado)
     })
+    } catch(e){
+        if(e.code == "ER_DUP_ENTRY"){
+            res.status(400).send("Número serial já cadastrado");
+        } else{
+            res.status(400).send("Erro ao editar");
+        }
+    }
 }
 
 module.exports = {

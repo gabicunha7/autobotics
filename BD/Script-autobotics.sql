@@ -78,7 +78,7 @@ create table componente (
 -- Parametrização dos alertas
 CREATE TABLE parametro(
   id_parametro int auto_increment,
-  fk_componente INT NOT NULL,
+  fk_componente INT NOT NULL unique,
   valor DOUBLE,
   criticidade TINYINT(2),
   PRIMARY KEY(id_parametro, fk_componente),

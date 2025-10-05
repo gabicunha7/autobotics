@@ -123,6 +123,8 @@ function cadastrar() {
                     buscarControlador()    
                     fecharPopUp()
                            
+                } else {
+                    erros("Inserir um Número serial válido, este já está sendo usado");
                 }
     })
     }
@@ -158,6 +160,8 @@ function editar() {
                 popup.style.display = "none";
                 buscarControlador()    
                 fecharPopUp()    
+            } else {
+                erros("Inserir um Número serial válido, este já está sendo usado");
             }
         })
     }

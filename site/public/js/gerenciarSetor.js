@@ -100,20 +100,19 @@ function listar(dados) {
     console.log(dados);
 
     tabela.innerHTML = `<tr>
-                        <th>ID</th>
                         <th>Nome</th>
                         <th>Descrição</th>
-                        <th>Ação</th>
+                        <th>Excluir</th>
+                        <th>Editar</th>
                     </tr>`;
 
     dados.forEach(func => {
         tabela.innerHTML += `
             <tr>
-                <td>${func.id_setor}</td>
                 <td>${func.nome}</td>
                 <td>${func.descricao}</td>
-                <td onclick="excluir(${func.id_setor})">X</td>
-                <td onclick="abrirPopUpEditar('editar-setor', ${func.id_setor})">E</td>
+                <td onclick="excluir(${func.id_setor})"><img src="assets/icones/lixeira_icon.png"></td>
+                <td onclick="abrirPopUpEditar('editar-setor', ${func.id_setor})"><img src="assets/icones/editar_icon.png"></td>
             </tr>
         `;
     });
@@ -121,6 +120,8 @@ function listar(dados) {
 
 
 function buscarSetor() {
+    document.getElementById("nome-usuario").innerHTML = sessionStorage.NOME_USUARIO;
+    document.getElementById("email-usuario").innerHTML = sessionStorage.EMAIL_USUARIO;
     varEmpresa = sessionStorage.EMPRESA_USUARIO;
 
     fetch("/setor/buscarSetor", {
