@@ -167,70 +167,77 @@
 
 </body>
 <script>
+const COLORS = ['#4CAF50', '#FFC107', '#F44336'];
 
+function index(perc) {
+  return perc < 70 ? 0 : perc < 90 ? 1 : 2;
+}
 
-    const COLORS = ['#4CAF50', '#FFC107', '#F44336']; 
+function criarGrafico(idCanvas, titulo, valor) {
+  const data = {
+    datasets: [{
+      data: [valor, 100 - valor],
+      backgroundColor: [
+        COLORS[index(valor)],
+        'rgb(234, 234, 234)'
+      ],
+      borderWidth: 0
+    }]
+  };
 
-    function index(perc) {
-        return perc < 70 ? 0 : perc < 90 ? 1 : 2;
+  const options = {
+    aspectRatio: 2,
+    cutout: '70%',
+    circumference: 180,
+    rotation: -90,
+    plugins: {
+      legend: { display: false },
+      tooltip: { enabled: false }
     }
+  };
 
-    function criarGrafico(idCanvas, titulo, valor) {
+  // plugin por-chart para desenhar o valor no centro do arco
+  const centerPlugin = {
+    id: 'valorCentral',
+    afterDraw(chart) {
+      const { ctx, chartArea } = chart;
+      if (!chartArea) return;
+      const left = chartArea.left;
+      const right = chartArea.right;
+      const top = chartArea.top;
+      const bottom = chartArea.bottom;
+      const centerX = (left + right) / 2;
+      // ajusta verticalmente para dentro do arco
+      const centerY = (top + bottom) / 2 + (bottom - top) * 0.12;
 
-        const data = {
-            datasets: [{
-                data: [valor, 100 - valor],
-                backgroundColor: [
-                    COLORS[index(valor)],
-                    'rgb(234, 234, 234)'
-                ]
-            }]
-        };
+      ctx.save();
+      ctx.font = 'bold 26px Jost, sans-serif';
+      ctx.fillStyle = '#000';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(`${valor}%`, centerX, centerY);
 
-        const options = {
-            aspectRatio: 2,
-            cutout: '70%',
-            circumference: 180,
-            rotation: -90,
-            plugins: {
-                legend: { display: false },
-                tooltip: { enabled: false },
-                annotation: {
-                    annotations: {
-                        label: {
-                            type: 'label',
-                            xValue: 0,
-                            yValue: 0,
-                            backgroundColor: 'transparent',
-                            content: [`${valor}%`, titulo],
-                            font: [
-                                { size: 24, weight: 'bold' },
-                                { size: 14 }
-                            ],
-                            color: ['#000', 'gray']
-                        }
-                    }
-                }
-            }
-        };
-
-        const ctx = document.getElementById(idCanvas);
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: data,
-            options: options
-        });
+      // subtítulo (opcional)
+      ctx.font = '14px Jost, sans-serif';
+      ctx.fillStyle = '#666';
+      ctx.fillText(titulo, centerX, centerY + 28);
+      ctx.restore();
     }
+  };
 
-    criarGrafico('grafico_cpu', 'CPU Utilização', 46);
-    criarGrafico('grafico_ram', 'Memória RAM', 81);
-    criarGrafico('grafico_disco', 'Disco', 97);
+  const ctx = document.getElementById(idCanvas);
+  new Chart(ctx, {
+    type: 'doughnut',
+    data,
+    options,
+    plugins: [centerPlugin] // <<--- plugin corretamente passado aqui
+  });
+}
 
-
-
-
-
+// chamadas de exemplo
+criarGrafico('grafico_cpu', 'CPU Utilização', 46);
+criarGrafico('grafico_ram', 'Memória RAM', 81);
+criarGrafico('grafico_disco', 'Disco', 97);
 </script>
-
 
 </html>
