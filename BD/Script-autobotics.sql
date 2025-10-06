@@ -117,10 +117,8 @@ insert into setor(nome, descricao, fk_empresa)
 values ("SETOR DE TESTES", "Este setor é um exemplo de um teste a ser utilizado", 1);
 
 insert into funcionario (nome, email, fk_setor, fk_empresa, ativo, fk_cargo, senha_hash)
-values ("teste", "teste@gmail.com", 1, 1, 1, 2, SHA2("senha123", 256));
+values ("teste", "teste@gmail.com", null, 1, 1, 2, SHA2("senha123", 256));
 
 insert into parametro(fk_componente, valor, criticidade) values(1, 35.5, 3);
-
-select * from componente;
 
 
