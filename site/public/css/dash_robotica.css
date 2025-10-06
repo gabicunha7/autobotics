@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+/* RESET CSS */
+* {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Jost";
+}
+
+a {
+    text-decoration: none;
+}
+
+img {
+    width: 100%;
+    height: auto;
+}
+
+/* FIM RESET CSS */
+
+body{
+    display: flex;
+    height: 100vh;
+}
+
+.div-superior{
+    display: flex;
+}
+
+.div-filtro{
+    width: 50vw;
+    background-color: #D9D9D9;
+    margin: 50px;
+    display: flex;
+    align-items: center;
+    height: 100px;
+    border-radius: 50px;
+    padding: 50px;
+    font-size: 20px;
+}
+
+.div-filtro select{
+    font-size: 20px;
+    height: 40px;
+    width: 150px;
+    margin: 20px;
+}
+
+.div-usuario{
+    display: flex;
+    width: 20vw;
+    background-color: #D9D9D9;
+    margin: 50px;
+    height: 100px;
+    border-radius: 50px;
+    padding: 20px;
+    font-size: 20px;
+}
+
+.div-usuario h6{
+    font-size: 23px;
+}
+
+.div-img-usuario{
+    margin-right: 15px;
+    margin-left: 15px;
+}
+
+.div-conteudo{
+    display: flex;
+    justify-content: center;
+    background-color: #D9D9D9;
+    margin-left: 50px;
+    margin-right: 50px;
+    width: 75vw;
+    height: 100vh;
+    border-radius: 20px;
+}
+
+.div-info-conteudo{
+    display: flex;
+    padding: 20px;
+    justify-content: space-between;
+}
+
+.div-info-conteudo h3{
+    font-size: 25px;
+}
+
+.div-info-conteudo p{
+    font-size: 20px;
+}
+.div_metricas{
+    display: flex;
+    flex-direction: row;
+}
+.cards-metricas {
+  display: grid;
+  grid-template-columns: repeat(3, 0fr);
+  gap: 15px;
+  margin: 20px;
+}
+
+.card-metrica {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 15px;
+  font-size: 18px;
+  font-weight: 500;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  width: 200px;
+  height: 130px;
+}
+
+.card-metrica span {
+  font-size: 22px;
+  font-weight: 600;
+  margin-top: 10px;
+  color: #333;
+}
+
+.div_graficos {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 20px;
+}
+
+.div_grafico {
+  background-color: #fff;
+  border-radius: 15px;
+  width: 30%;
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.div_grafico p {
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+#grafico_cpu,
+#grafico_ram,
+#grafico_disco {
+    width: 100% !important;
+    height: 200px !important;
+}
+
+.div_grafico_alertas_processo{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-processo{
+    background-color: #EEEDED;
+    height: 350px;
+    width: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-radius: 25px;
+}
+
+.processo{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 150px;
+    gap: 10px;
+    
+}
+
+
+
+.processo_dashboard{
+    display: flex;
+    justify-content: space-between;
+    font-size: 25px;
+    width: 300px;
+    height: 50px;
+    background-color: #d5d2d2;
+    padding: 20px;
+    align-items: center;
+    border-radius: 20px;
+}

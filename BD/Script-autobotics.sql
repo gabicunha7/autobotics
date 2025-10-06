@@ -78,9 +78,10 @@ create table componente (
 -- Parametrização dos alertas
 CREATE TABLE parametro(
   id_parametro int auto_increment,
-  fk_componente INT NOT NULL unique,
+  fk_componente INT NOT NULL,
   valor DOUBLE,
   criticidade TINYINT(2),
+  CONSTRAINT IX_UNIQUE_COMPONENTE UNIQUE(fk_componente, criticidade),
   PRIMARY KEY(id_parametro, fk_componente),
   CONSTRAINT fk_parametro_componente FOREIGN KEY (fk_componente) REFERENCES componente(id_componente)
 );
@@ -121,3 +122,5 @@ values ("teste", "teste@gmail.com", 1, 1, 1, 2, SHA2("senha123", 256));
 insert into parametro(fk_componente, valor, criticidade) values(1, 35.5, 3);
 
 select * from componente;
+
+

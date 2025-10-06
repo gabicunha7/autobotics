@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autobotics | Dashboard</title>
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/dash_robotica.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1"></script>
+</head>
+
+<body>
+    <aside>
+        <section class="menu-container">
+            <img class="img-logo-curta" src="assets/logo/LOGO_CURTA.png" alt="">
+            <h1>MENU</h1>
+
+            <div class="paginas-container">
+                <a class="a-pagina" href="dashboard.html">
+                    <img class="icon-pagina" src="assets/icones/dash_icon.png" alt="">
+                    Dashboard
+                </a>
+                <a class="a-pagina" href="">
+                    <img class="icon-pagina" src="assets/icones/alerta_icon.png" alt="">
+                    Alertas
+                </a>
+                <a class="a-pagina" href="parametros.html">
+                    <img class="icon-pagina" src="assets/icones/parametros_icon.png" alt="">
+                    Parâmetros
+                </a>
+                <a class="a-pagina" href="">
+                    <img class="icon-pagina" src="assets/icones/info_icon.png" alt="">
+                    Informacoes
+                </a>
+                <a class="a-pagina" href="setor.html">
+                    <img class="icon-pagina" src="assets/icones/setor_icon.png" alt="">
+                    Setores
+                </a>
+                <a class="a-pagina" href="controladores.html">
+                    <img class="icon-pagina" src="assets/icones/controlador_icon.png" alt="">
+                    Controladores
+                </a>
+                <a class="a-pagina" href="funcionario.html">
+                    <img class="icon-pagina" src="assets/icones/userImg.png" alt="">
+                    Funcionários
+                </a>
+            </div>
+        </section>
+        <a href="">
+            <button id="btn-sair" onclick="limparSessao()">
+                <img class="icon-sair" src="assets/icones/sair_icon.png" alt="">
+                Sair
+            </button>
+        </a>
+    </aside>
+
+    <section class="container-content">
+        <div class="div-superior">
+            <div class="div-filtro">
+                <p>Controlador: </p>
+                <select name="Setor" id="">
+                    <option value="Setor A">Controlador 1</option>
+                </select>
+            </div>
+
+            <div class="div-usuario">
+                <div class="div-img-usuario">
+                    <img src="assets/icones/foto_usuario.png" alt="">
+                </div>
+                <div>
+                    <h6>Lucas</h6>
+                    <p>lucas@gmail.com</p>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="div-conteudo">
+            <div class="container-conteudo">
+                <div class="div-info-conteudo">
+                    <h3>Dashboard</h3>
+                    <p>Data: 01/10/2025</p>
+                </div>
+
+                <div class="div-metricas">
+                    <div class="div_grafico_alertas_processo">
+                        <div class="cards-metricas">
+                            <div class="card-metrica">
+                                <p>Pico de CPU (%):</p>
+                                <span>78%</span>
+                            </div>
+                            <div class="card-metrica">
+                                <p>RAM Total (GB):</p>
+                                <span>16</span>
+                            </div>
+                            <div class="card-metrica">
+                                <p>Disco Total (GB):</p>
+                                <span>512</span>
+                            </div>
+                            <div class="card-metrica">
+                                <p>Média de CPU (%):</p>
+                                <span>46%</span>
+                            </div>
+                            <div class="card-metrica">
+                                <p>RAM em uso (GB):</p>
+                                <span>12.5</span>
+                            </div>
+                            <div class="card-metrica">
+                                <p>Disco em uso (%):</p>
+                                <span>90%</span>
+                            </div>
+
+                        </div>
+                        <div class="card-processo">
+                            <div class="processo">
+                                <h2>Processos mais utilizados:</h2>
+                                <div class="processo_dashboard">
+                                    <p>processo: </p>
+                                    <p>xx</p>
+                                </div>
+                                <div class="processo_dashboard">
+                                    <p>processo: </p>
+                                    <p>yy</p>
+                                </div>
+                                <div class="processo_dashboard">
+                                    <p>processo: </p>
+                                    <p>zz</p>
+                                </div>
+                                <div class="processo_dashboard">
+                                    <p>processo: </p>
+                                    <p>ww</p>
+                                </div>
+                                <div class="processo_dashboard">
+                                    <p>processo: </p>
+                                    <p>xx</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="div_graficos">
+                        <div class="div_grafico">
+                            <p>CPU (%):</p>
+                            <canvas id="grafico_cpu"></canvas>
+                        </div>
+
+                        <div class="div_grafico">
+                            <p>RAM (%):</p>
+                            <canvas id="grafico_ram"></canvas>
+                        </div>
+
+                        <div class="div_grafico">
+                            <p>Utilização do Disco (%):</p>
+                            <canvas id="grafico_disco"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+</body>
+<script>
+
+
+    const COLORS = ['#4CAF50', '#FFC107', '#F44336']; 
+
+    function index(perc) {
+        return perc < 70 ? 0 : perc < 90 ? 1 : 2;
+    }
+
+    function criarGrafico(idCanvas, titulo, valor) {
+
+        const data = {
+            datasets: [{
+                data: [valor, 100 - valor],
+                backgroundColor: [
+                    COLORS[index(valor)],
+                    'rgb(234, 234, 234)'
+                ]
+            }]
+        };
+
+        const options = {
+            aspectRatio: 2,
+            cutout: '70%',
+            circumference: 180,
+            rotation: -90,
+            plugins: {
+                legend: { display: false },
+                tooltip: { enabled: false },
+                annotation: {
+                    annotations: {
+                        label: {
+                            type: 'label',
+                            xValue: 0,
+                            yValue: 0,
+                            backgroundColor: 'transparent',
+                            content: [`${valor}%`, titulo],
+                            font: [
+                                { size: 24, weight: 'bold' },
+                                { size: 14 }
+                            ],
+                            color: ['#000', 'gray']
+                        }
+                    }
+                }
+            }
+        };
+
+        const ctx = document.getElementById(idCanvas);
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: data,
+            options: options
+        });
+    }
+
+    criarGrafico('grafico_cpu', 'CPU Utilização', 46);
+    criarGrafico('grafico_ram', 'Memória RAM', 81);
+    criarGrafico('grafico_disco', 'Disco', 97);
+
+
+
+
+
+</script>
+
+
+</html>
