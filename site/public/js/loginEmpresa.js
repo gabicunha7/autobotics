@@ -85,7 +85,13 @@ function entrar() {
                 sessionStorage.ATIVO_USUARIO = json.ativo;
                 
                 setTimeout(() => {
-                    window.location = "funcionario.html";
+                    if(sessionStorage.CARGO_USUARIO == 1) {
+                        window.location = "dashboard_robotica.html";
+                    }
+                    else {
+                        window.location = "dashboard_manutencao.html";
+                    }
+                    
                 }, "1000");
                 
                 });
