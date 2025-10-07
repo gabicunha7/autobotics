@@ -53,15 +53,23 @@ function excluir(req, res) {
     })
 }
 
-function editar(req, res) {
+async function editar(req, res) {
     idParametro = req.body.id_parametro
     valor = req.body.valor
     criticidade = req.body.criticidade
     
-
-    parametrosModel.editar(idParametro, valor, criticidade).then(function (resultado) {
+    try{
+        await parametrosModel.editar(idParametro, valor, criticidade)
+        .then(function (resultado) {
         res.status(200).json(resultado)
-    })
+        })
+    } catch(e){
+        if(e.code == "ER_DUP_ENTRY"){
+            res.status(400).send("Parâmetro já cadastrado");
+        } else{
+            res.status(400).send("Erro no cadastro");
+        }
+    }
 }
 
 

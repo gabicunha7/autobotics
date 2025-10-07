@@ -195,6 +195,8 @@ function editar() {
             fecharPopUp('editar-par')
             buscarParametro()
 
+        }else {
+            erros("Este componente já tem parâmetro definido");
         }
     })
 }

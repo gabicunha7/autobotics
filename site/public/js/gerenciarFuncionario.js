@@ -75,7 +75,7 @@ function listar(dados) {
                         <th>Nome</th>
                         <th>Email</th>
                         <th>Setor</th>
-                        <th>Status</th>
+                        <th>Cargo</th>
                         <th>Excluir</th>
                         <th>Editar</th>
                     </tr>`;
@@ -86,7 +86,7 @@ function listar(dados) {
                 <td>${func.nome}</td>
                 <td>${func.email}</td>
                 <td>${func.nome_setor != null ? func.nome_setor : "Nenhum setor"}</td>
-                <td>${func.ativo == 1 ? "Ativo" : "Inativo"}</td>
+                <td>${func.nome_cargo == "Eng_Robotica" ? "Engenheiro de robótica" : "Engenheiro de manutenção"}</td>
                 <td onclick="excluir(${func.id_funcionario})"><img src="assets/icones/lixeira_icon.png"></td>
                 <td onclick="abrirPopUpEditar('editar-func', ${func.id_funcionario})"><img src="assets/icones/editar_icon.png"></td>
             </tr>
