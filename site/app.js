@@ -18,6 +18,7 @@ var app = express();
 var indexRouter = require("./src/routes/index");
 var usuarioRouter = require("./src/routes/usuarios");
 var empresasRouter = require("./src/routes/empresas");
+var emailRouter = require("./src/routes/email");
 
 // CRUD FUNCIONARIO
 
@@ -40,6 +41,7 @@ app.use("/funcionario", funcionarioRouter);
 app.use("/setor", setorRouter);
 app.use("/parametros", parametroRouter);
 app.use("/controladores", controladorRouter);
+app.use("/api", emailRouter);
 
 
 app.listen(PORTA_APP, function () {
