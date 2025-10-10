@@ -86,6 +86,20 @@ CREATE TABLE parametro(
   CONSTRAINT fk_parametro_componente FOREIGN KEY (fk_componente) REFERENCES componente(id_componente)
 );
 
+CREATE TABLE dados_hardware (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    timestamp DATETIME,
+    nome_maquina VARCHAR(100),
+    nome_usuario VARCHAR(100),
+    cpu_percent DECIMAL(5,2),
+    ram_total_gb DECIMAL(6,2),
+    ram_usada_percent DECIMAL(5,2),
+    disco_total_gb DECIMAL(6,2),
+    disco_usado_percent DECIMAL(5,2),
+    num_processos INT,
+    top5_processos TEXT
+);
+
 DROP USER IF EXISTS "agente";
 CREATE USER "agente" IDENTIFIED BY "sptech";
 GRANT ALL PRIVILEGES on autobotics.* TO "agente";
