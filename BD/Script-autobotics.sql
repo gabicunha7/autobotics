@@ -97,7 +97,7 @@ CREATE TABLE telemetria (
     disco_total_gb DECIMAL(6,2),
     disco_usado_percent DECIMAL(5,2),
     num_processos INT,
-    top5_processos json,
+    top5_processos text,
     fk_controlador int unique,
     constraint fk_controlador_telemetria foreign key (fk_controlador) references controlador(id_controlador)
 );
@@ -107,6 +107,7 @@ create table alerta (
     timestamp datetime,
     fk_controlador int,
     fk_componente int,
+    valor decimal(5,2),
 	constraint fk_controlador_alerta foreign key (fk_controlador) references controlador(id_controlador),
 	constraint fk_componente_alerta foreign key (fk_componente) references componente(id_componente)
     );
