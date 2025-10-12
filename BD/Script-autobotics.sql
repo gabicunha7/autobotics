@@ -157,7 +157,7 @@ values ("SETOR DE TESTES", "Este setor é um exemplo de um teste a ser utilizado
 insert into funcionario (nome, email, fk_setor, fk_empresa, ativo, fk_cargo, senha_hash)
 values ("teste", "teste@gmail.com", null, 1, 1, 2, SHA2("senha123", 256));
 
-insert into parametro(fk_componente, valor, criticidade) values(1, 35.5, 3);
+insert into parametro(fk_componente, valor, criticidade) values(1, 35.5, 2);
 
 insert into controlador(numero_serial, fk_empresa, fk_setor)
 values ("COD000", 1, 1);
