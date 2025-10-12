@@ -86,7 +86,7 @@ CREATE TABLE parametro(
   CONSTRAINT fk_parametro_componente FOREIGN KEY (fk_componente) REFERENCES componente(id_componente)
 );
 
-CREATE TABLE dados_hardware (
+CREATE TABLE telemetria (
     id INT AUTO_INCREMENT PRIMARY KEY,
     timestamp DATETIME,
     nome_maquina VARCHAR(100),
@@ -97,8 +97,19 @@ CREATE TABLE dados_hardware (
     disco_total_gb DECIMAL(6,2),
     disco_usado_percent DECIMAL(5,2),
     num_processos INT,
-    top5_processos TEXT
+    top5_processos json,
+    fk_controlador int unique,
+    constraint fk_controlador_telemetria foreign key (fk_controlador) references controlador(id_controlador)
 );
+
+create table alerta (
+	id int primary key auto_increment,
+    timestamp datetime,
+    fk_controlador int,
+    fk_componente int,
+	constraint fk_controlador_alerta foreign key (fk_controlador) references controlador(id_controlador),
+	constraint fk_componente_alerta foreign key (fk_componente) references componente(id_componente)
+    );
 
 DROP USER IF EXISTS "agente";
 CREATE USER "agente" IDENTIFIED BY "sptech";
@@ -125,6 +136,18 @@ begin
             ("Disco", new.fk_empresa, new.id_setor);
 end;
 $$
+
+create trigger after_insert_controlador
+after insert on controlador
+for each row
+begin
+	insert into telemetria (timestamp, nome_maquina, nome_usuario, cpu_percent, ram_total_gb, ram_usada_percent,
+    disco_total_gb, disco_usado_percent, num_processos, top5_processos, fk_controlador)
+	values  (now(), 'maquina000', 'usuario000', 0.00, 0.00, 0.00,
+    0.00, 0.00, 0, JSON_ARRAY(), new.id_controlador);
+end;
+$$
+
 delimiter ;
 
 insert into setor(nome, descricao, fk_empresa)
@@ -135,4 +158,9 @@ values ("teste", "teste@gmail.com", null, 1, 1, 2, SHA2("senha123", 256));
 
 insert into parametro(fk_componente, valor, criticidade) values(1, 35.5, 3);
 
+insert into controlador(numero_serial, fk_empresa, fk_setor)
+values ("COD000", 1, 1);
 
+select * from telemetria;
+select top5_processos from telemetria;
+select * from parametro;
