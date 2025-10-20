@@ -11,7 +11,7 @@ exports.enviarEmail = async (req, res) => {
 
     const msg = {
       to: ['autobotics.sptech@gmail.com', email],
-      from: 'kaua.medeiros@sptech.school', 
+      from: 'autobotics.sptech@gmail.com', 
       subject: `Mensagem de ${nome || 'Autobotics'}`,
       text: mensagem,
       html: `<h2>Mensagem da Autobotics</h2>
