@@ -75,7 +75,7 @@ body{
     margin-left: 50px;
     margin-right: 50px;
     width: 75vw;
-    height: 75vh;
+    height: 77vh;
     border-radius: 20px;
 }
 
@@ -99,8 +99,9 @@ body{
 
 .div_grafico{
     text-align: center;
+    font-size: 1.4rem;
     background-color: white;
-    width: 610px;
+    width: 33vw;
     margin: 20px;
 }
 
@@ -117,7 +118,7 @@ body{
 
 .kpis{
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     height: 293px;
     margin: 20px;
@@ -125,13 +126,30 @@ body{
 
 .kpi_dashboard{
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: space-around;
+    gap: 20px;
     font-size: 25px;
-    width: 600px;
-    height: 50px;
-    background-color: #EEEDED;
+    width: 15vw;
+    height: 22vh;
+    background-color: white;
     margin: 20px;
     padding: 30px;
     align-items: center;
     border-radius: 20px;
+}
+
+.kpi_dashboard p{
+    font-size: 1.1em;
+}
+
+.total-alertas{
+    color: #8CD610;
+}
+
+.componente-alertas{
+    color: #EFC600;
+    font-weight: 500;
 }

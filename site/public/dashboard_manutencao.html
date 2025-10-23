@@ -49,8 +49,8 @@
         </section>
         <a href="">
             <button id="btn-sair" onclick="limparSessao()">
-            <img class="icon-sair" src="assets/icones/sair_icon.png" alt="">
-              Sair
+                <img class="icon-sair" src="assets/icones/sair_icon.png" alt="">
+                Sair
             </button>
         </a>
     </aside>
@@ -87,12 +87,12 @@
 
                     <div class="div_grafico_cpu_ram">
                         <div class="div_grafico">
-                            <p>Uso de CPU durante a semana:</p>
+                            <p>Média de Status da CPU por dia da semana</p>
                             <canvas id="grafico_cpu"></canvas>
                         </div>
-                        
+
                         <div class="div_grafico">
-                            <p>Uso de Memória RAM durante a semana:</p>
+                            <p>Média de Status da RAM por dia da semana</p>
                             <canvas id="grafico_ram"></canvas>
                         </div>
                     </div>
@@ -101,21 +101,17 @@
                         <div class="kpis">
                             <div class="kpi_dashboard">
                                 <p>Total de alertas: </p>
-                                <p>20</p>
+                                <p class="total-alertas">20</p>
                             </div>
                             <div class="kpi_dashboard">
-                                <p>Mais alertas em: </p>
-                                <p>CPU</p>
-                            </div>
-                            <div class="kpi_dashboard">
-                                <p>Controlador com mais alertas: </p>
-                                <p>Controlador A</p>
+                                <p>Componente com mais alertas: </p>
+                                <p class="componente-alertas">CPU</p>
                             </div>
                         </div>
 
-                        
+
                         <div class="div_grafico">
-                            <p>Alertas na semana:</p>
+                            <p>Total de Alertas nos dias da semana</p>
                             <canvas id="grafico_alerta"></canvas>
                         </div>
                     </div>
@@ -134,9 +130,22 @@
         data: {
             labels: ['25/09/25', '26/09/25', '27/09/25', '28/09/25', '29/09/25', '30/09/25', '01/10/25'],
             datasets: [{
-                label: 'Uso de CPU (%)',
-                data: [60, 65, 57, 63, 61, 59, 63],
-                borderWidth: 2
+                label: 'Nível Estável (até 60%)',
+                data: [33, 27, 42, 39, 35, 28, 37], // linha fixa
+                borderWidth: 1,
+                borderColor: '#8CD610'
+            },
+            {
+                label: 'Nível Médio (60% a 85%)',
+                data: [64, 61, 82, 68, 72, 76, 77], // linha fixa
+                borderWidth: 1,
+                borderColor: '#EFC600'
+            },
+            {
+                label: 'Nível Crítico (>85%)',
+                data: [89, 88, 93, 86, 90, 87, 90], // linha fixa
+                borderWidth: 1,
+                borderColor: '#E71831'
             }]
         },
         options: {
@@ -180,9 +189,22 @@
         data: {
             labels: ['25/09/25', '26/09/25', '27/09/25', '28/09/25', '29/09/25', '30/09/25', '01/10/25'],
             datasets: [{
-                label: 'Uso de RAM (%)',
-                data: [70, 65, 82, 76, 79, 81, 77],
-                borderWidth: 2
+                label: 'Nível Estável (até 75%)',
+                data: [54, 67, 64, 59, 61, 69, 65], // linha fixa
+                borderWidth: 1,
+                borderColor: '#8CD610'
+            },
+            {
+                label: 'Nível Médio (75% a 90%)',
+                data: [75, 75, 76, 77, 82, 79, 81], // linha fixa
+                borderWidth: 1,
+                borderColor: '#EFC600'
+            },
+            {
+                label: 'Nível Crítico (>90%)',
+                data: [90, 91, 91, 90, 93, 90, 92], // linha fixa
+                borderWidth: 1,
+                borderColor: '#E71831'
             }]
         },
         options: {
