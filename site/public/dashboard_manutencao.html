@@ -17,11 +17,11 @@
             <h1>MENU</h1>
 
             <div class="paginas-container">
-                <a class="a-pagina" href="dashboard.html">
+                <a class="a-pagina" onclick="cargoDash()">
                     <img class="icon-pagina" src="assets/icones/dash_icon.png" alt="">
                     Dashboard
                 </a>
-                <a class="a-pagina" href="">
+                <a class="a-pagina" href="alerta.html">
                     <img class="icon-pagina" src="assets/icones/alerta_icon.png" alt="">
                     Alertas
                 </a>
@@ -29,10 +29,7 @@
                     <img class="icon-pagina" src="assets/icones/parametros_icon.png" alt="">
                     Parâmetros
                 </a>
-                <a class="a-pagina" href="">
-                    <img class="icon-pagina" src="assets/icones/info_icon.png" alt="">
-                    Informacoes
-                </a>
+                
                 <a class="a-pagina" href="setor.html">
                     <img class="icon-pagina" src="assets/icones/setor_icon.png" alt="">
                     Setores
@@ -47,7 +44,7 @@
                 </a>
             </div>
         </section>
-        <a href="">
+        <a href="index.html">
             <button id="btn-sair" onclick="limparSessao()">
                 <img class="icon-sair" src="assets/icones/sair_icon.png" alt="">
                 Sair
@@ -69,8 +66,8 @@
                     <img src="assets/icones/foto_usuario.png" alt="">
                 </div>
                 <div>
-                    <h6>Lucas</h6>
-                    <p>lucas@gmail.com</p>
+                    <h6 id="nome-usuario"></h6>
+                    <p id="email-usuario"></p>
                 </div>
             </div>
         </div>
@@ -122,7 +119,14 @@
     </section>
 
 </body>
+
+<script src="js/rotaDash.js"></script>
+
 <script>
+    document.getElementById("nome-usuario").innerHTML = sessionStorage.NOME_USUARIO;
+    document.getElementById("email-usuario").innerHTML = sessionStorage.EMAIL_USUARIO;
+
+
     const ctx_cpu = document.getElementById('grafico_cpu');
 
     new Chart(ctx_cpu, {

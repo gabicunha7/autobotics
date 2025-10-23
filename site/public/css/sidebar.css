@@ -40,6 +40,7 @@ a {
 }
 
 .a-pagina:hover{
+    cursor: pointer;
     transition: 0.5s;
     background-color: #D9D9D9;
 }
