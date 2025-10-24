@@ -100,7 +100,7 @@ tabela.innerHTML = `<tr>
                 <td>${par.id_parametro}</td>
                 <td>${par.fk_componente}</td>
                 <td>${par.valor}</td>
-                <td>${par.criticidade == 0 ? "Baixo" : par.criticidade == 1 ? "Médio" : "Alto"}</td>
+                <td>${par.criticidade == 0 ? "Estável" : par.criticidade == 1 ? "Médio" : "Crítico"}</td>
                 <td onclick="excluir(${par.id_parametro})"><img src="assets/icones/lixeira_icon.png"></td>
                 <td onclick="abrirPopUpEditar('editar-par', ${par.id_parametro})"><img src="assets/icones/editar_icon.png"></td>
             </tr>
@@ -111,13 +111,18 @@ tabela.innerHTML = `<tr>
 
 function fecharPopUp(id) {
     popup = document.getElementById(id)
-    popup.style.display = "none";
+    if (popup) popup.style.display = "none";
+    const overlay = document.getElementById('overlay');
+    if (overlay) overlay.classList.remove('active');
 }
 
 function abrirPopUpCadastro(id) {
     popup = document.getElementById(id)
-    popup.style.display = "flex";
+    if (popup) popup.style.display = "flex";
+    const overlay = document.getElementById('overlay');
+    if (overlay) overlay.classList.add('active');
 }
+
 
 function cadastrar(){
     if(slc_componente_parametro.value == ""){
@@ -173,8 +178,25 @@ function excluir(id) {
 function abrirPopUpEditar(idPopUp, idPar) {
     parametroId = idPar
     popup = document.getElementById(idPopUp)
-    popup.style.display = "flex";
+    if (popup) popup.style.display = "flex";
+    const overlay = document.getElementById('overlay');
+    if (overlay) overlay.classList.add('active');
 }
+
+
+function fecharTodosPopups(){
+    const ids = ['cadastrar-parametro', 'editar-par', 'cadastrar-func', 'editar-func', 'cadastrar-setor', 'editar-setor'];
+    ids.forEach(id => {
+        const p = document.getElementById(id);
+        if (p) p.style.display = 'none';
+    });
+    const overlay = document.getElementById('overlay');
+    if (overlay) overlay.classList.remove('active');
+}
+
+
+const overlay_element = document.getElementById('overlay');
+if (overlay_element) overlay_element.addEventListener('click', fecharTodosPopups);
 
 function editar() {
     varEmpresa = sessionStorage.EMPRESA_USUARIO;

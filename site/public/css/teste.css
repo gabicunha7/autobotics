@@ -83,6 +83,23 @@ body {
     flex-direction: column;
     background-color: #D9D9D9;
     border-radius: 10px;
+    z-index: 110; 
+}
+
+
+#overlay{
+    display: none;
+    position: fixed;
+    inset: 0; /* top:0; right:0; bottom:0; left:0 */
+    background: rgba(0,0,0,0.35);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 100;
+}
+
+
+#overlay.active{
+    display: block;
 }
 
 .topo{

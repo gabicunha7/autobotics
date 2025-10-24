@@ -95,6 +95,8 @@
         </section>
     </main>
 
+    <div id="overlay"></div>
+
     <div id="cadastrar-parametro">
         <div class="topo">
             <p onclick="fecharPopUp('cadastrar-parametro')"><img src="assets/icones/x_icon.png"></p>
@@ -109,9 +111,9 @@
                 <label for="slc_criticidade">Criticidade:</label>
                 <select name="Criticidade" id="slc_criticidade">
                     <option value="" disabled selected>Criticidade</option>
-                    <option value="0">Baixo</option>
+                    <option value="0">Estável</option>
                     <option value="1">Médio</option>
-                    <option value="2">Alto</option>
+                    <option value="2">Crítico</option>
                 </select>
             </div>
             <button onclick="cadastrar()">Cadastrar</button>
@@ -133,9 +135,9 @@
                 <label for="slc_criticidade_editar">Criticidade:</label>
                 <select name="Criticidade" id="slc_criticidade_editar">
                     <option value="" disabled selected>Criticidade</option>
-                    <option value="0">Baixo</option>
+                    <option value="0">Estável</option>
                     <option value="1">Médio</option>
-                    <option value="2">Alto</option>
+                    <option value="2">Crítico</option>
                 </select>               
             </div>
             <button onclick="editar()">Cadastrar</button>

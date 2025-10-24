@@ -2,13 +2,16 @@ funcionarioId = null
 
 function fecharPopUp(id) {
     popup = document.getElementById(id)
-    popup.style.display = "none";
+    if (popup) popup.style.display = "none";
+    const overlay = document.getElementById('overlay');
+    if (overlay) overlay.classList.remove('active');
 }
 
-// Funciona para editar e cadastro
-function abrirPopUpCadastro(id) {  
+function abrirPopUpCadastro(id) {
     popup = document.getElementById(id)
-    popup.style.display = "flex";
+    if (popup) popup.style.display = "flex";
+    const overlay = document.getElementById('overlay');
+    if (overlay) overlay.classList.add('active');
 }
 
 function buscarCargos(){
@@ -61,11 +64,28 @@ function buscarSetor(){
     }) 
 }
 
-function abrirPopUpEditar(idPopUp, idFunc) {
-    funcionarioId = idFunc
+function abrirPopUpEditar(idPopUp, idPar) {
+    parametroId = idPar
     popup = document.getElementById(idPopUp)
-    popup.style.display = "flex";
+    if (popup) popup.style.display = "flex";
+    const overlay = document.getElementById('overlay');
+    if (overlay) overlay.classList.add('active');
 }
+
+
+function fecharTodosPopups(){
+    const ids = ['cadastrar-parametro', 'editar-par', 'cadastrar-func', 'editar-func', 'cadastrar-setor', 'editar-setor'];
+    ids.forEach(id => {
+        const p = document.getElementById(id);
+        if (p) p.style.display = 'none';
+    });
+    const overlay = document.getElementById('overlay');
+    if (overlay) overlay.classList.remove('active');
+}
+
+
+const overlay_element = document.getElementById('overlay');
+if (overlay_element) overlay_element.addEventListener('click', fecharTodosPopups);
 
 function listar(dados) {
     const tabela = document.getElementById('func-table');
