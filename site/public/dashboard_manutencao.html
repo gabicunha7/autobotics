@@ -76,7 +76,7 @@
         <div class="div-conteudo">
             <div class="container-conteudo">
                 <div class="div-info-conteudo">
-                    <h3>Dashboard</h3>
+                    <h3>Dashboard - Controlador A</h3>
                     <p id="data_atual"></p>
                 </div>
 
@@ -96,12 +96,12 @@
 
                     <div class="div_grafico_alertas_kpi">
                         <div class="kpis">
-                            <div class="kpi_dashboard">
-                                <p>Total de alertas: </p>
+                            <div class="kpi_dashboard" id="total-alertas">
+                                <h3>Total de alertas: </h3>
                                 <p class="total-alertas">20</p>
                             </div>
-                            <div class="kpi_dashboard">
-                                <p>Componente com mais alertas: </p>
+                            <div class="kpi_dashboard" id="componente-alertas">
+                                <h3>Componente com mais alertas: </h3>
                                 <p class="componente-alertas">CPU</p>
                             </div>
                         </div>
@@ -152,7 +152,7 @@
                 label: 'Nível Médio (60% a 85%)',
                 data: [64, 61, 82, 68, 72, 76, 77], // linha fixa
                 borderWidth: 1,
-                borderColor: '#EFC600'
+                borderColor: '#e6ac00'
             },
             {
                 label: 'Nível Crítico (>85%)',
@@ -211,7 +211,7 @@
                 label: 'Nível Médio (75% a 90%)',
                 data: [75, 75, 76, 77, 82, 79, 81], // linha fixa
                 borderWidth: 1,
-                borderColor: '#EFC600'
+                borderColor: '#e6ac00'
             },
             {
                 label: 'Nível Crítico (>90%)',

@@ -113,6 +113,7 @@ body{
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   width: 200px;
   height: 130px;
+  text-align: center;
 }
 
 .card-metrica span {
@@ -161,7 +162,7 @@ body{
 }
 
 .card-processo{
-    background-color: #EEEDED;
+    background-color: white;
     height: 350px;
     width: 400px;
     display: flex;

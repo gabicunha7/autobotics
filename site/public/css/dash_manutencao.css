@@ -131,7 +131,7 @@ body{
     align-items: center;
     justify-content: space-around;
     gap: 20px;
-    font-size: 25px;
+    font-size: 1.5rem;
     width: 15vw;
     height: 22vh;
     background-color: white;
@@ -142,14 +142,16 @@ body{
 }
 
 .kpi_dashboard p{
-    font-size: 1.1em;
+    font-weight: 700;
+    font-size: 2em;
 }
 
-.total-alertas{
-    color: #8CD610;
+#total-alertas{
+    color: white;
+    background-color: #4CAF50;
 }
 
-.componente-alertas{
-    color: #EFC600;
-    font-weight: 500;
+#componente-alertas{
+    color: white;
+    background-color: #e6ac00;
 }

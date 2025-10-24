@@ -78,7 +78,7 @@
         <div class="div-conteudo">
             <div class="container-conteudo">
                 <div class="div-info-conteudo">
-                    <h3>Dashboard</h3>
+                    <h3>Dashboard - Controlador A</h3>
                     <p id="data_atual"></p>
                 </div>
 
@@ -86,8 +86,8 @@
                     <div class="div_grafico_alertas_processo">
                         <div class="cards-metricas">
                             <div class="card-metrica">
-                                <p>Pico de CPU :</p>
-                                <span>78%</span>
+                                <p>Pico de uso em CPU no dia:</p>
+                                <span style="color: #e6ac00;">78%</span>
                             </div>
                             <div class="card-metrica">
                                 <p>RAM Total :</p>
@@ -103,11 +103,11 @@
                             </div>
                             <div class="card-metrica">
                                 <p>RAM em uso :</p>
-                                <span style="color: gold;">12.96 GB</span>
+                                <span style="color: #e6ac00;">12.96 GB</span>
                             </div>
                             <div class="card-metrica">
-                                <p>Disco em uso :</p>
-                                <span style="color: red;">97%</span>
+                                <p>Disco restante:</p>
+                                <span style="color: red;">15,36 GB</span>
                             </div>
 
                         </div>
@@ -179,7 +179,7 @@ document.getElementById("data_atual").innerHTML = `Data: ${dia}/${mes}/${ano}`;
 document.getElementById("nome-usuario").innerHTML = sessionStorage.NOME_USUARIO;
 document.getElementById("email-usuario").innerHTML = sessionStorage.EMAIL_USUARIO;
 
-const COLORS = ['#4CAF50', '#FFC107', '#F44336'];
+const COLORS = ['#4CAF50', '#e6ac00', '#F44336'];
 
 function index(perc) {
   return perc < 70 ? 0 : perc < 90 ? 1 : 2;
