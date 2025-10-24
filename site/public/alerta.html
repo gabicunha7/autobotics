@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alertas</title>
-    <link rel="stylesheet" href="css/body.css">
+    <!-- <link rel="stylesheet" href="css/body.css"> -->
     <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet" href="css/teste.css">
     <link rel="stylesheet" href="css/alerta.css">
@@ -25,7 +25,7 @@
                         <img class="icon-pagina" src="assets/icones/dash_icon.png" alt="">
                         Dashboard
                     </a>
-                    <a class="a-pagina" href="alerta.html">
+                    <a class="a-pagina" href="alerta.html" id="agora">
                         <img class="icon-pagina" src="assets/icones/alerta_icon.png" alt="">
                         Alertas
                     </a>
@@ -92,8 +92,8 @@
         <section class="container-func">
             <div class="container-table">
                 <div class="top-options">
-                    <h1 class="title">Alertas</h1>
-                    <h2 id="data_atual"></h2>
+                    <h1 class="title">Alertas da Semana</h1>
+                    
                 </div>
                 <table id="parametro-table" class="tabela">
                     <tr>
@@ -103,25 +103,25 @@
                         <th>Status</th>
                     </tr>
                     <tr>
-                        <td>01/01/2026 - 15:30</td>
+                        <td>28/10/2025 - 15:30</td>
                         <td>Controlador 1</td>
                         <td>Setor A</td>
                         <td style="color: red; font-weight: bold;">Crítico</td>
                     </tr>
                     <tr>
-                        <td>01/01/2026 - 12:30</td>
+                        <td>28/10/2025 - 12:30</td>
                         <td>Controlador 1</td>
                         <td>Setor B</td>
                         <td style="color: orange; font-weight: bold;">Médio</td>
                     </tr>
                     <tr>
-                        <td>01/01/2026 - 12:10</td>
+                        <td>27/10/2025 - 12:10</td>
                         <td>Controlador 1</td>
                         <td>Setor B</td>
                         <td style="color: red; font-weight: bold;">Crítico</td>
                     </tr>
                     <tr>
-                        <td>31/12/2025 - 09:47</td>
+                        <td>26/10/2025 - 09:47</td>
                         <td>Controlador 1</td>
                         <td>Setor A</td>
                         <td style="color: orange; font-weight: bold;">Médio</td>
@@ -136,13 +136,6 @@
 <script src="js/rotaDash.js"></script>
 
 <script>
-    const dataAtual = new Date();
-    const dia = dataAtual.getDate();
-    const mes = dataAtual.getMonth() + 1; 
-    const ano = dataAtual.getFullYear();
-
-    document.getElementById("data_atual").innerHTML = `Data: ${dia}/${mes}/${ano}`;
-
     document.getElementById("nome-usuario").innerHTML = sessionStorage.NOME_USUARIO;
     document.getElementById("email-usuario").innerHTML = sessionStorage.EMAIL_USUARIO;
 </script>

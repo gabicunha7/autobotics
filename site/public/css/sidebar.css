@@ -11,6 +11,14 @@ aside {
     align-items: center;
 }
 
+#agora{
+    background-color: #E78433;
+    color: black;
+    transition: 0.5s;
+    cursor: pointer;
+    border-radius: 20px;
+}
+
 .img-logo-curta{
     width: 80px;
 }
@@ -46,6 +54,7 @@ a {
     cursor: pointer;
     transition: 0.5s;
     background-color: #D9D9D9;
+    border-radius: 20px;
 }
 
 .icon-pagina{

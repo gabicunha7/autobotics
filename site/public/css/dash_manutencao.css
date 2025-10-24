@@ -121,7 +121,7 @@ body{
     flex-direction: row;
     align-items: center;
     height: 293px;
-    margin: 20px;
+    margin: 20px 20px 30px;
 }
 
 .kpi_dashboard{
