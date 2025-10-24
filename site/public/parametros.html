@@ -90,13 +90,14 @@
                     </tr>
                 </table>
                 </div>
-            <div id="div_erros_login"></div>
+            
             </div>
         </section>
     </main>
 
     <div id="overlay"></div>
-
+    <div id="div_erros_login"></div>
+    
     <div id="cadastrar-parametro">
         <div class="topo">
             <p onclick="fecharPopUp('cadastrar-parametro')"><img src="assets/icones/x_icon.png"></p>
@@ -104,8 +105,12 @@
         <div class="campos">
             <h1>Cadastrar</h1>
             <div>
-                <label for="">Valor:</label>
-                <input id="ipt_valor_cadastro" type="number">
+                <label for="">Valor Mínimo:</label>
+                <input id="ipt_valor_min_cadastro" type="number">
+            </div>
+            <div>
+                <label for="">Valor Máximo:</label>
+                <input id="ipt_valor_max_cadastro" type="number">
             </div>
             <div>
                 <label for="slc_criticidade">Criticidade:</label>
@@ -128,8 +133,12 @@
         <div class="campos">
             <h1>Editar</h1>
             <div>
-                <label for="">Valor:</label>
-                <input id="ipt_valor_editar" type="number">
+                <label for="">Valor Mínimo:</label>
+                <input id="ipt_valor_min_editar" type="number">
+            </div>
+            <div>
+                <label for="">Valor Máximo:</label>
+                <input id="ipt_valor_max_editar" type="number">
             </div>
             <div>
                 <label for="slc_criticidade_editar">Criticidade:</label>

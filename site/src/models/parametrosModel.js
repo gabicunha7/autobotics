@@ -15,8 +15,8 @@ function buscarParametro(componente) {
     return database.executar(sql)
 }
 
-function cadastrar(id_componente, valor, criticidade) {
-    var sql = `INSERT INTO parametro(fk_componente, valor, criticidade) VALUES (${id_componente}, ${valor}, ${criticidade});`
+function cadastrar(id_componente, valor_min, valor_max, criticidade) {
+    var sql = `INSERT INTO parametro(fk_componente, valor_min, valor_max, criticidade) VALUES (${id_componente}, ${valor_min}, ${valor_max}, ${criticidade});`
     return database.executar(sql)
 }
 
@@ -25,8 +25,8 @@ function excluir(id) {
     return database.executar(sql)
 }
 
-function editar(idParametro, valor, criticidade) {
-    var sql = `UPDATE parametro SET valor="${valor}", criticidade="${criticidade}" WHERE id_parametro=${idParametro};`
+function editar(idParametro, valor_min, valor_max, criticidade) {
+    var sql = `UPDATE parametro SET valor_min=${valor_min}, valor_max=${valor_max}, criticidade=${criticidade} WHERE id_parametro=${idParametro};`
     return database.executar(sql)
 }
 

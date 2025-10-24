@@ -214,8 +214,10 @@ main{
     right: 1rem;
     bottom: 1rem;
     color: var(--corTextoPri);
+    color: white;
     background-color: #9b0202;
     padding: 2rem;
+    z-index: 120; 
 }
 
 .campos {
