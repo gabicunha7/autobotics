@@ -93,7 +93,7 @@
             <div class="container-table">
                 <div class="top-options">
                     <h1 class="title">Alertas</h1>
-                    <h2>01/01/2026</h2>
+                    <h2 id="data_atual"></h2>
                 </div>
                 <table id="parametro-table" class="tabela">
                     <tr>
@@ -136,6 +136,13 @@
 <script src="js/rotaDash.js"></script>
 
 <script>
+    const dataAtual = new Date();
+    const dia = dataAtual.getDate();
+    const mes = dataAtual.getMonth() + 1; 
+    const ano = dataAtual.getFullYear();
+
+    document.getElementById("data_atual").innerHTML = `Data: ${dia}/${mes}/${ano}`;
+
     document.getElementById("nome-usuario").innerHTML = sessionStorage.NOME_USUARIO;
     document.getElementById("email-usuario").innerHTML = sessionStorage.EMAIL_USUARIO;
 </script>

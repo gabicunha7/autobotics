@@ -1,6 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
 
+/* RESET CSS */
+* {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Jost";
+}
 
+a {
+    text-decoration: none;
+}
+
+img {
+    width: 100%;
+    height: auto;
+}
+
+/* FIM RESET CSS */
+
+.menu-container h1{
+    font-size: 32px;
+}
 
 .superior {
     display: flex;
@@ -36,8 +58,6 @@
 
 body {
     display: flex;
-    flex-direction: row;
-    width: 100%;
 }
 
 
@@ -66,7 +86,10 @@ body {
 }
 
 main{
-    width: 100%;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    
 }
 
 .title{

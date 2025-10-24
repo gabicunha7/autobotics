@@ -79,35 +79,35 @@
             <div class="container-conteudo">
                 <div class="div-info-conteudo">
                     <h3>Dashboard</h3>
-                    <p>Data: 01/10/2025</p>
+                    <p id="data_atual"></p>
                 </div>
 
                 <div class="div-metricas">
                     <div class="div_grafico_alertas_processo">
                         <div class="cards-metricas">
                             <div class="card-metrica">
-                                <p>Pico de CPU (%):</p>
+                                <p>Pico de CPU :</p>
                                 <span>78%</span>
                             </div>
                             <div class="card-metrica">
-                                <p>RAM Total (GB):</p>
-                                <span>16</span>
+                                <p>RAM Total :</p>
+                                <span>16 GB</span>
                             </div>
                             <div class="card-metrica">
-                                <p>Disco Total (GB):</p>
-                                <span>512</span>
+                                <p>Disco Total :</p>
+                                <span>512 GB</span>
                             </div>
                             <div class="card-metrica">
-                                <p>Média de CPU (%):</p>
-                                <span>46%</span>
+                                <p>Uso de CPU <span style="font-size: smaller;">(Média):</span> </p>
+                                <span style="color: green;">46%</span>
                             </div>
                             <div class="card-metrica">
-                                <p>RAM em uso (GB):</p>
-                                <span>12.5</span>
+                                <p>RAM em uso :</p>
+                                <span style="color: gold;">12.96 GB</span>
                             </div>
                             <div class="card-metrica">
-                                <p>Disco em uso (%):</p>
-                                <span>90%</span>
+                                <p>Disco em uso :</p>
+                                <span style="color: red;">97%</span>
                             </div>
 
                         </div>
@@ -168,6 +168,13 @@
 <script src="js/rotaDash.js"></script>
 
 <script>
+
+const dataAtual = new Date();
+const dia = dataAtual.getDate();
+const mes = dataAtual.getMonth() + 1; 
+const ano = dataAtual.getFullYear();
+
+document.getElementById("data_atual").innerHTML = `Data: ${dia}/${mes}/${ano}`;
 
 document.getElementById("nome-usuario").innerHTML = sessionStorage.NOME_USUARIO;
 document.getElementById("email-usuario").innerHTML = sessionStorage.EMAIL_USUARIO;

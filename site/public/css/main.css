@@ -4,7 +4,7 @@
 }
 
 h1 {
-    font-size: 4rem;
+    font-size: 8rem;
 }
 
 .inicio {
@@ -46,7 +46,7 @@ h1 {
 }
 
 .texto-sobre h2 {
-    font-size: 2.5rem;
+    font-size: 4rem;
     color: var(--corTituloH2);
 }
 
@@ -113,6 +113,7 @@ h1 {
 
 .servicos {
     display: flex;
+    height: 40vh;
     justify-content: center;
     flex-wrap: nowrap;
     align-items: center;
@@ -120,7 +121,7 @@ h1 {
 }
 
 .texto-servico h2 {
-    font-size: 2.2rem;
+    font-size: 4rem;
     color: var(--corTituloH2);
 }
 

@@ -1,9 +1,10 @@
+
+
 aside {
     width: 17vw;
     height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     background-color: #fff;
     padding: 20px;
     border-right: 1px solid #ccc;
@@ -27,6 +28,8 @@ aside {
     flex-direction: column;
     gap: 10px;
 }
+
+
 
 a {
     color: black;
@@ -58,6 +61,8 @@ a {
     width: 120px;
     padding: 15px;
     border-radius: 10px;
+    margin-top: 27vh;
+    border: none;
 }
 
 #btn-sair:hover{
