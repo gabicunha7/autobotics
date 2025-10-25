@@ -22,6 +22,7 @@ function cadastrar(){
         .then(function (resposta) {
             console.log(resposta);
             fecharPopUp("cadastrar-setor")
+            buscarSetor()
         }
     )}   
 }
@@ -59,7 +60,7 @@ function excluir(id) {
         if (resposta.ok) {
             buscarSetor()
         }else {
-            erros("Você tem parãmetros  neste setor, delete eles para excluir");
+            erros("Você tem parâmetros  neste setor, delete eles para excluir");
         }
     })
 }
@@ -89,12 +90,13 @@ function editar() {
     })
 }
 
-function abrirPopUpEditar(idPopUp, idPar) {
-    parametroId = idPar
+function abrirPopUpEditar(idPopUp, idFunc) {
+    funcionarioId = idFunc
     popup = document.getElementById(idPopUp)
     if (popup) popup.style.display = "flex";
     const overlay = document.getElementById('overlay');
     if (overlay) overlay.classList.add('active');
+    
 }
 
 
@@ -106,6 +108,7 @@ function fecharTodosPopups(){
     });
     const overlay = document.getElementById('overlay');
     if (overlay) overlay.classList.remove('active');
+    
 }
 
 

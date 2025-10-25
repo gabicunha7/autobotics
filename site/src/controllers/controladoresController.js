@@ -14,8 +14,10 @@ async function cadastrar(req, res) {
     } catch(e){
         if(e.code == "ER_DUP_ENTRY"){
             res.status(400).send("Número serial já cadastrado");
+            console.log("entrou no if")
         } else{
             res.status(400).send("Erro no cadastro");
+            console.log(e)
         }
     }
 }

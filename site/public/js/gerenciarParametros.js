@@ -135,7 +135,7 @@ function cadastrar(){
         erros("preencha o campo de valor mínimo")
     }else if(ipt_valor_max_cadastro.value == ""){
         erros("preencha o campo de valor máximo")
-    }else if(ipt_valor_max_cadastro.value <= ipt_valor_min_cadastro.value){
+    }else if(Number(ipt_valor_max_cadastro.value) <= Number(ipt_valor_min_cadastro.value)){
         erros("o valor máximo deve ser maior que o valor mínimo")
     }else{
         fetch("/parametros/cadastrar", {
@@ -211,7 +211,7 @@ function editar() {
         erros("preencha o campo de valor mínimo")
     }else if(ipt_valor_max_editar.value == ""){
         erros("preencha o campo de valor máximo")
-    }else if(ipt_valor_max_editar.value <= ipt_valor_min_editar.value){
+    }else if(Number(ipt_valor_max_editar.value) <= Number(ipt_valor_min_editar.value)){
         erros("o valor máximo deve ser maior que o valor mínimo")
     }else{
         fetch("/parametros/editar", {

@@ -59,8 +59,8 @@ function listar(dados) {
     });
 }
 
-function abrirPopUpEditar(idPopUp, idPar) {
-    parametroId = idPar
+function abrirPopUpEditar(idPopUp, idControlador) {
+    controladorId = idControlador
     popup = document.getElementById(idPopUp)
     if (popup) popup.style.display = "flex";
     const overlay = document.getElementById('overlay');
@@ -77,7 +77,6 @@ function fecharTodosPopups(){
     const overlay = document.getElementById('overlay');
     if (overlay) overlay.classList.remove('active');
 }
-
 
 const overlay_element = document.getElementById('overlay');
 if (overlay_element) overlay_element.addEventListener('click', fecharTodosPopups);

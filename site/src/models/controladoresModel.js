@@ -2,7 +2,7 @@ var database = require("../database/config");
 
 
 function cadastrar(numero_serial, idempresa, idsetor) {
-    var sql = `INSERT INTO controlador(numero_serial, fk_empresa, fk_setor) VALUES('${numero_serial}', ${idempresa}, ${idsetor});`
+    var sql = `INSERT INTO controlador(numero_serial, fk_setor, fk_empresa) VALUES('${numero_serial}', ${idempresa}, ${idsetor});`
     return database.executar(sql)
 }
 
@@ -21,7 +21,9 @@ function buscarSetor(empresa) {
     return database.executar(sql)
 }
 
-function excluir(id) {
+async function excluir(id) {
+    var sql = `DELETE FROM telemetria WHERE fk_controlador = ${id};`
+    await database.executar(sql)
     var sql = `DELETE FROM controlador WHERE id_controlador = ` + id
     return database.executar(sql)
 }

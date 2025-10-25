@@ -64,14 +64,13 @@ function buscarSetor(){
     }) 
 }
 
-function abrirPopUpEditar(idPopUp, idPar) {
-    parametroId = idPar
+function abrirPopUpEditar(idPopUp, idFunc) {
+    funcionarioId = idFunc
     popup = document.getElementById(idPopUp)
     if (popup) popup.style.display = "flex";
     const overlay = document.getElementById('overlay');
     if (overlay) overlay.classList.add('active');
 }
-
 
 function fecharTodosPopups(){
     const ids = ['cadastrar-parametro', 'editar-par', 'cadastrar-func', 'editar-func', 'cadastrar-setor', 'editar-setor'];
@@ -82,7 +81,6 @@ function fecharTodosPopups(){
     const overlay = document.getElementById('overlay');
     if (overlay) overlay.classList.remove('active');
 }
-
 
 const overlay_element = document.getElementById('overlay');
 if (overlay_element) overlay_element.addEventListener('click', fecharTodosPopups);
@@ -182,7 +180,8 @@ function cadastrar() {
                     popup = document.getElementById("cadastrar-func")
 
                     popup.style.display = "none";
-                    buscar()            
+                    buscar()
+                    fecharPopUp('cadastrar-func')            
                 } else {
                     erros("Inserir um email válido, este já está sendo usado");
                 }
@@ -255,11 +254,11 @@ function editar() {
                         document.getElementById("nome-usuario").innerHTML = sessionStorage.NOME_USUARIO;
                         document.getElementById("email-usuario").innerHTML = sessionStorage.EMAIL_USUARIO;
                     }
-                buscar()
+                
                 popup = document.getElementById("editar-func")
-
                 popup.style.display = "none";
-                buscar()      
+                buscar()
+                fecharPopUp('editar-func')      
             } else {
                 erros("Inserir um email válido, este já está sendo usado");
             }
