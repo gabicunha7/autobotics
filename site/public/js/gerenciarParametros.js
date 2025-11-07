@@ -90,7 +90,6 @@ tabela.innerHTML = `<tr>
                         <th>ID</th>
                         <th>ID_Componente</th>
                         <th>Mínimo</th>
-                        <th>Máximo</th>
                         <th>Criticidade</th>
                         <th>Excluir</th>
                         <th>Editar</th>
@@ -100,8 +99,7 @@ tabela.innerHTML = `<tr>
             <tr>
                 <td>${par.id_parametro}</td>
                 <td>${par.fk_componente}</td>
-                <td>${par.valor_min}</td>
-                <td>${par.valor_max}</td>
+                <td>${par.valor}</td>
                 <td>${par.criticidade == 0 ? "Estável" : par.criticidade == 1 ? "Médio" : "Crítico"}</td>
                 <td onclick="excluir(${par.id_parametro})"><img src="assets/icones/lixeira_icon.png"></td>
                 <td onclick="abrirPopUpEditar('editar-par', ${par.id_parametro})"><img src="assets/icones/editar_icon.png"></td>
@@ -131,12 +129,8 @@ function cadastrar(){
         erros("preencha o campo de componente")
     } else if (slc_criticidade.value == ""){
         erros("preencha o campo de criticidade")
-    }else if(ipt_valor_min_cadastro.value == ""){
+    }else if(ipt_valor_cadastro.value == ""){
         erros("preencha o campo de valor mínimo")
-    }else if(ipt_valor_max_cadastro.value == ""){
-        erros("preencha o campo de valor máximo")
-    }else if(Number(ipt_valor_max_cadastro.value) <= Number(ipt_valor_min_cadastro.value)){
-        erros("o valor máximo deve ser maior que o valor mínimo")
     }else{
         fetch("/parametros/cadastrar", {
                 method: "POST",
@@ -145,8 +139,7 @@ function cadastrar(){
                 },
                 body: JSON.stringify({
                     id_componente: slc_componente_parametro.value,
-                    valor_min: ipt_valor_min_cadastro.value,
-                    valor_max: ipt_valor_max_cadastro.value,
+                    valor: ipt_valor_cadastro.value,
                     criticidade: slc_criticidade.value
                     })
             })
@@ -207,12 +200,8 @@ if (overlay_element) overlay_element.addEventListener('click', fecharTodosPopups
 
 function editar() {
     varEmpresa = sessionStorage.EMPRESA_USUARIO;
-    if(ipt_valor_min_editar.value == ""){
+    if(ipt_valor_editar.value == ""){
         erros("preencha o campo de valor mínimo")
-    }else if(ipt_valor_max_editar.value == ""){
-        erros("preencha o campo de valor máximo")
-    }else if(Number(ipt_valor_max_editar.value) <= Number(ipt_valor_min_editar.value)){
-        erros("o valor máximo deve ser maior que o valor mínimo")
     }else{
         fetch("/parametros/editar", {
         method: "POST",
@@ -221,8 +210,7 @@ function editar() {
         },
         body: JSON.stringify({
             id_parametro: parametroId,
-            valor_min: ipt_valor_min_editar.value,
-            valor_max: ipt_valor_max_editar.value,
+            valor: ipt_valor_editar.value,
             criticidade: slc_criticidade_editar.value
         })
         })

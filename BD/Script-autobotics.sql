@@ -79,8 +79,7 @@ create table componente (
 CREATE TABLE parametro(
   id_parametro int auto_increment,
   fk_componente INT NOT NULL,
-  valor_min DOUBLE,
-  valor_max DOUBLE,
+  valor DOUBLE,
   criticidade TINYINT(2),
   CONSTRAINT IX_UNIQUE_COMPONENTE UNIQUE(fk_componente, criticidade),
   PRIMARY KEY(id_parametro, fk_componente),
@@ -158,7 +157,7 @@ values ("SETOR DE TESTES", "Este setor é um exemplo de um teste a ser utilizado
 insert into funcionario (nome, email, fk_setor, fk_empresa, ativo, fk_cargo, senha_hash)
 values ("teste", "teste@gmail.com", null, 1, 1, 2, SHA2("senha123", 256));
 
-insert into parametro(fk_componente, valor_min, valor_max, criticidade) values(1, 35.5, 47, 2);
+insert into parametro(fk_componente, valor, criticidade) values(1, 35.5, 2);
 
 insert into controlador(numero_serial, fk_empresa, fk_setor)
 values ("COD000", 1, 1);

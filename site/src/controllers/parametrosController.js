@@ -28,13 +28,12 @@ function buscarParametro(req, res) {
 
 async function cadastrar(req, res) {
     id_componente = req.body.id_componente
-    valor_min = req.body.valor_min
-    valor_max = req.body.valor_max
+    valor = req.body.valor
     criticidade = req.body.criticidade
    
 
      try{
-        await parametrosModel.cadastrar(id_componente, valor_min, valor_max, criticidade)
+        await parametrosModel.cadastrar(id_componente, valor, criticidade)
         .then(function (resultado) {
         res.status(200).json(resultado)
         })
@@ -56,12 +55,11 @@ function excluir(req, res) {
 
 async function editar(req, res) {
     idParametro = req.body.id_parametro
-    valor_min = req.body.valor_min
-    valor_max = req.body.valor_max
+    valor = req.body.valor
     criticidade = req.body.criticidade
     
     try{
-        await parametrosModel.editar(idParametro, valor_min, valor_max, criticidade)
+        await parametrosModel.editar(idParametro, valor, criticidade)
         .then(function (resultado) {
         res.status(200).json(resultado)
         })
