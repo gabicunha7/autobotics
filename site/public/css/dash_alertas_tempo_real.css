@@ -18,7 +18,12 @@ body{ display: flex; background: #f4f4f4; color: #222; min-height: 100vh; }
 aside { /* deixei sem sobrescrever - sua sidebar.css permanece */ }
 
 /* MAIN */
-.container-content { flex: 1; padding: 24px; }
+.container-content { 
+  flex: 1; 
+  padding: 24px; 
+  overflow-y: scroll;
+  height: 100vh;
+}
 
 /* topo (filtro + usuário)*/
 .div-superior {
@@ -65,6 +70,7 @@ aside { /* deixei sem sobrescrever - sua sidebar.css permanece */ }
   display: flex;
   justify-content: center;
   padding: 18px;
+  
 }
 
 
@@ -81,6 +87,7 @@ aside { /* deixei sem sobrescrever - sua sidebar.css permanece */ }
     "kpi1 kpi2 feed"
     "chart chart gauge"
     "heatmap heatmap bars";
+    
 }
 
 
