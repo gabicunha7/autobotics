@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+    display: flex;
+}
+
+* {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Jost";
+}
+
+.container-content {
+    width: 80vw;
+    height: 100vh;
+}
+
+/* CABECALHO */
+
+.div-superior {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.div-filtro{
+  width: 70%;
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  height: 90px;
+  border-radius: 50px;
+  padding: 18px 28px;
+  font-size: 18px;
+}
+.div-filtro select{
+  font-size: 16px;
+  height: 38px;
+  width: 160px;
+  margin-left: 18px;
+}
+
+.div-usuario{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  height: 90px;
+  border-radius: 50px;
+  padding: 12px 20px;
+  font-size: 16px;
+}
+.div-usuario h6{ font-size: 18px; }
+.div-img-usuario img{ width:56px; height:56px; border-radius:50%; }
+
+
+/* MAIN */
+
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    width: 100%;
+    height: 42vh;
+    margin-bottom: 15px;
+}
+
+.main-itens-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 95%;
+    height: 42vh;
+}
+
+.main-item-1 {
+    width: 35%;
+    height: 42vh;
+}
+
+.canvas-full { width: 100% !important; height: 35vh !important; }
+
+.main-item-2 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 25%;
+    height: 42vh;
+}
+
+.main-card {
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10vh;
+    width: 90%;
+    margin-bottom: 10px;
+    border-radius: 20px;
+}
+
+.main-card p {
+    font-size: 20px;
+}
+
+.main-item-3 {
+    width: 30%;
+    height: 42vh;
+}

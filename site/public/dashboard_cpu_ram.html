@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Autobotics | Dashboard</title>
+  <link rel="stylesheet" href="css/sidebar.css" />
+  <link rel="stylesheet" href="css/dash_cpu_ram.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <aside>
+    <section>
+      <section class="menu-container">
+        <img class="img-logo-curta" src="assets/logo/LOGO_CURTA.png" alt="">
+        <h1>MENU</h1>
+        <div class="paginas-container">
+          <a class="a-pagina" onclick="cargoDash()" id="agora">
+            <img class="icon-pagina" src="assets/icones/dash_icon.png" alt="">Dashboard
+          </a>
+          <a class="a-pagina" href="alerta.html"><img class="icon-pagina" src="assets/icones/alerta_icon.png" alt="">Alertas</a>
+          <a class="a-pagina" href="parametros.html"><img class="icon-pagina" src="assets/icones/parametros_icon.png" alt="">Parâmetros</a>
+          <a class="a-pagina" href="setor.html"><img class="icon-pagina" src="assets/icones/setor_icon.png" alt="">Setores</a>
+          <a class="a-pagina" href="controladores.html"><img class="icon-pagina" src="assets/icones/controlador_icon.png" alt="">Controladores</a>
+          <a class="a-pagina" href="funcionario.html"><img class="icon-pagina" src="assets/icones/userImg.png" alt="">Funcionários</a>
+        </div>
+      </section>
+      <a href="index.html">
+        <button id="btn-sair" onclick="limparSessao()">
+          <img class="icon-sair" src="assets/icones/sair_icon.png" alt="">Sair
+        </button>
+      </a>
+    </section>
+  </aside>
+
+  <section class="container-content">
+
+    <!-- CABECALHO -->
+
+    <div class="div-superior">
+      <div class="div-filtro">
+        <p>Controlador: </p>
+        <select id="selectControlador">
+          <option>Controlador A</option>
+          <option>Controlador B</option>
+        </select>
+        <p style="margin-left: 55%; font-weight: 600;">
+          12:00 - 13:00
+        </p>
+      </div>
+
+      <div class="div-usuario">
+        <div class="div-img-usuario"><img src="assets/icones/foto_usuario.png" alt=""></div>
+        <div>
+          <h6 id="nome-usuario">Usuário</h6>
+          <p id="email-usuario">usuario@email.com</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN -->
+
+    <div class="main-container">
+      <div class="main-itens-container">
+
+        <div class="main-item-1">
+          <div class="card area-chart">
+            <h2>Registros de CPU (%) última hora:</h2>
+            <canvas id="grafico_componentes" class="canvas-full"></canvas>
+          </div>
+        </div>
+
+        <div class="main-item-2">
+          <div class="main-card">
+            <p>Total de alertas: 20</p>
+          </div>
+          <div class="main-card">
+            <p>Uso médio de CPU: 80%</p>
+          </div>
+        </div>
+
+        <div class="main-item-3">
+          <h2>Criticidade do alerta:</h2>
+          <canvas id="myDoughnut"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-container">
+      <div class="main-itens-container">
+        <div class="main-item-1"></div>
+        <div class="main-item-2"></div>
+        <div class="main-item-3"></div>
+      </div>
+    </div>
+
+  </section>
+
+ 
+  <script>
+   
+    document.getElementById('nome-usuario').innerText = sessionStorage.NOME_USUARIO || 'Usuário';
+    document.getElementById('email-usuario').innerText = sessionStorage.EMAIL_USUARIO || 'usuario@email.com';
+    document.getElementById('data_atual')?.remove?.(); 
+
+
+    const MOCK = {
+      feed: [
+        {time:'10:25', msg:'Alerta crítico de CPU (95%) - Controlador 0001', sev:'critico'},
+        {time:'10:20', msg:'Alerta médio de RAM (85%) - Controlador 0007', sev:'medio'},
+        {time:'10:15', msg:'Alerta crítico de Disco resolvido - Controlador 0006', sev:'estavel'},
+        {time:'09:55', msg:'Alerta crítico de Disco (95%) - Controlador 0006', sev:'critico'},
+        {time:'09:40', msg:'Alerta médio de CPU (80%) - Controlador 0010', sev:'medio'},
+        {time:'09:15', msg:'Alerta médio de RAM resolvido - Controlador 0005', sev:'estavel'}
+      ],
+      components: {
+        labels: ['25/09','26/09','27/09','28/09','29/09','30/09','01/10'],
+        cpu:  [33, 27, 42, 39, 35, 28, 37],
+        ram:  [54, 67, 64, 59, 61, 69, 65],
+        disco:[20, 23, 18, 22, 24, 26, 28]
+      },
+      controllers: Array.from({length:20}, (_,i)=>({
+        serial: String(i+1).padStart(4,'0'),
+        slots: Array.from({length:24}, ()=> {
+          const r = Math.random();
+          return r < 0.6 ? 'estavel' : r < 0.85 ? 'medio' : 'critico';
+        })
+      })),
+      counts: { critico: 6, medio: 5, estavel: 30 }
+    };
+
+  
+    function renderFeed(){
+      const feed = document.getElementById('feed_area');
+      feed.innerHTML = '';
+      MOCK.feed.forEach(it=>{
+        const div = document.createElement('div');
+        div.className = 'feed-item ' + (it.sev==='critico' ? 'critico' : it.sev==='medio' ? 'medio' : 'estavel');
+        div.innerHTML = `<div class="msg"><strong>${it.msg}</strong></div><div class="time">${it.time}</div>`;
+        feed.appendChild(div);
+      });
+    }
+
+
+const ctx1 = document.getElementById('grafico_componentes').getContext('2d');
+
+
+const horas = Array.from({length: 24}, (_, i) => `${i.toString().padStart(2,'0')}:00`);
+
+
+const dadosPorHora = {
+  cpu: horas.map(() => Math.floor(Math.random() * 5 + 10)),
+  ram: horas.map(() => Math.floor(Math.random() * 5 + 5)),
+  disco: horas.map(() => Math.floor(Math.random() * 2))
+};
+
+const chartComponents = new Chart(ctx1, {
+  type: 'line',
+  data: {
+    labels: horas,
+    datasets: [
+      {
+        label: 'CPU',
+        data: dadosPorHora.cpu,
+        borderColor: '#E71831',
+        backgroundColor: 'rgba(231,24,49,0.08)',
+        fill: true,
+        tension: 0.3
+      },
+      {
+        label: 'RAM',
+        data: dadosPorHora.ram,
+        borderColor: '#e6ac00',
+        backgroundColor: 'rgba(230,172,0,0.08)',
+        fill: true,
+        tension: 0.3
+      },
+      {
+        label: 'Disco',
+        data: dadosPorHora.disco,
+        borderColor: '#4CAF50',
+        backgroundColor: 'rgba(76,175,80,0.08)',
+        fill: true,
+        tension: 0.3
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: { mode: 'index', intersect: false }
+    },
+    scales: {
+      x: {
+        title: { display: true, text: 'Hora' },
+        ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 12 }
+      },
+      y: {
+        beginAtZero: true,
+        title: { display: true, text: 'Quantidade de Alertas' }
+      }
+    }
+  }
+});
+
+
+
+const labels = ['Vendas', 'Marketing', 'Pesquisa', 'Suporte', 'Outros'];
+    const dataValues = [45, 25, 10, 12, 8];
+
+    // Paleta de cores (você pode mudar)
+    const bgColors = [
+      'rgb(59,130,246)',   // azul
+      'rgb(16,185,129)',   // verde
+      'rgb(234,179,8)',    // amarelo
+      'rgb(14,165,233)',   // ciano
+      'rgb(168,85,247)'    // roxo
+    ];
+
+
+    const ctx = document.getElementById('myDoughnut').getContext('2d');
+
+    const myDoughnut = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Distribuição',
+          data: dataValues,
+          backgroundColor: bgColors,
+          borderColor: '#ffffff',
+          borderWidth: 2,
+          hoverOffset: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        aspectRatio: 1.6,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'right',
+            labels: {
+              boxWidth: 18,
+              padding: 12,
+              usePointStyle: true,
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const value = context.parsed;
+                const sum = context.dataset.data.reduce((a,b) => a + b, 0);
+                const pct = (value / sum * 100).toFixed(1);
+                return context.label + ': ' + value + ' (' + pct + '%)';
+              }
+            }
+          }
+        },
+        layout: {
+          padding: {
+            top: 8,
+            bottom: 8
+          }
+        },
+        cutout: '60%',
+
+        
+        animation: {
+          animateRotate: true,
+          duration: 800,
+          easing: 'easeOutQuart'
+        }
+      }
+    });
+ 
+  </script>
+</body>
+</html>
