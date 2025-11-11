@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Autobotics | Dashboard</title>
+  <link rel="stylesheet" href="css/sidebar.css" />
+  <link rel="stylesheet" href="css/dash_alertas_tempo_real.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <aside>
+    <section>
+      <section class="menu-container">
+        <img class="img-logo-curta" src="assets/logo/LOGO_CURTA.png" alt="">
+        <h1>MENU</h1>
+        <div class="paginas-container">
+          <a class="a-pagina" onclick="cargoDash()" id="agora">
+            <img class="icon-pagina" src="assets/icones/dash_icon.png" alt="">Dashboard
+          </a>
+          <a class="a-pagina" href="alerta.html"><img class="icon-pagina" src="assets/icones/alerta_icon.png" alt="">Alertas</a>
+          <a class="a-pagina" href="parametros.html"><img class="icon-pagina" src="assets/icones/parametros_icon.png" alt="">Parâmetros</a>
+          <a class="a-pagina" href="setor.html"><img class="icon-pagina" src="assets/icones/setor_icon.png" alt="">Setores</a>
+          <a class="a-pagina" href="controladores.html"><img class="icon-pagina" src="assets/icones/controlador_icon.png" alt="">Controladores</a>
+          <a class="a-pagina" href="funcionario.html"><img class="icon-pagina" src="assets/icones/userImg.png" alt="">Funcionários</a>
+        </div>
+      </section>
+      <a href="index.html">
+        <button id="btn-sair" onclick="limparSessao()">
+          <img class="icon-sair" src="assets/icones/sair_icon.png" alt="">Sair
+        </button>
+      </a>
+    </section>
+  </aside>
+
+  <section class="container-content">
+
+    <div class="div-superior">
+      <div class="div-filtro">
+        <p>Controlador: </p>
+        <select id="selectControlador">
+          <option>Controlador A</option>
+          <option>Controlador B</option>
+        </select>
+      </div>
+
+      <div class="div-usuario">
+        <div class="div-img-usuario"><img src="assets/icones/foto_usuario.png" alt=""></div>
+        <div>
+          <h6 id="nome-usuario">Usuário</h6>
+          <p id="email-usuario">usuario@email.com</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="div-conteudo">
+      <div class="dashboard-wrapper">
+
+   
+        <div class="card area-kpi1">
+          <h4>Alertas Ativos</h4>
+          <div class="kpi_dashboard"><p id="kpi_total">0</p></div>
+        </div>
+
+    
+        <div class="card area-kpi2">
+          <h4>Alertas Resolvidos (hoje)</h4>
+          <div class="kpi_dashboard"><p id="kpi_resolvidos">0</p></div>
+        </div>
+
+
+        <div class="card area-feed">
+          <h2>Feed de Alertas</h2>
+          <div class="feed" id="feed_area">
+       
+          </div>
+        </div>
+
+      
+        <div class="card area-chart">
+          <h2>Alertas por Componente</h2>
+          <canvas id="grafico_componentes" class="canvas-full"></canvas>
+        </div>
+
+      
+        <div class="card area-gauge">
+          <h2>Severidade</h2>
+          <canvas id="grafico_velocimetro" class="canvas-small"></canvas>
+          <div id="gauge_summary" class="gauge-center"></div>
+        </div>
+
+   
+<div class="card area-heatmap">
+  <h2>Estabilidade dos Controladores</h2>
+  <div class="heatmap-container">
+    <div class="heatmap-scroll" id="heatmapBody"></div>
+    <div class="heatmap-hours" id="heatmapHours"></div>
+  </div>
+</div>
+
+
+    
+        <div class="card area-bars">
+          <h2>Alertas Críticos e Médios (Ativos)</h2>
+          <div class="bar-wrap">
+            <canvas id="grafico_barras" class="bar-canvas"></canvas>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+ 
+  <script>
+   
+    document.getElementById('nome-usuario').innerText = sessionStorage.NOME_USUARIO || 'Usuário';
+    document.getElementById('email-usuario').innerText = sessionStorage.EMAIL_USUARIO || 'usuario@email.com';
+    document.getElementById('data_atual')?.remove?.(); 
+
+
+    const MOCK = {
+      feed: [
+        {time:'10:25', msg:'Alerta crítico de CPU (95%) - Controlador 0001', sev:'critico'},
+        {time:'10:20', msg:'Alerta médio de RAM (85%) - Controlador 0007', sev:'medio'},
+        {time:'10:15', msg:'Alerta crítico de Disco resolvido - Controlador 0006', sev:'estavel'},
+        {time:'09:55', msg:'Alerta crítico de Disco (95%) - Controlador 0006', sev:'critico'},
+        {time:'09:40', msg:'Alerta médio de CPU (80%) - Controlador 0010', sev:'medio'},
+        {time:'09:15', msg:'Alerta médio de RAM resolvido - Controlador 0005', sev:'estavel'}
+      ],
+      components: {
+        labels: ['25/09','26/09','27/09','28/09','29/09','30/09','01/10'],
+        cpu:  [33, 27, 42, 39, 35, 28, 37],
+        ram:  [54, 67, 64, 59, 61, 69, 65],
+        disco:[20, 23, 18, 22, 24, 26, 28]
+      },
+      controllers: Array.from({length:20}, (_,i)=>({
+        serial: String(i+1).padStart(4,'0'),
+        slots: Array.from({length:24}, ()=> {
+          const r = Math.random();
+          return r < 0.6 ? 'estavel' : r < 0.85 ? 'medio' : 'critico';
+        })
+      })),
+      counts: { critico: 6, medio: 5, estavel: 30 }
+    };
+
+  
+    function renderFeed(){
+      const feed = document.getElementById('feed_area');
+      feed.innerHTML = '';
+      MOCK.feed.forEach(it=>{
+        const div = document.createElement('div');
+        div.className = 'feed-item ' + (it.sev==='critico' ? 'critico' : it.sev==='medio' ? 'medio' : 'estavel');
+        div.innerHTML = `<div class="msg"><strong>${it.msg}</strong></div><div class="time">${it.time}</div>`;
+        feed.appendChild(div);
+      });
+    }
+
+
+    function renderKPIs(){
+      const totalHoje = MOCK.counts.critico + MOCK.counts.medio + MOCK.counts.estavel;
+      const ativos = MOCK.counts.critico + MOCK.counts.medio;
+      document.getElementById('kpi_total').innerText = ativos;
+ 
+      const sums = {
+        CPU: MOCK.components.cpu.reduce((a,b)=>a+b,0),
+        RAM: MOCK.components.ram.reduce((a,b)=>a+b,0),
+        DISCO: MOCK.components.disco.reduce((a,b)=>a+b,0)
+      };
+      const top = Object.entries(sums).sort((a,b)=>b[1]-a[1])[0][0];
+      document.getElementById('kpi_resolvidos').innerText = 19;
+
+    }
+
+
+const ctx1 = document.getElementById('grafico_componentes').getContext('2d');
+
+
+const horas = Array.from({length: 24}, (_, i) => `${i.toString().padStart(2,'0')}:00`);
+
+
+const dadosPorHora = {
+  cpu: horas.map(() => Math.floor(Math.random() * 5 + 10)),
+  ram: horas.map(() => Math.floor(Math.random() * 5 + 5)),
+  disco: horas.map(() => Math.floor(Math.random() * 2))
+};
+
+const chartComponents = new Chart(ctx1, {
+  type: 'line',
+  data: {
+    labels: horas,
+    datasets: [
+      {
+        label: 'CPU',
+        data: dadosPorHora.cpu,
+        borderColor: '#E71831',
+        backgroundColor: 'rgba(231,24,49,0.08)',
+        fill: true,
+        tension: 0.3
+      },
+      {
+        label: 'RAM',
+        data: dadosPorHora.ram,
+        borderColor: '#e6ac00',
+        backgroundColor: 'rgba(230,172,0,0.08)',
+        fill: true,
+        tension: 0.3
+      },
+      {
+        label: 'Disco',
+        data: dadosPorHora.disco,
+        borderColor: '#4CAF50',
+        backgroundColor: 'rgba(76,175,80,0.08)',
+        fill: true,
+        tension: 0.3
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: { mode: 'index', intersect: false }
+    },
+    scales: {
+      x: {
+        title: { display: true, text: 'Hora' },
+        ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 12 }
+      },
+      y: {
+        beginAtZero: true,
+        title: { display: true, text: 'Quantidade de Alertas' }
+      }
+    }
+  }
+});
+
+
+ 
+const ctxGauge = document.getElementById('grafico_velocimetro').getContext('2d');
+const total = MOCK.counts.critico + MOCK.counts.medio + MOCK.counts.estavel;
+const percMed = Math.round(MOCK.counts.medio / Math.max(1,total) * 100);
+const percCrit = Math.round(MOCK.counts.critico / Math.max(1,total) * 100);
+const nonStable = percMed + percCrit;
+
+const gaugeCenterText = {
+  id: 'gaugeCenterText',
+  afterDraw(chart) {
+    const { ctx, chartArea: {left, right, top, bottom, width, height} } = chart;
+    ctx.save();
+    ctx.font = '700 22px Jost';
+    ctx.fillStyle = '#222';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(`${nonStable}%`, left + width / 2, top + height / 1.3);
+    ctx.restore();
+  }
+};
+
+new Chart(ctxGauge, {
+  type: 'doughnut',
+  data: {
+    labels: ['Crítico', 'Médio', 'Estável'],
+    datasets: [{
+      data: [MOCK.counts.critico, MOCK.counts.medio, MOCK.counts.estavel],
+      backgroundColor: ['#E71831', '#e6ac00', '#4CAF50'],
+      borderWidth: 0,
+      circumference: 180,
+      rotation: 270,
+      cutout: '65%' 
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+  },
+  plugins: [gaugeCenterText]
+});
+
+document.getElementById('gauge_summary').innerText =
+  `Médios: ${percMed}% • Críticos: ${percCrit}%`;
+
+
+ 
+function renderHeatmap() {
+  const heatmapBody = document.getElementById('heatmapBody');
+  const heatmapHours = document.getElementById('heatmapHours');
+  heatmapBody.innerHTML = '';
+  heatmapHours.innerHTML = '';
+
+
+  const horas = Array.from({ length: 24 }, (_, i) =>
+    `${String(i).padStart(2, '0')}:00`
+  );
+
+ 
+  horas.forEach(h => {
+    const cell = document.createElement('div');
+    cell.textContent = h;
+    heatmapHours.appendChild(cell);
+  });
+
+  
+  for (let i = 1; i <= 10; i++) {
+    const row = document.createElement('div');
+    row.className = 'heatmap-row';
+
+    const label = document.createElement('div');
+    label.className = 'heatmap-label';
+    label.textContent = `Controlador ${String(i).padStart(4, '0')}`;
+    row.appendChild(label);
+
+    const grid = document.createElement('div');
+    grid.className = 'heatmap-grid';
+
+    for (let j = 0; j < 24; j++) {
+      const cell = document.createElement('div');
+      cell.className = 'heat-cell';
+      const rand = Math.random();
+      if (rand > 0.8) cell.style.background = '#E71831'; // crítico
+      else if (rand > 0.6) cell.style.background = '#e6ac00'; // médio
+      else cell.style.background = '#4CAF50'; // estável
+      grid.appendChild(cell);
+    }
+
+    row.appendChild(grid);
+    heatmapBody.appendChild(row);
+  }
+}
+
+
+
+    const ctxBars = document.getElementById('grafico_barras').getContext('2d');
+    const barsChart = new Chart(ctxBars, {
+      type: 'bar',
+      data: {
+        labels: ['Críticos','Médios'],
+        datasets: [{ data: [MOCK.counts.critico, MOCK.counts.medio], backgroundColor: ['#E71831','#e6ac00'] }]
+      },
+      options: { responsive:true, plugins:{ legend:{ display:false } }, scales:{ y:{ beginAtZero:true, ticks:{ stepSize:1 } } } }
+    });
+
+    // init
+    function initDashboard(){
+      renderFeed();
+      renderKPIs();
+      renderHeatmap();
+    }
+    document.addEventListener('DOMContentLoaded', initDashboard);
+
+
+    document.getElementById('selectControlador').addEventListener('change', e=>{
+
+      initDashboard();
+    });
+  </script>
+</body>
+</html>
