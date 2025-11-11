@@ -37,7 +37,7 @@ aside {
     padding: 24px;
 }
 
-/* topo (filtro + usuário)*/
+/* topo (titulo + usuário)*/
 .div-superior {
     display: flex;
     justify-content: space-between;
@@ -77,32 +77,90 @@ aside {
     border-radius: 50%;
 }
 
+/* parte principal */
 
 .div-conteudo {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  padding: 18px;
-  height: 85vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 18px;
+    height: 85vh;
 }
 
-.esquerda{
-    width: 100%;
-    background: #fff;
-    border-radius: 14px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-    display: flex;
-    flex-direction: column;
-    margin-right: 10px;
-}  
-
-.direita{
+.esquerda {
     width: 100%;
     background: #fff;
     border-radius: 14px;
     padding: 10px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
     display: flex;
     flex-direction: column;
-    margin-left: 10px;    
+    margin-right: 10px;
+    text-align: center;
+}
+
+.esquerda h1 {
+    margin-bottom: 10px;
+}
+
+.tabela th {
+    background-color: #E78433;
+    font-size: x-large;
+}
+
+
+.direita {
+    width: 100%;
+    background: #bebebe;
+    border-radius: 14px;
+    padding: 10px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    display: flex;
+    margin-left: 10px;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.comparacao {
+    display: flex;
+    flex-direction: row;
+    padding: 18px;
+    height: 100px;
+    width: 100%;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.kpis {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.kpi1{
+    height: 100px;
+    width: 400px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.kpi2{
+    height: 100px;
+    width: 100px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.grafico {
+    display: flex;
+    flex-direction: row;
+    padding: 18px;
+    height: 500px;
+    width: 100%;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
 }
