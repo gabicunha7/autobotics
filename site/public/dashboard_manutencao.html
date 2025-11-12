@@ -72,31 +72,22 @@
                 </div>
             </div>
         </div>
-
-
-        <div class="div-conteudo">
-            <div class="container-conteudo">
-                <div class="div-info-conteudo">
+            <div class="div-info-conteudo">
                     <h3>Dashboard - Controlador A</h3>
                     <p id="data_atual"></p>
                 </div>
+            <div class="container-conteudo">
+                
 
                 <div class="div-metricas">
 
-                    <div class="div_grafico_cpu_ram">
-                        <div class="div_grafico">
-                            <p>Média de Status da CPU por dia da semana</p>
-                            <canvas id="grafico_cpu"></canvas>
-                        </div>
-
+                    <div class="div-grafico-ram-kpi">
                         <div class="div_grafico">
                             <p>Média de Status da RAM por dia da semana</p>
                             <canvas id="grafico_ram"></canvas>
                         </div>
-                    </div>
-
-                    <div class="div_grafico_alertas_kpi">
-                        <div class="kpis">
+                
+                         <div class="kpis">
                             <div class="kpi_dashboard" id="total-alertas">
                                 <h3>Total de alertas (hoje): </h3>
                                 <p class="total-alertas">20</p>
@@ -106,7 +97,14 @@
                                 <p class="componente-alertas">CPU</p>
                             </div>
                         </div>
+                    </div>
 
+
+                    <div class="div-grafico-cpu-alertas">
+                        <div class="div_grafico">
+                            <p>Média de Status da CPU por dia da semana</p>
+                            <canvas id="grafico_cpu"></canvas>
+                        </div>
 
                         <div class="div_grafico">
                             <p>Total de Alertas nos dias da semana</p>
@@ -114,9 +112,10 @@
                         </div>
                     </div>
 
+                    </div>
                 </div>
+
             </div>
-        </div>
     </section>
 
 </body>
@@ -146,19 +145,19 @@
             datasets: [{
                 label: 'Nível Estável (até 60%)',
                 data: [33, 27, 42, 39, 35, 28, 37], // linha fixa
-                borderWidth: 1,
+                borderWidth: 3,
                 borderColor: '#8CD610'
             },
             {
                 label: 'Nível Médio (60% a 85%)',
                 data: [64, 61, 82, 68, 72, 76, 77], // linha fixa
-                borderWidth: 1,
+                borderWidth: 3,
                 borderColor: '#e6ac00'
             },
             {
                 label: 'Nível Crítico (>85%)',
                 data: [89, 88, 93, 86, 90, 87, 90], // linha fixa
-                borderWidth: 1,
+                borderWidth: 3,
                 borderColor: '#E71831'
             }]
         },
@@ -205,19 +204,19 @@
             datasets: [{
                 label: 'Nível Estável (até 75%)',
                 data: [54, 67, 64, 59, 61, 69, 65], // linha fixa
-                borderWidth: 1,
+                borderWidth: 3,
                 borderColor: '#8CD610'
             },
             {
                 label: 'Nível Médio (75% a 90%)',
                 data: [75, 75, 76, 77, 82, 79, 81], // linha fixa
-                borderWidth: 1,
+                borderWidth: 3,
                 borderColor: '#e6ac00'
             },
             {
                 label: 'Nível Crítico (>90%)',
                 data: [90, 91, 91, 90, 93, 90, 92], // linha fixa
-                borderWidth: 1,
+                borderWidth: 3,
                 borderColor: '#E71831'
             }]
         },
