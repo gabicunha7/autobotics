@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historico de alertas</title>
     <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet" href="css/dash_historico_alertas.css">
-    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
 
-    <body>
+
+<body>
 
     <aside>
 
- <section>
+        <section>
             <section class="menu-container">
                 <img class="img-logo-curta" src="assets/logo/LOGO_CURTA.png" alt="">
                 <h1>MENU</h1>
@@ -32,7 +33,7 @@
                         <img class="icon-pagina" src="assets/icones/parametros_icon.png" alt="">
                         Parâmetros
                     </a>
-                    
+
                     <a class="a-pagina" href="setor.html">
                         <img class="icon-pagina" src="assets/icones/setor_icon.png" alt="">
                         Setores
@@ -54,65 +55,140 @@
                 </button>
             </a>
 
-</aside>
+    </aside>
 
-<section class="container-content">
+    <section class="container-content">
 
-<div class="div-superior">
-      <div class="div-titulo">
-       <h1>Historico de alertas</h1>
-      </div>
-
-      <div class="div-usuario">
-        <div class="div-img-usuario"><img src="assets/icones/foto_usuario.png" alt=""></div>
-        <div>
-          <h6 id="nome-usuario">Usuário</h6>
-          <p id="email-usuario">usuario@email.com</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="div-conteudo">
-
-        <div class="esquerda">
-
-            <h1>Alertas por setor:</h1>
-
-            <table class="tabela">
-                <th>Setor</th>
-                <th>Alertas</th>
-                <th>Status</th>
-            </table>
-
-        </div>
-
-        <div class="direita">
-
-            <div class="comparacao">
+        <div class="div-superior">
+            <div class="div-titulo">
+                <h1>Historico de alertas</h1>
             </div>
 
-            <div class="kpis">
+            <div class="div-usuario">
+                <div class="div-img-usuario"><img src="assets/icones/foto_usuario.png" alt=""></div>
+                <div>
+                    <h6 id="nome-usuario">Usuário</h6>
+                    <p id="email-usuario">usuario@email.com</p>
+                </div>
+            </div>
+        </div>
 
-                <div class="kpi1">
+        <div class="div-conteudo">
+
+
+            <div class="esquerda">
+
+                <h1>Alertas por setor:</h1>
+
+                <table class="tabela">
+                    <th>Setor</th>
+                    <th>Alertas</th>
+                    <th>Status</th>
+                </table>
+
+            </div>
+
+            <div class="direita">
+
+                <div class="comparacao">
+                    <div class="comparacao-titulo">Comparação de alertas:</div>
+
+                    <div class="comparacao-colunas">
+                        <div class="comparacao-col">
+                            <div class="comp-subtitulo">Mês anterior:</div>
+                            <div class="comp-valor">50</div>
+                        </div>
+
+                        <div class="comparacao-col">
+                            <div class="comp-subtitulo">Este mês:</div>
+                            <div class="comp-valor">64</div>
+                        </div>
+
+                        <div class="comparacao-col">
+                            <div class="comp-subtitulo">Aumento de:</div>
+                            <div class="comp-valor">14 <span class="texto-alertas">alertas</span></div>
+                            <div class="comp-percentual">▲ 28%</div>
+                        </div>
+                    </div>
+
                 </div>
 
-                <div class="kpi2">
+                <div class="kpis">
+
+                    <div class="kpi1">
+                        <div class="kpi-titulo">Mais alertas em:</div>
+                        <span class="componente">CPU</span>
+                    </div>
+
+                    <div class="kpi2">
+                        <div class="kpi-titulo">Alertas em <span id="componente">CPU</span>:</div>
+                        <span class="qtdAlertasComponente">45</span>
+                    </div>
+
                 </div>
-            
+
+
+                <div class="grafico">
+                    <canvas id="grafico_alertas"></canvas>
+                </div>
+
+
             </div>
-
-
-            <div class="grafico">
-            </div>
-
 
         </div>
 
-    </div>
-    
-</section>
-    
+    </section>
+
 </body>
-    
-</body>
+
+
+
+
+<script>
+    document.getElementById("nome-usuario").innerHTML = sessionStorage.NOME_USUARIO;
+    document.getElementById("email-usuario").innerHTML = sessionStorage.EMAIL_USUARIO;
+
+    const ctx = document.getElementById('grafico_alertas');
+
+    // força a legenda ficar oculta
+    if (window.Chart && Chart.defaults && Chart.defaults.plugins) {
+        Chart.defaults.plugins.legend.display = false;
+        if (Chart.defaults.plugins.title) Chart.defaults.plugins.title.display = false;
+    }
+
+    const grafico_alertas = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+            datasets: [{
+                label: '', 
+                data: [12, 19, 15, 25, 22, 30, 28, 35, 40, 38, 45, 50],
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            plugins: {
+            title: {
+                display: true,
+                text: 'Número de Alertas por Mês',
+                position: 'top',
+                font: {
+                    size: 18,
+                    color: '#000000',
+                    weight: 'bold'
+                }
+            }
+        }
+        }
+    });
+
+
+
+
+
+</script>
+
+
 </html>
