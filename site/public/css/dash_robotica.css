@@ -24,6 +24,7 @@ img {
 body{
     display: flex;
     height: 100vh;
+    background-color: #f4f4f4;
 }
 
 .div-superior{
@@ -72,7 +73,6 @@ body{
 .div-conteudo{
     display: flex;
     justify-content: center;
-    background-color: #D9D9D9;
     margin-left: 50px;
     margin-right: 50px;
     width: 75vw;
@@ -138,6 +138,7 @@ body{
   padding: 15px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   margin: 10px;
+  gap: 1px;
 }
 
 .div_grafico p {
@@ -163,7 +164,7 @@ body{
 
 .card-processo{
     background-color: white;
-    height: 350px;
+    height: 400px;
     width: 400px;
     display: flex;
     align-items: center;
@@ -189,10 +190,26 @@ body{
     display: flex;
     justify-content: space-between;
     font-size: 25px;
-    width: 300px;
+    width: 270px;
     height: 50px;
     background-color: #d5d2d2;
     padding: 20px;
     align-items: center;
     border-radius: 20px;
 }
+
+.teste{
+    width: 100%;
+}
+
+.card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.area-chart { grid-area: chart; }
+.canvas-full { width: 100% !important; height: 320px !important; }

@@ -85,7 +85,14 @@
 
                 <div class="div-metricas">
                     <div class="div_grafico_alertas_processo">
-                        <div class="cards-metricas">
+                        <div class="teste">
+                        <div class="card area-chart">
+                            <h2>Média de uso dos componentes da ultima hora: </h2>
+                            <canvas id="grafico_componentes" class="canvas-full"></canvas>
+                        </div>
+                        </div>
+
+                        <!-- <div class="cards-metricas">
                             <div class="card-metrica">
                                 <p>Pico de uso em CPU (Última hora):</p>
                                 <span style="color: #e6ac00;">78%</span>
@@ -111,7 +118,7 @@
                                 <span style="color: red;">15,36 GB</span>
                             </div>
 
-                        </div>
+                        </div> -->
                         <div class="card-processo">
                             <div class="processo">
                                 <h2>Processos mais utilizados:</h2>
@@ -251,6 +258,72 @@ function criarGrafico(idCanvas, titulo, valor) {
 criarGrafico('grafico_cpu', 'CPU Utilização', 46);
 criarGrafico('grafico_ram', 'Memória RAM', 81);
 criarGrafico('grafico_disco', 'Disco', 97);
+
+
+//Nova dashboard
+const ctx1 = document.getElementById('grafico_componentes').getContext('2d');
+
+
+const horas = Array.from({length: 7}, (_, i) =>  `00:${i.toString().padStart(2, '0')}`);
+
+
+const dadosPorHora = {
+  cpu: horas.map(() => Math.floor(Math.random() * (100 - 20 + 1) + 20)),
+  ram: horas.map(() => Math.floor(Math.random() * (100 - 20 + 1) + 20)),
+  disco: horas.map(() => Math.floor(Math.random() * (100 - 20 + 1) + 20))
+};
+
+const chartComponents = new Chart(ctx1, {
+  type: 'line',
+  data: {
+    labels: horas,
+    datasets: [
+      {
+        label: 'CPU',
+        data: dadosPorHora.cpu,
+        borderColor: '#E71831',
+        backgroundColor: 'rgba(231,24,49,0.08)',
+        fill: true,
+        tension: 0.3
+      },
+      {
+        label: 'RAM',
+        data: dadosPorHora.ram,
+        borderColor: '#e6ac00',
+        backgroundColor: 'rgba(230,172,0,0.08)',
+        fill: true,
+        tension: 0.3
+      },
+      {
+        label: 'Disco',
+        data: dadosPorHora.disco,
+        borderColor: '#4CAF50',
+        backgroundColor: 'rgba(76,175,80,0.08)',
+        fill: true,
+        tension: 0.3
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: { mode: 'index', intersect: false }
+    },
+    scales: {
+      x: {
+        title: { display: true, text: 'Minutos' },
+        ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 12 }
+      },
+      y: {
+        beginAtZero: true,
+        title: { display: true, text: 'Porcentagem de uso (%)' }
+      }
+    }
+  }
+});
+
 </script>
 
 </html>
