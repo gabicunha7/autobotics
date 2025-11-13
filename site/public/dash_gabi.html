@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autobotics | Dashboard</title>
+    <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/css_gabi.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.1.0"></script>
+</head>
+
+<body>
+    <aside>
+        <section>
+            <section class="menu-container">
+                <img class="img-logo-curta" src="assets/logo/LOGO_CURTA.png" alt="">
+                <h1>MENU</h1>
+
+                <div class="paginas-container">
+                    <a class="a-pagina" onclick="cargoDash()" id="agora">
+                        <img class="icon-pagina" src="assets/icones/dash_icon.png" alt="">
+                        Dashboard
+                    </a>
+                    <a class="a-pagina" href="alerta.html">
+                        <img class="icon-pagina" src="assets/icones/alerta_icon.png" alt="">
+                        Alertas
+                    </a>
+                    <a class="a-pagina" href="parametros.html">
+                        <img class="icon-pagina" src="assets/icones/parametros_icon.png" alt="">
+                        Parâmetros
+                    </a>
+                    
+                    <a class="a-pagina" href="setor.html">
+                        <img class="icon-pagina" src="assets/icones/setor_icon.png" alt="">
+                        Setores
+                    </a>
+                    <a class="a-pagina" href="controladores.html">
+                        <img class="icon-pagina" src="assets/icones/controlador_icon.png" alt="">
+                        Controladores
+                    </a>
+                    <a class="a-pagina" href="funcionario.html">
+                        <img class="icon-pagina" src="assets/icones/userImg.png" alt="">
+                        Funcionários
+                    </a>
+                </div>
+            </section>
+            <a href="index.html">
+                <button id="btn-sair" onclick="limparSessao()">
+                    <img class="icon-sair" src="assets/icones/sair_icon.png" alt="">
+                    Sair
+                </button>
+            </a>
+    </aside>
+
+    <section class="container-content">
+        <div class="div-superior">                
+
+            <div class="div-filtro">
+                <div class="div_select">
+                    <p>Setor: </p>
+                    <select id="slc_setor">
+                        <option value="Setor_A">Setor A</option>
+                        <option value="Setor_B">Setor B</option>
+                        <option value="Setor_C">Setor C</option>
+                        <option value="Setor_D">Setor D</option>
+                    </select>
+                </div>
+                <p id="data_atual"></p>
+            </div>
+
+            <div class="div-usuario">
+                <div class="div-img-usuario">
+                    <img src="assets/icones/foto_usuario.png" alt="">
+                </div>
+                <div>
+                    <h6 id="nome-usuario"></h6>
+                    <p id="email-usuario"></p>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="div-conteudo">
+            <div class="container-conteudo">
+                <div class="div-metricas">
+                    <div class="div_grafico_top10">
+                        <div class="div_grafico">
+                            <p class="titulo_grafico">Top 10 controladores com maior uso de disco dia <p class="titulo_grafico" id="data_atual_tit"></p></p>
+                            <canvas id="grafico_uso_disco"></canvas>
+                        </div>
+                        <div class="div_select">
+                            <p>Controlador: </p>
+                            <select id="slc_controlador">
+                                <option value="ABS123">ABS123</option>
+                                <option value="BDA543">BDA543</option>
+                                <option value="NSJ754">NSJ754</option>
+                                <option value="NDH839">NDH839</option>
+                                <option value="LDS920">LDS920</option>
+                                <option value="NDA819">NDA819</option>
+                                <option value="NDS728">NDS728</option>
+                                <option value="KSI123">KSI123</option>
+                                <option value="YSH839">YSH839</option>
+                                <option value="ISJ459">ISJ459</option>
+                            </select>
+                        </div>
+                        <div class="div_grafico_uso_historico">
+                            <p>Uso do disco em um ano</p>
+                            <canvas id="grafico_historico"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="div_grafico_alertas_kpi">
+                        <div class="kpis">
+                            <div class="kpi_dashboard" id="porcentagem-media">
+                                <p class="porcentagem-media">50%</p>
+                                <h3>Média de uso de disco do setor</h3>
+                            </div>
+                            <div class="kpi_dashboard" id="componente-alertas">
+                                <p class="componente-alertas">5</p>
+                                <h3 style="font-size: x-large;">Discos emitiram alerta essa semana</h3>
+                            </div>
+                        </div>
+
+                        <div class="kpis_controlador">
+                            <div class="kpi_dashboard_controlador" id="config-disco">
+                                <p class="config-disco"style="font-size: x-large;">Total de espaço: 256GB</p>
+                                <p class="config-disco"style="font-size: x-large;">Uso do disco: 80%</p>
+                            </div>
+                            <div class="kpi_dashboard_controlador" id="previsao-disco">
+                                <p class="previsao-disco">20-11-2025</p>
+                                <h3 style="font-size: x-large;">Data de previsão para disco cheio</h3>
+                            </div>
+
+                        </div>
+                    </div>
+            
+            </div>
+        </div>
+    </section>
+
+</body>
+
+<script src="js/rotaDash.js"></script>
+
+<script>
+
+    $('#slc_setor').select2({language: {
+      	noResults: function() {
+        return "nenhum setor encontrado";}}
+    });
+    $('#slc_controlador').select2({language: {
+      	noResults: function() {
+        return "nenhum controlador encontrado";}}
+    });
+
+    const dataAtual = new Date();
+    const dia = dataAtual.getDate();
+    const mes = dataAtual.getMonth() + 1; 
+    const ano = dataAtual.getFullYear();
+
+    document.getElementById("data_atual").innerHTML = `Data: ${dia}/${mes}/${ano}`;
+    document.getElementById("data_atual_tit").innerHTML = `${dia}/${mes}`;
+
+
+
+    document.getElementById("nome-usuario").innerHTML = sessionStorage.NOME_USUARIO;
+    document.getElementById("email-usuario").innerHTML = sessionStorage.EMAIL_USUARIO;
+
+    
+    const ctx_historico = document.getElementById('grafico_historico');    
+    valores_grafico_historico = [39,41,44,47,50,60,62,68,75,77];
+
+    new Chart(ctx_historico, {
+        type: 'line',
+        data: {
+            labels: ['Janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'],
+            datasets: [{
+                label: 'Média de uso de disco em %',
+                data: valores_grafico_historico, 
+                borderWidth: 2,
+                borderColor: '#4c5caf'
+            },{
+                label: 'regressão',
+                data: valores_grafico_historico, 
+                borderWidth: 2,
+                borderColor: 'purple'
+            }
+        ]
+        },
+        options: {
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Meses',
+                        font: {
+                            size: 18
+                        }
+                    },
+                    ticks: {
+                        font: {
+                            size: 16
+                        }
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Uso de disco em porcentagem %',
+                        font: {
+                            size: 18
+                        }
+                    },
+                    ticks: {
+                        font: {
+                            size: 16
+                        }
+                    }
+                }
+            },
+            plugins: {
+                annotation: {
+                    annotations: {
+                        regressao: {
+                            type: 'line',
+                            yMin: Math.min(...valores_grafico_historico),
+                            yMax: 87,
+                            borderColor: 'purple',
+                            borderWidth: 2
+                        },                        
+                        Crítico: {
+                            type: 'line',
+                            yMin: 80,
+                            yMax: 80,
+                            borderColor: 'red',
+                            borderWidth: 2
+                        },
+                        
+                    }
+                }
+    }
+        }});
+
+    let regressao = []
+    const meses_ano = [1,2,3,4,5,6,7,8,9,10,11,12]
+    somaX = 0
+    somaY = 0
+
+    function calcRegressao(list){
+        somaX = 0
+        somaY = 0
+        for(i = 0; i < list.length; i++){
+            somaX += list
+        }
+    }
+
+    function corBarra(list){
+        cores = []
+        list.forEach(e => {
+            if(e >= 80){
+                cores.push('#ff3f2e');
+            } else if(e >=70){
+                cores.push('#ff852e');
+            } else {
+                cores.push('#4CAF50');
+            }
+        })
+        return cores;
+    }
+
+    let valores_grafico_barra = [87, 82, 74, 72, 68, 63, 55, 52, 50, 50];
+    const ctx_top10 = document.getElementById('grafico_uso_disco');
+
+    new Chart(ctx_top10, {
+        type: 'bar',
+        data: {
+            labels: ['ABS123', 'BDA543', 'NSJ754', 'NDH839', 'LDS920', 'NDA819', 'NDS728', 'KSI123', 'YSH839', 'ISJ459'],
+            datasets: [{
+                label: 'Uso de disco em %',
+                data: valores_grafico_barra,
+                borderWidth: 2,
+                backgroundColor: corBarra(valores_grafico_barra)
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Controladores',
+                        font: {
+                            size: 18
+                        }
+                    },
+                    ticks: {
+                        font: {
+                            size: 16
+                        }
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Porcentagem (%)',
+                        font: {
+                            size: 18
+                        }
+                    },
+                    ticks: {
+                        font: {
+                            size: 16
+                        }
+                    }
+                }
+            },
+                plugins: {
+                annotation: {
+                    annotations: {
+                        critico: {
+                            type: 'line',
+                            yMin: 80,
+                            yMax: 80,
+                            borderColor: 'red',
+                            borderWidth: 2
+                        },
+                        medio: {
+                            type: 'line',
+                            yMin: 70,
+                            yMax: 70,
+                            borderColor: 'orange',
+                            borderWidth: 2
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+
+</html>
