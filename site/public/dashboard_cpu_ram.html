@@ -60,6 +60,9 @@
     </div>
 
     <!-- MAIN -->
+     <h2>Registros de CPU (%) última hora:</h2>
+     <br>
+     <br>
 
     <div class="main-container">
       <div class="main-itens-container">
@@ -89,9 +92,26 @@
 
     <div class="main-container">
       <div class="main-itens-container">
-        <div class="main-item-1"></div>
-        <div class="main-item-2"></div>
-        <div class="main-item-3"></div>
+        <div class="main-item-1">
+          <div class="card area-chart">
+            <h2>Registros de RAM (%) última hora:</h2>
+            <canvas id="grafico_componentes_2" class="canvas-full"></canvas>
+          </div>
+        </div>
+
+        <div class="main-item-2">
+          <div class="main-card">
+            <p>Total de alertas: 20</p>
+          </div>
+          <div class="main-card">
+            <p>Uso médio de RAM: 80%</p>
+          </div>
+        </div>
+
+        <div class="main-item-3">
+          <h2>Criticidade do alerta:</h2>
+          <canvas id="myDoughnut_2"></canvas>
+        </div>
       </div>
     </div>
 
@@ -144,6 +164,7 @@
 
 
 const ctx1 = document.getElementById('grafico_componentes').getContext('2d');
+const ctx3 = document.getElementById('grafico_componentes_2').getContext('2d');
 
 
 const horas = Array.from({length: 24}, (_, i) => `${i.toString().padStart(2,'0')}:00`);
@@ -156,6 +177,58 @@ const dadosPorHora = {
 };
 
 const chartComponents = new Chart(ctx1, {
+  type: 'line',
+  data: {
+    labels: horas,
+    datasets: [
+      {
+        label: 'CPU',
+        data: dadosPorHora.cpu,
+        borderColor: '#E71831',
+        backgroundColor: 'rgba(231,24,49,0.08)',
+        fill: true,
+        tension: 0.3
+      },
+      {
+        label: 'RAM',
+        data: dadosPorHora.ram,
+        borderColor: '#e6ac00',
+        backgroundColor: 'rgba(230,172,0,0.08)',
+        fill: true,
+        tension: 0.3
+      },
+      {
+        label: 'Disco',
+        data: dadosPorHora.disco,
+        borderColor: '#4CAF50',
+        backgroundColor: 'rgba(76,175,80,0.08)',
+        fill: true,
+        tension: 0.3
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: { mode: 'index', intersect: false }
+    },
+    scales: {
+      x: {
+        title: { display: true, text: 'Hora' },
+        ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 12 }
+      },
+      y: {
+        beginAtZero: true,
+        title: { display: true, text: 'Quantidade de Alertas' }
+      }
+    }
+  }
+});
+
+
+const chartComponents_2 = new Chart(ctx3, {
   type: 'line',
   data: {
     labels: horas,
@@ -223,7 +296,64 @@ const labels = ['Vendas', 'Marketing', 'Pesquisa', 'Suporte', 'Outros'];
 
     const ctx = document.getElementById('myDoughnut').getContext('2d');
 
+    const ctx2 = document.getElementById('myDoughnut_2').getContext('2d');
+
     const myDoughnut = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Distribuição',
+          data: dataValues,
+          backgroundColor: bgColors,
+          borderColor: '#ffffff',
+          borderWidth: 2,
+          hoverOffset: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        aspectRatio: 1.6,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'right',
+            labels: {
+              boxWidth: 18,
+              padding: 12,
+              usePointStyle: true,
+            }
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const value = context.parsed;
+                const sum = context.dataset.data.reduce((a,b) => a + b, 0);
+                const pct = (value / sum * 100).toFixed(1);
+                return context.label + ': ' + value + ' (' + pct + '%)';
+              }
+            }
+          }
+        },
+        layout: {
+          padding: {
+            top: 8,
+            bottom: 8
+          }
+        },
+        cutout: '60%',
+
+        
+        animation: {
+          animateRotate: true,
+          duration: 800,
+          easing: 'easeOutQuart'
+        }
+      }
+    });
+
+    const myDoughnut_2 = new Chart(ctx2, {
       type: 'doughnut',
       data: {
         labels: labels,

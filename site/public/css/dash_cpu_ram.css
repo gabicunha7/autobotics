@@ -2,6 +2,7 @@
 
 body {
     display: flex;
+    background-color: #f4f4f4;
 }
 
 * {
@@ -13,8 +14,9 @@ body {
 }
 
 .container-content {
-    width: 80vw;
+    width: 75vw;
     height: 100vh;
+    margin: 0 auto;
 }
 
 /* CABECALHO */
@@ -24,13 +26,14 @@ body {
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 40px;
+  margin-top: 50px;
 }
 
 .div-filtro{
   width: 70%;
   background-color: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
   height: 90px;
@@ -50,8 +53,9 @@ body {
   align-items: center;
   gap: 12px;
   background-color: white;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
   height: 90px;
+  width: 20vw;
   border-radius: 50px;
   padding: 12px 20px;
   font-size: 16px;
@@ -69,11 +73,11 @@ body {
     justify-content: center;
     align-items: center;
     background-color: white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0px 8px rgba(0, 0, 0, 0.3);
     border-radius: 15px;
     width: 100%;
     height: 42vh;
-    margin-bottom: 15px;
+    margin-bottom: 30px;
 }
 
 .main-itens-container {
