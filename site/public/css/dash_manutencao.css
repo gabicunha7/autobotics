@@ -77,6 +77,8 @@ body{
 .div-info-conteudo{
     display: flex;
     padding: 20px;
+    margin-left: 10%;
+    margin-right: 10%;
     justify-content: space-between;
 }
 
@@ -112,6 +114,7 @@ body{
     width: 33vw;
     margin: 10px;
     border-radius: 20px;
+    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
 }
 
 .div-grafico-cpu-alertas{
@@ -156,19 +159,10 @@ body{
     padding: 30px;
     align-items: center;
     border-radius: 20px;
+    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
 }
 
 .kpi_dashboard p{
     font-weight: 700;
     font-size: 2em;
-}
-
-#total-alertas{
-    color: white;
-    background-color: #4CAF50;
-}
-
-#componente-alertas{
-    color: white;
-    background-color: #e6ac00;
 }
