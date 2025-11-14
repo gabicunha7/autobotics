@@ -261,10 +261,18 @@
         data: {
             labels: ['25/09/25', '26/09/25', '27/09/25', '28/09/25', '29/09/25', '30/09/25', '01/10/25'],
             datasets: [{
-                label: 'Alertas',
-                data: [25, 34, 15, 20, 23, 28, 31],
-                borderWidth: 2
-            }]
+                label: 'Alertas Críticos',
+                data: [5, 4, 1, 2, 3, 4, 6],
+                borderWidth: 2,
+                backgroundColor: '#E71831'
+            }, 
+            {
+                label: 'Alertas Médios',
+                data: [12, 10, 15, 10, 13, 8, 7],
+                borderWidth: 2,
+                backgroundColor: '#e6ac00'
+            }
+        ]
         },
         options: {
             scales: {
