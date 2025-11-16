@@ -14,9 +14,10 @@ body {
 }
 
 .container-content {
-    width: 75vw;
+    width: 80vw;
     height: 100vh;
     margin: 0 auto;
+    background-color: red;
 }
 
 /* CABECALHO */
@@ -66,61 +67,138 @@ body {
 
 /* MAIN */
 
-
 .main-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: white;
-    box-shadow: 0 0px 8px rgba(0, 0, 0, 0.3);
-    border-radius: 15px;
     width: 100%;
-    height: 42vh;
-    margin-bottom: 30px;
-}
-
-.main-itens-container {
+    height: 150vh;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
-    width: 95%;
-    height: 42vh;
+    justify-content: space-between;
+    margin-top: 40px;
+
+    background-color: blue;
 }
 
-.main-item-1 {
-    width: 35%;
-    height: 42vh;
+.chart-info {
+    height: 50vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
-.canvas-full { width: 100% !important; height: 35vh !important; }
+.chart-container {
+    background-color: blueviolet;
+    width: 60%;
+    height: 100%;
+}
 
-.main-item-2 {
+.kpis-chart-container {
+    width: 38.5%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    background-color: blueviolet;
+}
+
+.kpi-container {
+    width: 100%;
+    height: 23vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 25%;
-    height: 42vh;
+
+    background-color: blue;
 }
 
-.main-card {
-    background-color: white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+/* PARTE ESQUERDA */
+
+.left-main-container {
+    width: 69.5%;
+    height: 100%;
     display: flex;
+    flex-direction: column;
+    gap: 1.5vh;
+
+    background-color: green;
+}
+
+.left-main-item {
+    background-color: yellow;
+    width: 100%;
+}
+
+/* KPI´S DE CIMA*/
+
+.top-kpis {
+    height: 30vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.kpi-cpu-mean-container {
+    background-color: blueviolet;
+    width: 29%;
+    height: 100%;
+}
+
+.kpi-alert-process {
+    width: 39%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
+    gap: 10%;
+
+    background-color: blueviolet;
+}
+
+.top-kpi-flat {
+    width: 100%;
+    height: 12vh;
+    display: flex;
     align-items: center;
-    height: 10vh;
-    width: 90%;
-    margin-bottom: 10px;
-    border-radius: 20px;
+    justify-content: space-between;
+    background-color: red;
 }
 
-.main-card p {
-    font-size: 20px;
+.top-kpi-flat p {
+    margin: 10px;
+}
+.kpi-ram-mean-container {
+    background-color: blueviolet;
+    width: 29%;
+    height: 100%;
 }
 
-.main-item-3 {
-    width: 30%;
-    height: 42vh;
+/* GRÁFICO DE CPU + KPI DE PICO*/
+
+
+
+/* PARTE DIREITA*/
+
+.right-main-container {
+    width: 29.5%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5vh;
+
+    background-color: pink;
+}
+
+.process-list {
+    width: 100%;
+    height: 81.5vh;
+
+    background-color: blueviolet;
+}
+
+.measure-chart-container {
+    width: 100%;
+    height: 50vh;
+
+    background-color: blueviolet;
 }
