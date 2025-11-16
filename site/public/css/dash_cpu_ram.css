@@ -86,7 +86,7 @@ body {
 }
 
 .chart-container {
-    background-color: blueviolet;
+    background-color: rgb(211, 211, 211);
     width: 60%;
     height: 100%;
 }
@@ -109,7 +109,16 @@ body {
     justify-content: center;
     align-items: center;
 
-    background-color: blue;
+    background-color: red;
+}
+
+.pie-chart {
+    width: 170px !important;
+    height: 170px !important;
+}
+
+.line-chart {
+    width: 90% !important;
 }
 
 /* PARTE ESQUERDA */
@@ -189,16 +198,59 @@ body {
     background-color: pink;
 }
 
-.process-list {
-    width: 100%;
+.process-list-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: orange;
     height: 81.5vh;
+}
 
+.process-list-header {
+    height: 7%;
+    display: flex;
+    flex-direction: row;
     background-color: blueviolet;
 }
 
-.measure-chart-container {
+.process-list {
+    width: 85%;
+    height: 90%;
+    background-color: blueviolet;
+}
+
+.process-list-item {
+    background-color: red;
+}
+
+.process-item-info {
+    background-color: blue;
+}
+
+.process-metrics {
+    background-color: yellow;
+}
+
+.measures-chart-container {
     width: 100%;
     height: 50vh;
 
     background-color: blueviolet;
+}
+
+.measures-chart-header {
+    display: flex;
+    flex-direction: column;
+    background-color: olive;
+}
+
+.measures-chart-legend {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    background-color: red;
+}
+.pie-measures-chart {
+    width: 240px !important;
+    height: 240px !important;
 }
