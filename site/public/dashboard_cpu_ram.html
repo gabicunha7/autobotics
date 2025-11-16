@@ -74,9 +74,9 @@
     <div class="main-container">
       <div class="left-main-container">
         <div class="left-main-item top-kpis">
-          <div class="kpi-cpu-mean-container">
+          <div class="kpi-mean-container">
             <p>Média de uso CPU:</p>
-            <div class="cpu-pie-chart-container">
+            <div class="pie-chart-container">
               <p>85%</p>
               <canvas class="pie-chart" id="cpu-mean-pie"></canvas>
             </div>
@@ -91,20 +91,24 @@
               <p>120</p>
             </div>
           </div>
-          <div class="kpi-ram-mean-container">
+          <div class="kpi-mean-container">
             <p>Média de uso RAM:</p>
-            <div class="ram-pie-chart-container">
-              <p>55%</p>
+            <div class="pie-chart-container">
+                <p class="ram-percent">55%</p>
+                <p class="ram-total">8.5/16GB</p>
               <canvas class="pie-chart" id="ram-mean-pie"></canvas>
             </div>
           </div>
         </div>
         <div class="left-main-item chart-info">
+
           <div class="chart-container">
             <p>Registros de CPU (%) última hora:</p>
             <canvas class="line-chart" id="cpu-line-chart"></canvas>
           </div>
+
           <div class="kpis-chart-container">
+
             <div class="kpi-container">
               <p>Pico da última hora(CPU):</p>
               <div class="kpi-chart-info">
@@ -112,6 +116,7 @@
                 <p>Horário: 12:50</p>
               </div>
             </div>
+
             <div class="kpi-container">
               <p>Último registro(CPU):</p>
               <div class="kpi-chart-info">
@@ -119,8 +124,10 @@
                 <p>Horário: 13:00</p>
               </div>
             </div>
+
           </div>
         </div>
+        
         <div class="left-main-item chart-info">
           <div class="chart-container">
             <p>Registros de RAM (%) última hora:</p>
@@ -147,8 +154,8 @@
       <div class="right-main-container">
         <div class="process-list-container">
           <div class="process-list-header">
-            <p>Processos Consumindo recursos:</p>
-            <span class="material-symbols-outlined">
+            <p>Processos consumindo recursos:</p>
+            <span style="font-size: 35px;" class="material-symbols-outlined">
               info
             </span>
           </div>
@@ -163,7 +170,7 @@
                   </div>
                 </div>
                 <div class="process-item-time">
-                  12:50
+                  <p>12:50</p>
                 </div>
             </div>
 
@@ -177,7 +184,7 @@
                   </div>
                 </div>
                 <div class="process-item-time">
-                  12:50
+                  <p>12:50</p>
                 </div>
             </div>
 
@@ -191,7 +198,7 @@
                   </div>
                 </div>
                 <div class="process-item-time">
-                  12:50
+                  <p>12:50</p>
                 </div>
             </div>
           </div>
@@ -200,15 +207,15 @@
           <div class="measures-chart-header">
             <p>Classificação de Capturas:</p>
             <div class="measures-chart-legend">
-              <div class="measures-chart-estavel">
+              <div class="measures-chart-legend-item">
                 <div class="green-square"></div>
                 <p>Estável</p>
               </div>
-              <div class="measures-chart-medio">
+              <div class="measures-chart-legend-item">
                 <div class="yellow-square"></div>
                 <p>Alerta médio</p>
               </div>
-              <div class="measures-chart-critico">
+              <div class="measures-chart-legend-item">
                 <div class="red-square"></div>
                 <p>Alerta crítico</p>
               </div>

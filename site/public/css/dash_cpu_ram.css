@@ -13,6 +13,13 @@ body {
     font-family: "Jost";
 }
 
+:root {
+    --ligth-red: rgb(255, 75, 75);
+    --ligth-yellow: rgb(255, 217, 32);
+    --dark-yellow: rgb(239, 198, 0);
+    --ligth-green: rgb(70, 255, 45);
+}
+
 .container-content {
     width: 80vw;
     height: 100vh;
@@ -86,9 +93,19 @@ body {
 }
 
 .chart-container {
-    background-color: rgb(211, 211, 211);
+    display: flex;
+    flex-direction: column;
     width: 60%;
     height: 100%;
+
+    background-color: rgb(211, 211, 211);
+}
+
+.chart-container p {
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    font-size: 1.6rem;
 }
 
 .kpis-chart-container {
@@ -112,13 +129,23 @@ body {
     background-color: red;
 }
 
+.kpi-container p {
+    font-size: 1.6rem;
+}
+
+.kpi-chart-info {
+    font-size: 1.5rem;
+}
+
 .pie-chart {
-    width: 170px !important;
-    height: 170px !important;
+    width: 190px !important;
+    height: 190px !important;
 }
 
 .line-chart {
     width: 90% !important;
+    display: flex;
+    align-self: center;
 }
 
 /* PARTE ESQUERDA */
@@ -147,11 +174,6 @@ body {
     justify-content: space-between;
 }
 
-.kpi-cpu-mean-container {
-    background-color: blueviolet;
-    width: 29%;
-    height: 100%;
-}
 
 .kpi-alert-process {
     width: 39%;
@@ -173,14 +195,61 @@ body {
     background-color: red;
 }
 
-.top-kpi-flat p {
-    margin: 10px;
+#total-alerts {
+    border-radius: 15px;
+    background-color: var(--ligth-yellow);
 }
-.kpi-ram-mean-container {
-    background-color: blueviolet;
+
+#active-processes {
+    border-radius: 15px;
+    background-color: var(--ligth-green);
+}
+
+.top-kpi-flat p {
+    font-size: 1.7rem;
+    margin: 10px;
+    color: white;
+    font-weight: 500;
+}
+
+.kpi-mean-container {
     width: 29%;
     height: 100%;
+    display: flex;flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background-color: white;
+    border-radius: 15px;
 }
+
+.kpi-mean-container p {
+    font-size: 1.6rem;
+}
+
+.pie-chart-container p {
+    width: fit-content;
+    position: relative;
+    line-height: 0px;
+    top: 52%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--ligth-red);
+    font-weight: 700;
+}
+
+.pie-chart-container .ram-percent{
+    top: 40% !important;
+    color: var(--dark-yellow);
+}
+
+.pie-chart-container .ram-total{
+    top: 60% !important;
+    color: var(--dark-yellow);
+
+    font-size: 1.2rem;
+}
+
 
 /* GRÁFICO DE CPU + KPI DE PICO*/
 
@@ -207,31 +276,62 @@ body {
 }
 
 .process-list-header {
+    width: 85%;
     height: 7%;
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     background-color: blueviolet;
+}
+
+.process-list-header p {
+    font-size: 1.4rem;
 }
 
 .process-list {
     width: 85%;
     height: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     background-color: blueviolet;
 }
 
 .process-list-item {
+    display: flex;
+    flex-direction: row;
     background-color: red;
 }
 
 .process-item-info {
     background-color: blue;
+    width: 80%;
+    padding-left: 20px;
 }
 
 .process-metrics {
+    display: flex;
+    flex-direction: row;
+    gap: 7%;
     background-color: yellow;
 }
 
+.process-item-time {
+    width: 20%;
+    display: flex;
+    align-items: center;
+    background-color: brown;
+}
+.process-item-time p{
+    width: 100%;
+    text-align: center;
+}
+
 .measures-chart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
     height: 50vh;
 
@@ -239,18 +339,61 @@ body {
 }
 
 .measures-chart-header {
+    width: 100%;
+    height: 15vh;
     display: flex;
     flex-direction: column;
     background-color: olive;
+}
+
+.measures-chart-header p {
+    width: 100%;
+    padding-top: 10px;
+    font-size: 1.5rem;
+    text-align: center;
 }
 
 .measures-chart-legend {
     width: 100%;
     display: flex;
     flex-direction: row;
+    justify-content: space-around;
     background-color: red;
 }
+
+.measures-chart-legend-item {
+    height: 45px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: orange;
+}
+
+.measures-chart-legend-item p {
+    font-size: 1.2rem;
+    margin: 0;
+    padding: 0;
+    line-height: 0; 
+}
+
+.green-square {
+    width: 30px;
+    height: 25px;
+    background-color: var(--ligth-green);
+}
+
+.yellow-square {
+    width: 30px;
+    height: 25px;
+    background-color: var(--ligth-yellow);
+}
+
+.red-square {
+    width: 30px;
+    height: 25px;
+    background-color: var(--ligth-red);
+}
 .pie-measures-chart {
-    width: 240px !important;
-    height: 240px !important;
+    width: 260px !important;
+    height: 260px !important;
 }

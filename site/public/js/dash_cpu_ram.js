@@ -77,7 +77,7 @@ const data_cpu_line = {
   labels: labels_cpu_line,
   datasets: [{
     label: 'Média CPU (%)',
-    data: [22, 24, 28, 21, 33, 30, 37, 35, 33, 75, 89, 93],
+    data: [22, 24, 28, 21, 33, 30, 37, 35, 33, 75, 89, 93, 95],
     fill: true,
     borderColor: 'rgb(75, 192, 192)',
     tension: 0.1
@@ -97,7 +97,7 @@ const data_ram_line = {
   labels: labels_ram_line,
   datasets: [{
     label: 'Média RAM (%)',
-    data: [22, 24, 28, 21, 33, 30, 37, 35, 33, 75, 89, 93],
+    data: [22, 24, 28, 21, 33, 30, 37, 35, 33, 75, 89, 93, 95],
     fill: true,
     borderColor: 'rgb(75, 192, 192)',
     tension: 0.1
