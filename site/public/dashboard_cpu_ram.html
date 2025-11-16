@@ -112,7 +112,7 @@
             <div class="kpi-container">
               <p>Pico da última hora(CPU):</p>
               <div class="kpi-chart-info">
-                <p>Uso da CPU: 94%</p>
+                <p>Uso da CPU: <span class="text-red">94%</span></p>
                 <p>Horário: 12:50</p>
               </div>
             </div>
@@ -120,7 +120,7 @@
             <div class="kpi-container">
               <p>Último registro(CPU):</p>
               <div class="kpi-chart-info">
-                <p>Uso da CPU: 77%</p>
+                <p>Uso da CPU: <span class="text-yellow">77%</span></p>
                 <p>Horário: 13:00</p>
               </div>
             </div>
@@ -137,14 +137,14 @@
             <div class="kpi-container">
               <p>Pico da última hora(RAM):</p>
               <div class="kpi-chart-info">
-                <p>Uso da RAM: 30%</p>
+                <p>Uso da RAM: <span class="text-green">30%</span></p>
                 <p>Horário: 13:00</p>
               </div>
             </div>
             <div class="kpi-container">
               <p>Último registro(RAM):</p>
               <div class="kpi-chart-info">
-                <p>Uso da RAM: 30%</p>
+                <p>Uso da RAM: <span class="text-green">30%</span></p>
                 <p>Horário: 13:00</p>
               </div>
             </div>
@@ -160,7 +160,7 @@
             </span>
           </div>
           <div class="process-list">
-            <div class="process-list-item">
+            <div class="process-list-item process-list-item-critico">
                 <div class="process-item-info">
                   <p>systemDlsx.exe</p>
                   <div class="process-metrics">
@@ -174,7 +174,7 @@
                 </div>
             </div>
 
-            <div class="process-list-item">
+            <div class="process-list-item process-list-item-critico">
                 <div class="process-item-info">
                   <p>systemDlsx.exe</p>
                   <div class="process-metrics">
@@ -188,7 +188,7 @@
                 </div>
             </div>
 
-            <div class="process-list-item">
+            <div class="process-list-item process-list-item-medio">
                 <div class="process-item-info">
                   <p>systemDlsx.exe</p>
                   <div class="process-metrics">
@@ -201,6 +201,35 @@
                   <p>12:50</p>
                 </div>
             </div>
+
+            <div class="process-list-item process-list-item-estavel">
+                <div class="process-item-info">
+                  <p>systemDlsx.exe</p>
+                  <div class="process-metrics">
+                    <p>PiD: 255</p>
+                    <p class="text-bold">CPU: 8.2%</p>
+                    <p class="text-bold">RAM: 10.7%</p>
+                  </div>
+                </div>
+                <div class="process-item-time">
+                  <p>12:50</p>
+                </div>
+            </div>
+
+            <div class="process-list-item process-list-item-estavel">
+                <div class="process-item-info">
+                  <p>systemDlsx.exe</p>
+                  <div class="process-metrics">
+                    <p>PiD: 255</p>
+                    <p class="text-bold">CPU: 8.2%</p>
+                    <p class="text-bold">RAM: 10.7%</p>
+                  </div>
+                </div>
+                <div class="process-item-time">
+                  <p>12:50</p>
+                </div>
+            </div>
+
           </div>
         </div>
         <div class="measures-chart-container">
