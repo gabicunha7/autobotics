@@ -21,22 +21,21 @@ img {
 
 /* FIM RESET CSS */
 
-body{
+body {
     display: flex;
     background-color: #f4f4f4;
 }
 
-.div-superior{
+.div-superior {
     display: flex;
     width: 100%;
     justify-content: space-around;
     align-items: center;
 }
 
-.div-filtro{
+.div-filtro {
     width: 50vw;
     background-color: #fff;
-    margin: 20px;
     display: flex;
     align-items: center;
     height: 100px;
@@ -45,14 +44,14 @@ body{
     font-size: 20px;
 }
 
-.div-filtro select{
+.div-filtro select {
     font-size: 20px;
     height: 40px;
     width: 150px;
     margin: 20px;
 }
 
-.div-usuario{
+.div-usuario {
     display: flex;
     width: 20vw;
     background-color: #fff;
@@ -63,88 +62,114 @@ body{
     font-size: 20px;
 }
 
-.div-usuario h6{
+.div-usuario h6 {
     font-size: 23px;
 }
 
-.div-img-usuario{
+.div-img-usuario {
     margin-right: 15px;
     margin-left: 15px;
 }
 
 
 
-.div-info-conteudo{
+.div-info-conteudo {
     display: flex;
-    padding: 20px;
+    padding: 10px;
     margin-left: 10%;
     margin-right: 10%;
     justify-content: space-between;
 }
 
-.div-info-conteudo h3{
+.div-info-conteudo h3 {
     font-size: 25px;
 }
 
-.div-info-conteudo p{
+.div-info-conteudo p {
     font-size: 20px;
 }
 
-.container-content{
+.container-content {
     width: 85%;
 }
 
-.container-conteudo{
+.container-conteudo {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-.div-metricas{
-    
+.div-metricas {
     display: flex;
-    flex-direction: column;
+    flex-direction: row-reverse;
 }
 
-.div_grafico{
+.div_grafico {
     text-align: center;
     font-size: 1.4rem;
     background-color: #fff;
-    width: 33vw;
+    width: 35vw;
     margin: 10px;
     border-radius: 20px;
     box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
 }
 
-.div-grafico-cpu-alertas{
+.div-grafico-cpu-alertas {
     display: flex;
-    flex-direction: row ;
+    flex-direction: column-reverse;
+    background-color: #fff;
+    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
+    padding-right: 10px;
+    text-align: center;
+    margin-left: 50px;
+    border-radius: 10px;
 }
 
-.div-grafico-ram-kpi{
+.div-grafico-ram-kpi {
     display: flex;
-    flex-direction: row;
+    flex-direction: column-reverse;
+    background-color: #fff;
+    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
+    padding-left: 10px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.div-controlador{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.div-controlador select {
+    font-size: 15px;
+    height: 30px;
+    width: 100px;
+    margin: 20px;
 }
 
 #grafico_cpu,
 #grafico_ram,
 #grafico_alerta {
     width: 100% !important;
-    height: 320px !important;
+    height: 290px !important;
 }
 
-.kpis{
-    display: flex;.container-contente{
-    width: 80vw;
-}
+.kpis {
+    display: flex;
+
+    .container-content {
+        width: 80vw;
+    }
+
     flex-direction: row;
     align-items: center;
     height: 293px;
     margin: 20px 20px 30px;
 }
 
-.kpi_dashboard{
+.kpi_dashboard {
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -162,7 +187,7 @@ body{
     box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
 }
 
-.kpi_dashboard p{
+.kpi_dashboard p {
     font-weight: 700;
     font-size: 2em;
 }

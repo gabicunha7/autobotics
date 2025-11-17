@@ -30,7 +30,7 @@
                         <img class="icon-pagina" src="assets/icones/parametros_icon.png" alt="">
                         Parâmetros
                     </a>
-                    
+
                     <a class="a-pagina" href="setor.html">
                         <img class="icon-pagina" src="assets/icones/setor_icon.png" alt="">
                         Setores
@@ -72,50 +72,60 @@
                 </div>
             </div>
         </div>
-            <div class="div-info-conteudo">
-                    <h3>Dashboard de Manutenção - Controlador A</h3>
-                    <p id="data_atual"></p>
-            </div>
-            <div class="container-conteudo">
-                
+        <div class="div-info-conteudo">
+            <h3>Dashboard de Manutenção - Controlador A</h3>
+            <p id="data_atual"></p>
+        </div>
+        <div class="container-conteudo">
 
-                <div class="div-metricas">
 
-                    <div class="div-grafico-ram-kpi">
-                        <div class="div_grafico">
-                            <p>Média de Status da RAM por dia da semana</p>
-                            <canvas id="grafico_ram"></canvas>
-                        </div>
-                
-                         <div class="kpis">
-                            <div class="kpi_dashboard" id="total-alertas">
-                                <h3>Total de alertas (hoje): </h3>
-                                <p class="total-alertas">20</p>
-                            </div>
-                            <div class="kpi_dashboard" id="componente-alertas">
-                                <h3 style="font-size: x-large;">Componente com mais alertas (hoje): </h3>
-                                <p class="componente-alertas">CPU</p>
-                            </div>
-                        </div>
+            <div class="div-metricas">
+                <h3></h3>
+
+
+
+                <div class="div-grafico-cpu-alertas">
+                    <div class="div_grafico">
+                        <p>Quantidade de alertas por nivel (na semana)</p>
+                        <canvas id="grafico_cpu"></canvas>
                     </div>
 
-
-                    <div class="div-grafico-cpu-alertas">
-                        <div class="div_grafico">
-                            <p>Média de Status da CPU por dia da semana</p>
-                            <canvas id="grafico_cpu"></canvas>
-                        </div>
-
-                        <div class="div_grafico">
-                            <p>Total de Alertas nos dias da semana</p>
-                            <canvas id="grafico_alerta"></canvas>
-                        </div>
+                    <div class="div_grafico">
+                        <p>Picos e Média de uso de "Componente" (na semana)</p>
+                        <canvas id="grafico_ram"></canvas>
                     </div>
-
+                    <div class="div-controlador">
+                        <h1>Controlador</h1>
+                        <p>Escolha o componente:</p>
+                        <select name="Controlador" id="">
+                            <option value="RAM">RAM</option>
+                            <option value="CPU">CPU</option>
+                        </select>
                     </div>
                 </div>
 
+                <div class="div-grafico-ram-kpi">
+                    <div class="div_grafico">
+                        <p>Top 5 Controladores com mais alertas hoje</p>
+                        <canvas id="grafico_alerta"></canvas>
+                    </div>
+                    <hr>
+                    <div class="kpis">
+                        <div class="kpi_dashboard" id="total-alertas">
+                            <h3>Total de alertas (hoje): </h3>
+                            <p class="total-alertas">20</p>
+                        </div>
+                        <div class="kpi_dashboard" id="componente-alertas">
+                            <h3 style="font-size: x-large;">Componente com mais alertas (hoje): </h3>
+                            <p class="componente-alertas">CPU</p>
+                        </div>
+                    </div>
+                    <h1>Setor</h1>
+                </div>
             </div>
+        </div>
+
+        </div>
     </section>
 
 </body>
@@ -126,7 +136,7 @@
 
     const dataAtual = new Date();
     const dia = dataAtual.getDate();
-    const mes = dataAtual.getMonth() + 1; 
+    const mes = dataAtual.getMonth() + 1;
     const ano = dataAtual.getFullYear();
 
     document.getElementById("data_atual").innerHTML = `Data: ${dia}/${mes}/${ano}`;
@@ -143,12 +153,6 @@
         data: {
             labels: ['25/09/25', '26/09/25', '27/09/25', '28/09/25', '29/09/25', '30/09/25', '01/10/25'],
             datasets: [{
-                label: 'Nível Estável (até 60%)',
-                data: [33, 27, 42, 39, 35, 28, 37], // linha fixa
-                borderWidth: 3,
-                borderColor: '#8CD610'
-            },
-            {
                 label: 'Nível Médio (60% a 85%)',
                 data: [64, 61, 82, 68, 72, 76, 77], // linha fixa
                 borderWidth: 3,
@@ -202,22 +206,16 @@
         data: {
             labels: ['25/09/25', '26/09/25', '27/09/25', '28/09/25', '29/09/25', '30/09/25', '01/10/25'],
             datasets: [{
-                label: 'Nível Estável (até 75%)',
+                label: 'Média de Uso',
                 data: [54, 67, 64, 59, 61, 69, 65], // linha fixa
                 borderWidth: 3,
-                borderColor: '#8CD610'
+                borderColor: 'Grey'
             },
             {
-                label: 'Nível Médio (75% a 90%)',
-                data: [75, 75, 76, 77, 82, 79, 81], // linha fixa
+                label: 'Pico de Uso',
+                data: [90, 90, 91, 89, 89, 90, 90], // linha fixa
                 borderWidth: 3,
-                borderColor: '#e6ac00'
-            },
-            {
-                label: 'Nível Crítico (>90%)',
-                data: [90, 91, 91, 90, 93, 90, 92], // linha fixa
-                borderWidth: 3,
-                borderColor: '#E71831'
+                borderColor: '#890B59'
             }]
         },
         options: {
@@ -259,20 +257,21 @@
     new Chart(ctx_alerta, {
         type: 'bar',
         data: {
-            labels: ['25/09/25', '26/09/25', '27/09/25', '28/09/25', '29/09/25', '30/09/25', '01/10/25'],
+            labels: ['Controlador A', 'Controlador B', 'Controlador C', 'Controlador D', 'Controlador E'],
             datasets: [{
-                label: 'Alertas Críticos',
+                label: 'Quantidade de Alertas',
                 data: [5, 4, 1, 2, 3, 4, 6],
                 borderWidth: 2,
-                backgroundColor: '#E71831'
-            }, 
-            {
-                label: 'Alertas Médios',
-                data: [12, 10, 15, 10, 13, 8, 7],
-                borderWidth: 2,
-                backgroundColor: '#e6ac00'
+                backgroundColor: [
+                    '#E91E63',
+                    '#FFB6C1',
+                    '#FF4081',
+                    '#880E4F',
+                    '#C2185B',
+
+                ],
             }
-        ]
+            ]
         },
         options: {
             scales: {
