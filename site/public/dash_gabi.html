@@ -86,36 +86,13 @@
             </div>
         </div>
 
-
+ <div class="div-info-conteudo">
+                <h3>Dashboard - Uso de Disco</h3>
+                <p id="data_atual"></p>
+            </div>
         <div class="div-conteudo">
             <div class="container-conteudo">
                 <div class="div-metricas">
-                    <div class="div_grafico_top10">
-                        <div class="div_grafico">
-                            <p class="titulo_grafico">Top 10 controladores com maior uso de disco dia <p class="titulo_grafico" id="data_atual_tit"></p></p>
-                            <canvas id="grafico_uso_disco"></canvas>
-                        </div>
-                        <div class="div_select">
-                            <p>Controlador: </p>
-                            <select id="slc_controlador">
-                                <option value="ABS123">ABS123</option>
-                                <option value="BDA543">BDA543</option>
-                                <option value="NSJ754">NSJ754</option>
-                                <option value="NDH839">NDH839</option>
-                                <option value="LDS920">LDS920</option>
-                                <option value="NDA819">NDA819</option>
-                                <option value="NDS728">NDS728</option>
-                                <option value="KSI123">KSI123</option>
-                                <option value="YSH839">YSH839</option>
-                                <option value="ISJ459">ISJ459</option>
-                            </select>
-                        </div>
-                        <div class="div_grafico_uso_historico">
-                            <p>Uso do disco em um ano</p>
-                            <canvas id="grafico_historico"></canvas>
-                        </div>
-                    </div>
-
                     <div class="div_grafico_alertas_kpi">
                         <div class="kpis">
                             <div class="kpi_dashboard" id="porcentagem-media">
@@ -127,21 +104,152 @@
                                 <h3 style="font-size: x-large;">Discos emitiram alerta essa semana</h3>
                             </div>
                         </div>
+                    <div class="listagem">
+                        <h1>Estado dos discos do Setor</h1>
+                        <table id="controlador-table" class="tabela">
+                        <th>Número Serial</th>
+                        <th>Total GB</th>
+                        <th>% de uso</th>
+                        <th>Status</th>
+                        <th>Visualizar</th>
+                        </tr>
 
-                        <div class="kpis_controlador">
+                        <tr>
+                        <td>ABS123</td>
+                        <td>256</td>
+                        <td>88</td>
+                        <td>Crítico</td>
+                        <td onclick=""><img src="assets/icones/dashboard.png"></td>
+                        </tr>
+                        
+                        <tr>
+                        <td>ABS123</td>
+                        <td>256</td>
+                        <td>88</td>
+                        <td>Crítico</td>
+                        <td onclick=""><img src="assets/icones/dashboard.png"></td>
+                        </tr>
+                        
+                        <tr>
+                        <td>ABS123</td>
+                        <td>256</td>
+                        <td>88</td>
+                        <td>Crítico</td>
+                        <td onclick=""><img src="assets/icones/dashboard.png"></td>
+                        </tr>
+                        
+                        <tr>
+                        <td>ABS123</td>
+                        <td>256</td>
+                        <td>88</td>
+                        <td>Crítico</td>
+                        <td onclick=""><img src="assets/icones/dashboard.png"></td>
+                        </tr>
+                        
+                        <tr>
+                        <td>ABS123</td>
+                        <td>256</td>
+                        <td>88</td>
+                        <td>Crítico</td>
+                        <td onclick=""><img src="assets/icones/dashboard.png"></td>
+                        </tr>
+                        
+                        <tr>
+                        <td>ABS123</td>
+                        <td>256</td>
+                        <td>88</td>
+                        <td>Crítico</td>
+                        <td onclick=""><img src="assets/icones/dashboard.png"></td>
+                        </tr>
+                        
+                        <tr>
+                        <td>ABS123</td>
+                        <td>256</td>
+                        <td>88</td>
+                        <td>Crítico</td>
+                        <td onclick=""><img src="assets/icones/dashboard.png"></td>
+                        </tr>
+                        
+                        <tr>
+                        <td>ABS123</td>
+                        <td>256</td>
+                        <td>88</td>
+                        <td>Crítico</td>
+                        <td onclick=""><img src="assets/icones/dashboard.png"></td>
+                        </tr>
+                        
+                        <tr>
+                        <td>ABS123</td>
+                        <td>256</td>
+                        <td>88</td>
+                        <td>Crítico</td>
+                        <td onclick=""><img src="assets/icones/dashboard.png"></td>
+                        </tr>
+                        
+                        <tr>
+                        <td>ABS123</td>
+                        <td>256</td>
+                        <td>88</td>
+                        <td>Crítico</td>
+                        <td onclick=""><img src="assets/icones/dashboard.png"></td>
+                        </tr>
+                        
+                        <tr>
+                        <td>ABS123</td>
+                        <td>256</td>
+                        <td>88</td>
+                        <td>Crítico</td>
+                        <td onclick=""><img src="assets/icones/dashboard.png"></td>
+                        </tr>
+                        
+                        <tr>
+                        <td>ABS123</td>
+                        <td>256</td>
+                        <td>88</td>
+                        <td>Crítico</td>
+                        <td onclick=""><img src="assets/icones/dashboard.png"></td>
+                        </tr>
+                        
+                        <tr>
+                        <td>ABS123</td>
+                        <td>256</td>
+                        <td>88</td>
+                        <td>Crítico</td>
+                        <td onclick=""><img src="assets/icones/dashboard.png"></td>
+                        </tr>
+                        </table>
+                    </div>
+                    </div>
+                            <div class="kpis_controlador">                        
+                                <div class="div_select">
+                                    <p>Controlador: </p>
+                                    <select id="slc_controlador">
+                                        <option value="ABS123">ABS123</option>
+                                        <option value="BDA543">BDA543</option>
+                                        <option value="NSJ754">NSJ754</option>
+                                        <option value="NDH839">NDH839</option>
+                                        <option value="LDS920">LDS920</option>
+                                        <option value="NDA819">NDA819</option>
+                                        <option value="NDS728">NDS728</option>
+                                        <option value="KSI123">KSI123</option>
+                                        <option value="YSH839">YSH839</option>
+                                        <option value="ISJ459">ISJ459</option>
+                                </select>
+                            </div>
+                            <div class="div_grafico_uso_historico">
+                                <p class="titulo_grafico">Uso do disco em um ano</p>
+                                <canvas id="grafico_historico"></canvas>
+                            </div>
                             <div class="kpi_dashboard_controlador" id="config-disco">
                                 <p class="config-disco"style="font-size: x-large;">Total de espaço: 256GB</p>
                                 <p class="config-disco"style="font-size: x-large;">Uso do disco: 80%</p>
                             </div>
                             <div class="kpi_dashboard_controlador" id="previsao-disco">
                                 <p class="previsao-disco">20-11-2025</p>
-                                <h3 style="font-size: x-large;">Data de previsão para disco cheio</h3>
+                                <h3 style="font-size: x-large;">Data de previsão para Crítico</h3>
                             </div>
-
                         </div>
                     </div>
-            
-            </div>
         </div>
     </section>
 
@@ -166,8 +274,6 @@
     const ano = dataAtual.getFullYear();
 
     document.getElementById("data_atual").innerHTML = `Data: ${dia}/${mes}/${ano}`;
-    document.getElementById("data_atual_tit").innerHTML = `${dia}/${mes}`;
-
 
 
     document.getElementById("nome-usuario").innerHTML = sessionStorage.NOME_USUARIO;
@@ -261,87 +367,87 @@
         }
     }
 
-    function corBarra(list){
-        cores = []
-        list.forEach(e => {
-            if(e >= 80){
-                cores.push('#ff3f2e');
-            } else if(e >=70){
-                cores.push('#ff852e');
-            } else {
-                cores.push('#4CAF50');
-            }
-        })
-        return cores;
-    }
+    // function corBarra(list){
+    //     cores = []
+    //     list.forEach(e => {
+    //         if(e >= 80){
+    //             cores.push('#ff3f2e');
+    //         } else if(e >=70){
+    //             cores.push('#ff852e');
+    //         } else {
+    //             cores.push('#4CAF50');
+    //         }
+    //     })
+    //     return cores;
+    // }
 
-    let valores_grafico_barra = [87, 82, 74, 72, 68, 63, 55, 52, 50, 50];
-    const ctx_top10 = document.getElementById('grafico_uso_disco');
+    // let valores_grafico_barra = [87, 82, 74, 72, 68, 63, 55, 52, 50, 50];
+    // const ctx_top10 = document.getElementById('grafico_uso_disco');
 
-    new Chart(ctx_top10, {
-        type: 'bar',
-        data: {
-            labels: ['ABS123', 'BDA543', 'NSJ754', 'NDH839', 'LDS920', 'NDA819', 'NDS728', 'KSI123', 'YSH839', 'ISJ459'],
-            datasets: [{
-                label: 'Uso de disco em %',
-                data: valores_grafico_barra,
-                borderWidth: 2,
-                backgroundColor: corBarra(valores_grafico_barra)
-            }]
-        },
-        options: {
-            scales: {
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Controladores',
-                        font: {
-                            size: 18
-                        }
-                    },
-                    ticks: {
-                        font: {
-                            size: 16
-                        }
-                    }
-                },
-                y: {
-                    title: {
-                        display: true,
-                        text: 'Porcentagem (%)',
-                        font: {
-                            size: 18
-                        }
-                    },
-                    ticks: {
-                        font: {
-                            size: 16
-                        }
-                    }
-                }
-            },
-                plugins: {
-                annotation: {
-                    annotations: {
-                        critico: {
-                            type: 'line',
-                            yMin: 80,
-                            yMax: 80,
-                            borderColor: 'red',
-                            borderWidth: 2
-                        },
-                        medio: {
-                            type: 'line',
-                            yMin: 70,
-                            yMax: 70,
-                            borderColor: 'orange',
-                            borderWidth: 2
-                        }
-                    }
-                }
-            }
-        }
-    });
+    // new Chart(ctx_top10, {
+    //     type: 'bar',
+    //     data: {
+    //         labels: ['ABS123', 'BDA543', 'NSJ754', 'NDH839', 'LDS920', 'NDA819', 'NDS728', 'KSI123', 'YSH839', 'ISJ459'],
+    //         datasets: [{
+    //             label: 'Uso de disco em %',
+    //             data: valores_grafico_barra,
+    //             borderWidth: 2,
+    //             backgroundColor: corBarra(valores_grafico_barra)
+    //         }]
+    //     },
+    //     options: {
+    //         scales: {
+    //             x: {
+    //                 title: {
+    //                     display: true,
+    //                     text: 'Controladores',
+    //                     font: {
+    //                         size: 18
+    //                     }
+    //                 },
+    //                 ticks: {
+    //                     font: {
+    //                         size: 16
+    //                     }
+    //                 }
+    //             },
+    //             y: {
+    //                 title: {
+    //                     display: true,
+    //                     text: 'Porcentagem (%)',
+    //                     font: {
+    //                         size: 18
+    //                     }
+    //                 },
+    //                 ticks: {
+    //                     font: {
+    //                         size: 16
+    //                     }
+    //                 }
+    //             }
+    //         },
+    //             plugins: {
+    //             annotation: {
+    //                 annotations: {
+    //                     critico: {
+    //                         type: 'line',
+    //                         yMin: 80,
+    //                         yMax: 80,
+    //                         borderColor: 'red',
+    //                         borderWidth: 2
+    //                     },
+    //                     medio: {
+    //                         type: 'line',
+    //                         yMin: 70,
+    //                         yMax: 70,
+    //                         borderColor: 'orange',
+    //                         borderWidth: 2
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // });
 </script>
 
 
