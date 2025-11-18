@@ -27,9 +27,7 @@ body {
     min-height: 100vh;
 }
 
-aside {
-    /* deixei sem sobrescrever - sua sidebar.css permanece */
-}
+
 
 /* MAIN */
 .container-content {
@@ -108,6 +106,7 @@ aside {
 .tabela th {
     background-color: #E78433;
     font-size: x-large;
+    width: 33%;
 }
 
 
