@@ -61,7 +61,13 @@
 
         <div class="div-superior">
             <div class="div-titulo">
-                <h1>Historico de alertas</h1>
+                <h1>Historico de alertas dos setores</h1>
+            </div>
+
+            <div class="data">
+
+                <div id="data_atual" style="font-size: 18px; font-weight: 600; color: #222;"></div>
+
             </div>
 
             <div class="div-usuario">
@@ -145,6 +151,13 @@
 
 
 <script>
+    const dataAtual = new Date();
+    const dia = dataAtual.getDate();
+    const mes = dataAtual.getMonth() + 1;
+    const ano = dataAtual.getFullYear();
+
+    document.getElementById("data_atual").innerHTML = `Data: ${dia}/${mes}/${ano}`;
+
     document.getElementById("nome-usuario").innerHTML = sessionStorage.NOME_USUARIO;
     document.getElementById("email-usuario").innerHTML = sessionStorage.EMAIL_USUARIO;
 
