@@ -2,174 +2,197 @@
 <html lang="pt-br">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Autobotics | Dashboard</title>
-    <link rel="stylesheet" href="css/sidebar.css">
-    <link rel="stylesheet" href="css/dash_robotica.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1"></script>
-    <script src="js/rotaDash.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Autobotics | Dashboard</title>
+  <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/dash_robotica.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1"></script>
+  <script src="js/rotaDash.js"></script>
 </head>
 
 <body>
-    <aside>
-        <section>
-            <section class="menu-container">
-                <img class="img-logo-curta" src="assets/logo/LOGO_CURTA.png" alt="">
-                <h1>MENU</h1>
+  <aside>
+    <section>
+      <section class="menu-container">
+        <img class="img-logo-curta" src="assets/logo/LOGO_CURTA.png" alt="">
+        <h1>MENU</h1>
 
-                <div class="paginas-container">
-                    <a class="a-pagina" onclick="cargoDash()" id="agora">
-                        <img class="icon-pagina" src="assets/icones/dash_icon.png" alt="">
-                        Dashboard
-                    </a>
-                    <a class="a-pagina" href="alerta.html">
-                        <img class="icon-pagina" src="assets/icones/alerta_icon.png" alt="">
-                        Alertas
-                    </a>
-                    <a class="a-pagina" href="parametros.html">
-                        <img class="icon-pagina" src="assets/icones/parametros_icon.png" alt="">
-                        Parâmetros
-                    </a>
-                    
-                    <a class="a-pagina" href="setor.html">
-                        <img class="icon-pagina" src="assets/icones/setor_icon.png" alt="">
-                        Setores
-                    </a>
-                    <a class="a-pagina" href="controladores.html">
-                        <img class="icon-pagina" src="assets/icones/controlador_icon.png" alt="">
-                        Controladores
-                    </a>
-                    <a class="a-pagina" href="funcionario.html">
-                        <img class="icon-pagina" src="assets/icones/userImg.png" alt="">
-                        Funcionários
-                    </a>
-                </div>
-            </section>
-            <a href="index.html">
-                <button id="btn-sair" onclick="limparSessao()">
-                    <img class="icon-sair" src="assets/icones/sair_icon.png" alt="">
-                    Sair
-                </button>
-            </a>
-    </aside>
+        <div class="paginas-container">
+          <a class="a-pagina" onclick="cargoDash()" id="agora">
+            <img class="icon-pagina" src="assets/icones/dash_icon.png" alt="">
+            Dashboard
+          </a>
+          <a class="a-pagina" href="alerta.html">
+            <img class="icon-pagina" src="assets/icones/alerta_icon.png" alt="">
+            Alertas
+          </a>
+          <a class="a-pagina" href="parametros.html">
+            <img class="icon-pagina" src="assets/icones/parametros_icon.png" alt="">
+            Parâmetros
+          </a>
 
-    <section class="container-content">
-        <div class="div-superior">
-            <div class="div-filtro">
-                <p>Controlador: </p>
-                <select name="Setor" id="">
-                    <option value="Setor A">Controlador A</option>
-                </select>
-            </div>
+          <a class="a-pagina" href="setor.html">
+            <img class="icon-pagina" src="assets/icones/setor_icon.png" alt="">
+            Setores
+          </a>
+          <a class="a-pagina" href="controladores.html">
+            <img class="icon-pagina" src="assets/icones/controlador_icon.png" alt="">
+            Controladores
+          </a>
+          <a class="a-pagina" href="funcionario.html">
+            <img class="icon-pagina" src="assets/icones/userImg.png" alt="">
+            Funcionários
+          </a>
+        </div>
+      </section>
+      <a href="index.html">
+        <button id="btn-sair" onclick="limparSessao()">
+          <img class="icon-sair" src="assets/icones/sair_icon.png" alt="">
+          Sair
+        </button>
+      </a>
+  </aside>
 
-            <div class="div-usuario">
-                <div class="div-img-usuario">
-                    <img src="assets/icones/foto_usuario.png" alt="">
-                </div>
-                <div>
-                    <h6 id="nome-usuario"></h6>
-                    <p id="email-usuario"></p>
-                </div>
-            </div>
+  <section class="container-content">
+    <div class="div-superior">
+      <div class="div-filtro">
+        <p>Controlador: </p>
+        <select name="Setor" id="">
+          <option value="Setor A">Controlador A</option>
+        </select>
+        <p style="display: flex; justify-content: end; align-items: center; width: 70%; text-align: end;">Última atualização: 21:55</p>
+      </div>
+
+      <div class="div-usuario">
+        <div class="div-img-usuario">
+          <img src="assets/icones/foto_usuario.png" alt="">
+        </div>
+        <div>
+          <h6 id="nome-usuario"></h6>
+          <p id="email-usuario"></p>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="div-conteudo">
+      <div class="container-conteudo">
+        <div class="div-info-conteudo">
+          <h3>Dashboard de Robótica (Tempo real) - Controlador A</h3>
+          <p id="data_atual"></p>
         </div>
 
-
-        <div class="div-conteudo">
-            <div class="container-conteudo">
-                <div class="div-info-conteudo">
-                    <h3>Dashboard - Controlador A</h3>
-                    <p id="data_atual"></p>
+        <div class="div-metricas">
+          <div class="doido">
+            <div class="div_grafico_alertas_processo">
+              <div class="teste">
+                <div class="card area-chart">
+                  <h2>Últimos registros de uso dos componentes (%): </h2>
+                  <canvas id="grafico_componentes" class="canvas-full"></canvas>
                 </div>
+              </div>
+              <div class="cards-metricas">
+                <div class="card-metrica">
+                  <p>Pico de uso em CPU (Últimos registros):</p>
+                  <span style="color: #e6ac00;">78%</span>
+                </div>
+                <div class="card-metrica">
+                  <p style="text-align: center;">Uso de CPU (Média últimos registros): </p>
+                  <span style="color: green;">46%</span>
+                </div>
+                <div class="card-metrica">
+                  <p>Disco restante:</p>
+                  <span style="color: red;">15,36 GB</span>
+                </div>
+              </div>
+            </div>
 
-                <div class="div-metricas">
-                    <div class="div_grafico_alertas_processo">
-                        <div class="teste">
-                        <div class="card area-chart">
-                            <h2>Média de uso dos componentes da ultima hora: </h2>
-                            <canvas id="grafico_componentes" class="canvas-full"></canvas>
-                        </div>
-                        </div>
 
-                        <!-- <div class="cards-metricas">
-                            <div class="card-metrica">
-                                <p>Pico de uso em CPU (Última hora):</p>
-                                <span style="color: #e6ac00;">78%</span>
-                            </div>
-                            <div class="card-metrica">
-                                <p>RAM Total :</p>
-                                <span>16 GB</span>
-                            </div>
-                            <div class="card-metrica">
-                                <p>Disco Total :</p>
-                                <span>512 GB</span>
-                            </div>
-                            <div class="card-metrica">
-                                <p>Uso de CPU <span style="font-size: smaller;">(Média):</span> </p>
-                                <span style="color: green;">46%</span>
-                            </div>
-                            <div class="card-metrica">
-                                <p>RAM em uso :</p>
-                                <span style="color: #e6ac00;">12.96 GB</span>
-                            </div>
-                            <div class="card-metrica">
-                                <p>Disco restante:</p>
-                                <span style="color: red;">15,36 GB</span>
-                            </div>
+            <div class="div_graficos">
+              <div class="div_grafico">
+                <p>CPU (%):</p>
+                <canvas id="grafico_cpu"></canvas>
+              </div>
 
-                        </div> -->
-                        <div class="card-processo">
-                            <div class="processo">
-                                <h2>Processos mais utilizados:</h2>
-                                <div class="processo_dashboard">
-                                    <p>processo: </p>
-                                    <p>xx</p>
-                                </div>
-                                <div class="processo_dashboard">
-                                    <p>processo: </p>
-                                    <p>yy</p>
-                                </div>
-                                <div class="processo_dashboard">
-                                    <p>processo: </p>
-                                    <p>zz</p>
-                                </div>
-                                <div class="processo_dashboard">
-                                    <p>processo: </p>
-                                    <p>ww</p>
-                                </div>
-                                <div class="processo_dashboard">
-                                    <p>processo: </p>
-                                    <p>xx</p>
-                                </div>
-                            </div>
-                        </div>
+              <div class="div_grafico">
+                <p>RAM (%):</p>
+                <canvas id="grafico_ram"></canvas>
+              </div>
 
+              <div class="div_grafico">
+                <p>Utilização do Disco (%):</p>
+                <canvas id="grafico_disco"></canvas>
+              </div>
+
+              <div class="card-processo">
+                <h3>Processos consumindo <br>recursos:</h3>
+                <div class="process-list">
+                  <div class="process-list-item process-list-item-critico">
+                    <div class="process-item-info">
+                      <p>systemDlsx.exe</p>
+                      <div class="process-metrics">
+                        <p class="text-bold">CPU: 8.2%</p>
+                        <p class="text-bold">RAM: 10.7%</p>
+                      </div>
                     </div>
 
+                  </div>
 
-                    <div class="div_graficos">
-                        <div class="div_grafico">
-                            <p>CPU (%):</p>
-                            <canvas id="grafico_cpu"></canvas>
-                        </div>
-
-                        <div class="div_grafico">
-                            <p>RAM (%):</p>
-                            <canvas id="grafico_ram"></canvas>
-                        </div>
-
-                        <div class="div_grafico">
-                            <p>Utilização do Disco (%):</p>
-                            <canvas id="grafico_disco"></canvas>
-                        </div>
+                  <div class="process-list-item process-list-item-critico">
+                    <div class="process-item-info">
+                      <p>systemDlsx.exe</p>
+                      <div class="process-metrics">
+                        <p class="text-bold">CPU: 8.2%</p>
+                        <p class="text-bold">RAM: 10.7%</p>
+                      </div>
                     </div>
 
+                  </div>
+
+                  <div class="process-list-item process-list-item-medio">
+                    <div class="process-item-info">
+                      <p>systemDlsx.exe</p>
+                      <div class="process-metrics">
+                        <p class="text-bold">CPU: 8.2%</p>
+                        <p class="text-bold">RAM: 10.7%</p>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="process-list-item process-list-item-estavel">
+                    <div class="process-item-info">
+                      <p>systemDlsx.exe</p>
+                      <div class="process-metrics">
+                        <p class="text-bold">CPU: 8.2%</p>
+                        <p class="text-bold">RAM: 10.7%</p>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="process-list-item process-list-item-estavel">
+                    <div class="process-item-info">
+                      <p>systemDlsx.exe</p>
+                      <div class="process-metrics">
+                        
+                        <p class="text-bold">CPU: 8.2%</p>
+                        <p class="text-bold">RAM: 10.7%</p>
+                      </div>
+                    </div>
+
+                  </div>
                 </div>
+
+
+              </div>
             </div>
+          </div>
         </div>
-        </div>
-    </section>
+      </div>
+  </section>
 
 </body>
 
@@ -177,152 +200,152 @@
 
 <script>
 
-const dataAtual = new Date();
-const dia = dataAtual.getDate();
-const mes = dataAtual.getMonth() + 1; 
-const ano = dataAtual.getFullYear();
+  const dataAtual = new Date();
+  const dia = dataAtual.getDate();
+  const mes = dataAtual.getMonth() + 1;
+  const ano = dataAtual.getFullYear();
 
-document.getElementById("data_atual").innerHTML = `Data: ${dia}/${mes}/${ano}`;
+  document.getElementById("data_atual").innerHTML = `Data: ${dia}/${mes}/${ano}`;
 
-document.getElementById("nome-usuario").innerHTML = sessionStorage.NOME_USUARIO;
-document.getElementById("email-usuario").innerHTML = sessionStorage.EMAIL_USUARIO;
+  document.getElementById("nome-usuario").innerHTML = sessionStorage.NOME_USUARIO;
+  document.getElementById("email-usuario").innerHTML = sessionStorage.EMAIL_USUARIO;
 
-const COLORS = ['#4CAF50', '#e6ac00', '#F44336'];
+  const COLORS = ['#4CAF50', '#e6ac00', '#F44336'];
 
-function index(perc) {
-  return perc < 70 ? 0 : perc < 90 ? 1 : 2;
-}
-
-function criarGrafico(idCanvas, titulo, valor) {
-  const data = {
-    datasets: [{
-      data: [valor, 100 - valor],
-      backgroundColor: [
-        COLORS[index(valor)],
-        'rgb(234, 234, 234)'
-      ],
-      borderWidth: 0
-    }]
-  };
-
-  const options = {
-    aspectRatio: 2,
-    cutout: '70%',
-    circumference: 180,
-    rotation: -90,
-    plugins: {
-      legend: { display: false },
-      tooltip: { enabled: false }
-    }
-  };
-
-  // plugin por-chart para desenhar o valor no centro do arco
-  const centerPlugin = {
-    id: 'valorCentral',
-    afterDraw(chart) {
-      const { ctx, chartArea } = chart;
-      if (!chartArea) return;
-      const left = chartArea.left;
-      const right = chartArea.right;
-      const top = chartArea.top;
-      const bottom = chartArea.bottom;
-      const centerX = (left + right) / 2;
-      // ajusta verticalmente para dentro do arco
-      const centerY = (top + bottom) / 2 + (bottom - top) * 0.12;
-
-      ctx.save();
-      ctx.font = 'bold 26px Jost, sans-serif';
-      ctx.fillStyle = '#000';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(`${valor}%`, centerX, centerY);
-
-      // subtítulo (opcional)
-      ctx.font = '14px Jost, sans-serif';
-      ctx.fillStyle = '#666';
-      ctx.fillText(titulo, centerX, centerY + 28);
-      ctx.restore();
-    }
-  };
-
-  const ctx = document.getElementById(idCanvas);
-  new Chart(ctx, {
-    type: 'doughnut',
-    data,
-    options,
-    plugins: [centerPlugin] // <<--- plugin corretamente passado aqui
-  });
-}
-
-// chamadas de exemplo
-criarGrafico('grafico_cpu', 'CPU Utilização', 46);
-criarGrafico('grafico_ram', 'Memória RAM', 81);
-criarGrafico('grafico_disco', 'Disco', 97);
-
-
-//Nova dashboard
-const ctx1 = document.getElementById('grafico_componentes').getContext('2d');
-
-
-const horas = Array.from({length: 7}, (_, i) =>  `00:${i.toString().padStart(2, '0')}`);
-
-
-const dadosPorHora = {
-  cpu: horas.map(() => Math.floor(Math.random() * (100 - 20 + 1) + 20)),
-  ram: horas.map(() => Math.floor(Math.random() * (100 - 20 + 1) + 20)),
-  disco: horas.map(() => Math.floor(Math.random() * (100 - 20 + 1) + 20))
-};
-
-const chartComponents = new Chart(ctx1, {
-  type: 'line',
-  data: {
-    labels: horas,
-    datasets: [
-      {
-        label: 'CPU',
-        data: dadosPorHora.cpu,
-        borderColor: '#E71831',
-        backgroundColor: 'rgba(231,24,49,0.08)',
-        fill: true,
-        tension: 0.3
-      },
-      {
-        label: 'RAM',
-        data: dadosPorHora.ram,
-        borderColor: '#e6ac00',
-        backgroundColor: 'rgba(230,172,0,0.08)',
-        fill: true,
-        tension: 0.3
-      },
-      {
-        label: 'Disco',
-        data: dadosPorHora.disco,
-        borderColor: '#4CAF50',
-        backgroundColor: 'rgba(76,175,80,0.08)',
-        fill: true,
-        tension: 0.3
-      }
-    ]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { position: 'top' },
-      tooltip: { mode: 'index', intersect: false }
-    },
-    scales: {
-      x: {
-        title: { display: true, text: 'Minutos' },
-        ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 12 }
-      },
-      y: {
-        beginAtZero: true,
-        title: { display: true, text: 'Porcentagem de uso (%)' }
-      }
-    }
+  function index(perc) {
+    return perc < 70 ? 0 : perc < 90 ? 1 : 2;
   }
-});
+
+  function criarGrafico(idCanvas, titulo, valor, cor) {
+    const data = {
+      datasets: [{
+        data: [valor, 100 - valor],
+        backgroundColor: [
+          COLORS[index(valor)],
+          'rgb(234, 234, 234)'
+        ],
+        borderWidth: 0
+      }]
+    };
+
+    const options = {
+      aspectRatio: 2,
+      cutout: '70%',
+      circumference: 180,
+      rotation: -90,
+      plugins: {
+        legend: { display: false },
+        tooltip: { enabled: false }
+      }
+    };
+
+    // plugin por-chart para desenhar o valor no centro do arco
+    const centerPlugin = {
+      id: 'valorCentral',
+      afterDraw(chart) {
+        const { ctx, chartArea } = chart;
+        if (!chartArea) return;
+        const left = chartArea.left;
+        const right = chartArea.right;
+        const top = chartArea.top;
+        const bottom = chartArea.bottom;
+        const centerX = (left + right) / 2;
+        // ajusta verticalmente para dentro do arco
+        const centerY = (top + bottom) / 2 + (bottom - top) * 0.12;
+
+        ctx.save();
+        ctx.font = 'bold 26px Jost, sans-serif';
+        ctx.fillStyle = cor;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(`${valor}%`, centerX, centerY);
+
+        // subtítulo (opcional)
+        ctx.font = '14px Jost, sans-serif';
+        ctx.fillStyle = cor;
+        ctx.fillText(titulo, centerX, centerY + 28);
+        ctx.restore();
+      }
+    };
+
+    const ctx = document.getElementById(idCanvas);
+    new Chart(ctx, {
+      type: 'doughnut',
+      data,
+      options,
+      plugins: [centerPlugin] // <<--- plugin corretamente passado aqui
+    });
+  }
+
+  // chamadas de exemplo
+  criarGrafico('grafico_cpu', 'CPU Utilização', 46, '#4CAF50');
+  criarGrafico('grafico_ram', '12.96/16GB', 81, '#e6ac00');
+  criarGrafico('grafico_disco', '496.64/512GB', 97, '#F44336');
+
+
+  //Nova dashboard
+  const ctx1 = document.getElementById('grafico_componentes').getContext('2d');
+
+
+  const horas = Array.from({ length: 7 }, (_, i) => `00:${i.toString().padStart(2, '0')}`);
+
+
+  const dadosPorHora = {
+    cpu: horas.map(() => Math.floor(Math.random() * (100 - 20 + 1) + 20)),
+    ram: horas.map(() => Math.floor(Math.random() * (100 - 20 + 1) + 20)),
+    disco: horas.map(() => Math.floor(Math.random() * (100 - 20 + 1) + 20))
+  };
+
+  const chartComponents = new Chart(ctx1, {
+    type: 'line',
+    data: {
+      labels: horas,
+      datasets: [
+        {
+          label: 'CPU',
+          data: dadosPorHora.cpu,
+          borderColor: '#E71831',
+          backgroundColor: 'rgba(231,24,49,0.08)',
+          fill: false,
+          tension: 0.3
+        },
+        {
+          label: 'RAM',
+          data: dadosPorHora.ram,
+          borderColor: '#e6ac00',
+          backgroundColor: 'rgba(230,172,0,0.08)',
+          fill: false,
+          tension: 0.3
+        },
+        {
+          label: 'Disco',
+          data: dadosPorHora.disco,
+          borderColor: '#4CAF50',
+          backgroundColor: 'rgba(76,175,80,0.08)',
+          fill: false,
+          tension: 0.3
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'top' },
+        tooltip: { mode: 'index', intersect: false }
+      },
+      scales: {
+        x: {
+          title: { display: true, text: 'Minutos' },
+          ticks: { maxRotation: 0, autoSkip: true, maxTicksLimit: 12 }
+        },
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: 'Porcentagem de uso (%)' }
+        }
+      }
+    }
+  });
 
 </script>
 

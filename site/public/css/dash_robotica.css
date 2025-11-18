@@ -10,6 +10,16 @@
     font-family: "Jost";
 }
 
+:root {
+    --ligth-red: rgb(255, 75, 75);
+    --transparent-red: rgb(255, 227, 227);
+    --ligth-yellow: rgb(255, 217, 32);
+    --transparent-yellow: rgb(255, 246, 203);
+    --dark-yellow: rgb(239, 198, 0);
+    --ligth-green: rgb(70, 255, 45);
+    --transparent-green: rgb(214, 255, 208);
+}
+
 a {
     text-decoration: none;
 }
@@ -27,14 +37,16 @@ body{
     background-color: #f4f4f4;
 }
 
-.div-superior{
+.div-superior {
     display: flex;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
 }
 
-.div-filtro{
+.div-filtro {
     width: 50vw;
-    background-color: #D9D9D9;
-    margin: 50px;
+    background-color: #fff;
     display: flex;
     align-items: center;
     height: 100px;
@@ -50,11 +62,11 @@ body{
     margin: 20px;
 }
 
-.div-usuario{
+.div-usuario {
     display: flex;
     width: 20vw;
-    background-color: #D9D9D9;
-    margin: 50px;
+    background-color: #fff;
+    margin: 20px;
     height: 100px;
     border-radius: 50px;
     padding: 20px;
@@ -80,26 +92,39 @@ body{
     border-radius: 20px;
 }
 
-.div-info-conteudo{
+.div-info-conteudo {
     display: flex;
-    padding: 20px;
+    padding: 10px;
+    margin-left: 10%;
+    margin-right: 10%;
     justify-content: space-between;
 }
 
-.div-info-conteudo h3{
+.div-info-conteudo h3 {
     font-size: 25px;
 }
 
-.div-info-conteudo p{
+.div-info-conteudo p {
     font-size: 20px;
 }
+
+.container-content {
+    width: 85%;
+}
+
+.doido{
+    display: flex;
+    flex-direction: column-reverse;
+}
+
 .div_metricas{
     display: flex;
     flex-direction: row;
 }
+
 .cards-metricas {
   display: grid;
-  grid-template-columns: repeat(3, 0fr);
+  grid-template-columns: repeat(1, 0fr);
   gap: 15px;
   margin: 20px;
 }
@@ -129,6 +154,8 @@ body{
   align-items: center;
   margin: 10px;
   margin-top: 20px;
+  flex-direction: row;
+  width: 100%;
 }
 
 .div_grafico {
@@ -150,8 +177,8 @@ body{
 #grafico_cpu,
 #grafico_ram,
 #grafico_disco {
-    width: 100% !important;
-    height: 200px !important;
+    width: 300px !important;
+    height: 150px !important;
 }
 
 .div_grafico_alertas_processo{
@@ -164,27 +191,82 @@ body{
 
 .card-processo{
     background-color: white;
-    height: 400px;
-    width: 400px;
+    width: 100%;
+    height: 250px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
     border-radius: 25px;
     margin-left: 20px;
-}
-
-.processo{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 150px;
-    gap: 10px;
     
 }
 
+.card-processo h3{
+    text-align: center;
+}
 
+
+.process-list {
+    width: 255px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: scroll;
+}
+
+.process-list-item {
+    height: 7vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.process-list-item-critico {
+    background-color: var(--transparent-red);
+    border-left: 8px solid red !important;
+    border: 1px solid rgb(255, 157, 157);
+}
+
+.process-list-item-medio {
+    background-color: var(--transparent-yellow);
+    border-left: 8px solid var(--dark-yellow) !important;
+    border: 1px solid rgb(240, 212, 130);
+}
+
+.process-list-item-estavel {
+    background-color: var(--transparent-green);
+    border-left: 8px solid var(--ligth-green) !important;
+    border: 1px solid rgb(140, 250, 143);
+}
+
+.process-item-info {
+    width: 80%;
+    padding-left: 20px;
+}
+
+.process-metrics {
+    display: flex;
+    flex-direction: row;
+    gap: 6%;
+}
+
+.process-item-time {
+    width: 20%;
+    display: flex;
+    align-items: center;
+}
+.process-item-time p{
+    width: 100%;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.text-bold {
+    font-weight: 500;
+}
 
 .processo_dashboard{
     display: flex;
