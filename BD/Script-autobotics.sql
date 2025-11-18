@@ -108,6 +108,7 @@ create table alerta (
     fk_controlador int,
     fk_componente int,
     valor decimal(5,2),
+	criticidade tinyint(2),
 	constraint fk_controlador_alerta foreign key (fk_controlador) references controlador(id_controlador),
 	constraint fk_componente_alerta foreign key (fk_componente) references componente(id_componente)
     );
