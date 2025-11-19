@@ -103,6 +103,7 @@ body{
     padding: 0.5rem;
     border-radius: 10px;
     margin: 1rem 0rem 1rem 0rem;
+    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
 }
 
 #grafico_historico {
@@ -135,9 +136,9 @@ body{
     width: 50%;
     height: 8vw;
     background-color: white;
-    margin: 1rem 1rem 1rem 1rem;
     padding: 20px;
     border-radius: 20px;
+    margin: 1rem 1rem 1rem 1rem;
 }
 
 .kpi_dashboard p{
@@ -179,15 +180,33 @@ body{
     height: fit-content;
     margin: auto;
     padding: 10px;
-    border-radius: 20px;
+    border-radius: 20px
 }
 
-.kpis_controlador{
+.direita{
     display: flex;
     width: 50%;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    margin: 1rem 1rem 1rem 1rem;
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 20px;
+    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
+}
+
+.esquerda{
+    display: flex;
+    width: 50%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 1rem 1rem 1rem 1rem;
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 20px;
+    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
 }
 
 #previsao-disco{
@@ -235,7 +254,6 @@ body{
     width: 100%;
     overflow-y: scroll;
     border-radius: 10px;
-    margin: 1rem 1rem 1rem 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -244,9 +262,9 @@ body{
 
 .div-info-conteudo{
     display: flex;
-    padding: 1rem 1rem 1rem 1rem;
     margin: auto;
     justify-content: space-between;
+    margin: 1rem 3rem 1rem 3rem;
 }
 
 .div-info-conteudo h3{
@@ -267,4 +285,6 @@ body{
     align-items: center;
     justify-content: center;
     width: 100%;
+
 }
+
