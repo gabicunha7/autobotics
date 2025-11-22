@@ -169,7 +169,7 @@ insert into parametro(fk_componente, valor, criticidade) values
 (3, 85, 2),
 (1, 60, 1),
 (2, 75, 1),
-(2, 70, 1);
+(3, 70, 1);
 
 insert into controlador(numero_serial, fk_empresa, fk_setor)
 values 	("0001", 1, 1),
@@ -180,7 +180,7 @@ values 	("0001", 1, 1),
         ("0006", 1, 2),
         ("0007", 1, 2),
         ("0008", 1, 3),
-        ("0008", 1, 3),
+        ("0009", 1, 3),
         ("0010", 1, 3),
         ("0011", 1, 3),
         ("0012", 1, 4),
