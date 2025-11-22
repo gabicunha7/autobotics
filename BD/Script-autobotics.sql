@@ -125,7 +125,7 @@ insert into endereco(estado, cidade, cep, bairro, logradouro)
 values ("SP", "Bragança Paulista", "12900-130", "Centro", "Praça José Bonifácio");
 
 insert into empresa(nome, cnpj, fk_endereco, status)
-values ("Teste", "12.312.321/3123-12", 1, "APROVADA");
+values ("Porsche", "12.312.321/3123-12", 1, "APROVADA");
 
 delimiter $$
 create trigger after_insert_setor
@@ -153,15 +153,40 @@ $$
 delimiter ;
 
 insert into setor(nome, descricao, fk_empresa)
-values ("SETOR DE TESTES", "Este setor é um exemplo de um teste a ser utilizado", 1);
+values ("Fabricacao de Componentes", "Este setor é um exemplo de um teste a ser utilizado", 1),
+		("Desenvolvimento de Tecnologias", "Este setor é um exemplo de um teste a ser utilizado", 1),
+		("Estamparia", "Este setor é um exemplo de um teste a ser utilizado", 1),
+		("Montagem final", "Este setor é um exemplo de um teste a ser utilizado", 1);
 
 insert into funcionario (nome, email, fk_setor, fk_empresa, ativo, fk_cargo, senha_hash)
-values ("teste", "teste@gmail.com", null, 1, 1, 2, SHA2("senha123", 256));
+values ("teste", "teste@gmail.com", null, 1, 1, 2, SHA2("senha123", 256)),
+		("ronaldo", "ronaldo@gmail.com", null, 1, 1, 2, SHA2("senha123", 256)),
+		("fenomeno", "fenomeno@gmail.com", 1, 1, 1, 1, SHA2("senha123", 256));
 
-insert into parametro(fk_componente, valor, criticidade) values(1, 35.5, 2);
+insert into parametro(fk_componente, valor, criticidade) values
+(1, 85, 2),
+(2, 90, 2),
+(3, 85, 2),
+(1, 60, 1),
+(2, 75, 1),
+(2, 70, 1);
 
 insert into controlador(numero_serial, fk_empresa, fk_setor)
-values ("COD000", 1, 1);
+values 	("0001", 1, 1),
+		("0002", 1, 1),
+        ("0003", 1, 1),
+        ("0004", 1, 2),
+        ("0005", 1, 2),
+        ("0006", 1, 2),
+        ("0007", 1, 2),
+        ("0008", 1, 3),
+        ("0008", 1, 3),
+        ("0010", 1, 3),
+        ("0011", 1, 3),
+        ("0012", 1, 4),
+        ("0013", 1, 4),
+        ("0014", 1, 4),
+        ("0015", 1, 4);
 
 select * from telemetria;
 select top5_processos from telemetria;
