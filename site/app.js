@@ -27,6 +27,9 @@ var setorRouter = require("./src/routes/setor")
 var parametroRouter = require("./src/routes/parametros")
 var controladorRouter = require("./src/routes/controladores")
 
+//Dashboards
+
+var roboticaRouter = require("./src/routes/robotica")
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -41,7 +44,9 @@ app.use("/funcionario", funcionarioRouter);
 app.use("/setor", setorRouter);
 app.use("/parametros", parametroRouter);
 app.use("/controladores", controladorRouter);
+app.use("/robotica", roboticaRouter);
 app.use("/api", emailRouter);
+
 
 
 app.listen(PORTA_APP, function () {

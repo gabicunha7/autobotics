@@ -199,6 +199,45 @@
 <script src="js/rotaDash.js"></script>
 
 <script>
+window.onload = function() {
+    chartCPU = criarGrafico("grafico_cpu", "CPU", 0, "#FB8500", "cpu");
+    chartRAM = criarGrafico("grafico_ram", "RAM", 0, "#00A8E8", "ram");
+    chartDISCO = criarGrafico("grafico_disco", "Disco", 0, "#8ECAE6", "disco");
+
+    carregarTelemetria(1);
+
+    setInterval(() => carregarTelemetria(1), 4000);
+};
+
+function carregarTelemetria(idControlador) {
+  fetch("/robotica/buscarComponente", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+    id_controlador: idControlador
+})
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data && data.length > 0) {
+        atualizarGraficos(data[0]);
+    }
+})
+  .catch(err => console.error(err));
+}
+
+function atualizarGraficos(data) {
+
+    chartCPU.data.datasets[0].data = [data.cpu_percent, 100 - data.cpu_percent];
+    chartRAM.data.datasets[0].data = [data.ram_usada_percent, 100 - data.ram_usada_percent];
+    chartDISCO.data.datasets[0].data = [data.disco_usado_percent, 100 - data.disco_usado_percent];
+
+    chartCPU.update();
+    chartRAM.update();
+    chartDISCO.update();
+}
 
   const dataAtual = new Date();
   const dia = dataAtual.getDate();
@@ -216,7 +255,13 @@
     return perc < 70 ? 0 : perc < 90 ? 1 : 2;
   }
 
-  function criarGrafico(idCanvas, titulo, valor, cor) {
+  // cache global dos gráficos
+let chartCPU = null;
+let chartRAM = null;
+let chartDISCO = null;
+
+
+function criarGrafico(idCanvas, titulo, valor, cor, chave) {
     const data = {
       datasets: [{
         data: [valor, 100 - valor],
@@ -239,18 +284,19 @@
       }
     };
 
-    // plugin por-chart para desenhar o valor no centro do arco
     const centerPlugin = {
-      id: 'valorCentral',
+      id: 'valorCentral' + chave,
       afterDraw(chart) {
         const { ctx, chartArea } = chart;
         if (!chartArea) return;
+
+        const valorAtual = chart.data.datasets[0].data[0];
+
         const left = chartArea.left;
         const right = chartArea.right;
         const top = chartArea.top;
         const bottom = chartArea.bottom;
         const centerX = (left + right) / 2;
-        // ajusta verticalmente para dentro do arco
         const centerY = (top + bottom) / 2 + (bottom - top) * 0.12;
 
         ctx.save();
@@ -258,9 +304,8 @@
         ctx.fillStyle = cor;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(`${valor}%`, centerX, centerY);
+        ctx.fillText(`${valorAtual}%`, centerX, centerY);
 
-        // subtítulo (opcional)
         ctx.font = '14px Jost, sans-serif';
         ctx.fillStyle = cor;
         ctx.fillText(titulo, centerX, centerY + 28);
@@ -269,19 +314,14 @@
     };
 
     const ctx = document.getElementById(idCanvas);
-    new Chart(ctx, {
+
+    return new Chart(ctx, {
       type: 'doughnut',
       data,
       options,
-      plugins: [centerPlugin] // <<--- plugin corretamente passado aqui
+      plugins: [centerPlugin]
     });
-  }
-
-  // chamadas de exemplo
-  criarGrafico('grafico_cpu', 'CPU Utilização', 46, '#4CAF50');
-  criarGrafico('grafico_ram', '12.96/16GB', 81, '#e6ac00');
-  criarGrafico('grafico_disco', '496.64/512GB', 97, '#F44336');
-
+}
 
   //Nova dashboard
   const ctx1 = document.getElementById('grafico_componentes').getContext('2d');
