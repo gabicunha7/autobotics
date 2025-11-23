@@ -20,6 +20,8 @@
 
     $('#slc_setor').on('change', function () {
     buscarSerial();
+    buscarAlertasSemana();
+    buscarQtdDiscosAlerta();
     });
 
     $('#slc_controlador').select2({language: {
@@ -163,6 +165,8 @@ function listarSetores(dados) {
         select_setor.innerHTML += `<option value="${dado.id_setor}">${dado.nome}</option>`;
     });
     buscarSerial()
+    buscarAlertasSemana()
+    buscarQtdDiscosAlerta()
 }
 
 function buscarSerial() {
@@ -203,3 +207,96 @@ function listarNumSeriais(dados) {
         select_controlador.innerHTML += `<option value="${dado.numero_serial}">${dado.numero_serial}</option>`;
     });
 }
+
+
+function buscarAlertasSemana() {
+    select_setor = document.getElementById("slc_setor");
+    select_index = select_setor.selectedIndex;
+    varSetor = select_setor.options[select_index].value;
+    
+    fetch("/disco/buscarAlertasSemana", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            setor: varSetor,
+
+        })
+    })
+    .then(resposta => {
+        if (resposta.ok) {
+            return resposta.json(); 
+        } else {
+            throw "Erro ao buscar alertas.";
+        }
+    })
+    .then(dados => {
+        listarAlertas(dados); 
+    })
+    .catch(erro => {
+        console.error(erro);
+    });
+}
+
+function listarAlertas(dados) {
+    const tabela = document.getElementById('alerta-table');
+    tabela.innerHTML = "";
+
+    tabela.innerHTML = `<tr>
+                            <th>Timestamp</th>
+                            <th>Número Serial</th>
+                            <th>% de uso</th>
+                            <th>Status</th>
+                        </tr>`;
+
+    dados.forEach(dado => {
+        status_do_alerta = dado.criticidade == 1 ? '<p style="background-color: #e6ac00!important;border-radius: 10px;">Médio</p>' : '<p style="background-color: #ff3f2e!important;border-radius: 10px;">Crítico</p>'
+        tabela.innerHTML += `
+                            <tr>
+                                <td>${dado.timestamp}</td>
+                                <td>${dado.numero_serial}</td>
+                                <td>${dado.valor}</td>
+                                <td>${status_do_alerta}</td>
+                            </tr>`;
+    });
+}
+
+function buscarQtdDiscosAlerta() {
+    select_setor = document.getElementById("slc_setor");
+    select_index = select_setor.selectedIndex;
+    varSetor = select_setor.options[select_index].value;
+    
+    fetch("/disco/buscarQtdDiscosAlerta", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            setor: varSetor,
+
+        })
+    })
+    .then(resposta => {
+        if (resposta.ok) {
+            return resposta.json(); 
+        } else {
+            throw "Erro ao buscar qtd de alertas.";
+        }
+    })
+    .then(dados => {
+        listarQtdDiscosAlerta(dados); 
+    })
+    .catch(erro => {
+        console.error(erro);
+    });
+}
+
+function listarQtdDiscosAlerta(dados) {
+    qtd_alertas = document.getElementById('quantidade-alertas');
+
+    dados.forEach(dado => {
+        qtd_alertas.innerHTML = dado.contagem;
+    });
+}
+

@@ -26,7 +26,37 @@ function buscarSerial(req, res) {
         });
 }
 
+function buscarAlertasSemana(req, res) {
+    var setor = req.body.setor;
+
+    discoModel.buscarAlertasSemana(setor)
+        .then(function (resultado) {
+            res.status(200).json(resultado);
+        })
+        .catch(function (erro) {
+            console.log("Erro ao buscar alertas na semana:", erro);
+            res.status(500).json(erro);
+        });
+}
+
+
+function buscarQtdDiscosAlerta(req, res) {
+    var setor = req.body.setor;
+
+    discoModel.buscarQtdDiscosAlerta(setor)
+        .then(function (resultado) {
+            res.status(200).json(resultado);
+        })
+        .catch(function (erro) {
+            console.log("Erro ao buscar qtd de alertas na semana:", erro);
+            res.status(500).json(erro);
+        });
+}
+
+
 module.exports = {
     buscarSetor,
-    buscarSerial
+    buscarSerial,
+    buscarAlertasSemana,
+    buscarQtdDiscosAlerta
 };
