@@ -12,46 +12,59 @@
 </head>
 <body>
     <aside>
+
         <section>
             <section class="menu-container">
-            <img class="img-logo-curta" src="assets/logo/LOGO_CURTA.png" alt="">
-            <h1>MENU</h1>
+                <img class="img-logo-curta" src="assets/logo/LOGO_CURTA.png" alt="">
+                <h1>MENU</h1>
 
-            <div class="paginas-container">
-                <a class="a-pagina" onclick="cargoDash()">
-                    <img class="icon-pagina" src="assets/icones/dash_icon.png" alt="">
-                    Dashboard
-                </a>
-                <a class="a-pagina" href="alerta.html">
-                    <img class="icon-pagina" src="assets/icones/alerta_icon.png" alt="">
-                    Alertas
-                </a>
-                <a class="a-pagina" href="parametros.html">
-                    <img class="icon-pagina" src="assets/icones/parametros_icon.png" alt="">
-                    Parâmetros
-                </a>
-                
-                <a class="a-pagina" href="setor.html" id="agora">
-                    <img class="icon-pagina" src="assets/icones/setor_icon.png" alt="">
-                    Setores
-                </a>
-                <a class="a-pagina" href="controladores.html">
-                    <img class="icon-pagina" src="assets/icones/controlador_icon.png" alt="">
-                    Controladores
-                </a>
-                <a class="a-pagina" href="funcionario.html">
-                    <img class="icon-pagina" src="assets/icones/userImg.png" alt="">
-                    Funcionários
-                </a>
-            </div>
-        </section>
-        <a href="index.html">
-            <button id="btn-sair" onclick="limparSessao()">
-            <img class="icon-sair" src="assets/icones/sair_icon.png" alt="">
-              Sair
-            </button>
-        </a>
-        </section>
+                <div class="paginas-container">
+
+                    <div class="menu-dropdown-container">
+
+                        <button class="a-pagina" onclick="menu(event)" tag="agora">
+                            <img class="icon-pagina" src="assets/icones/dash_icon.png" alt="">
+                            Dashboards
+                            <img class="icon-pagina" src="assets/icones/arrow_down.png" alt="">
+                        </button>
+
+
+                        
+                        <div class="menu-dropdown-items" id="menuDropdown">
+                        </div>
+                    </div>
+
+
+                    <a class="a-pagina" href="alerta.html">
+                        <img class="icon-pagina" src="assets/icones/alerta_icon.png" alt="">
+                        Alertas
+                    </a>
+                    <a class="a-pagina" href="parametros.html">
+                        <img class="icon-pagina" src="assets/icones/parametros_icon.png" alt="">
+                        Parâmetros
+                    </a>
+
+                    <a class="a-pagina" href="setor.html" id="selecionado">
+                        <img class="icon-pagina" src="assets/icones/setor_icon.png" alt="">
+                        Setores
+                    </a>
+                    <a class="a-pagina" href="controladores.html">
+                        <img class="icon-pagina" src="assets/icones/controlador_icon.png" alt="">
+                        Controladores
+                    </a>
+                    <a class="a-pagina" href="funcionario.html">
+                        <img class="icon-pagina" src="assets/icones/userImg.png" alt="">
+                        Funcionários
+                    </a>
+                </div>
+            </section>
+            <a href="index.html">
+                <button id="btn-sair" onclick="limparSessao()">
+                    <img class="icon-sair" src="assets/icones/sair_icon.png" alt="">
+                    Sair
+                </button>
+            </a>
+
     </aside>
 
     <main>

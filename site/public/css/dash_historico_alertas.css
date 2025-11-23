@@ -110,6 +110,7 @@ body {
     flex-direction: column;
     margin-right: 10px;
     text-align: center;
+    overflow-y: auto;
 }
 
 .esquerda h1 {
@@ -120,6 +121,18 @@ body {
     background-color: #E78433;
     font-size: x-large;
     width: 33%;
+}
+
+.tabela td{
+    text-align: center;
+    height: fit-content;
+    background-color: #f0f0f0;
+    font-size: large;
+    border: 1px solid rgba(0,0,0,0.12);
+}
+
+.tabela td:hover{
+    cursor: pointer;
 }
 
 

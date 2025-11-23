@@ -14,20 +14,34 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.1.0"></script>
+
+    <script src="js/rotaDash.js"></script>
 </head>
 
 <body onload="buscarSetor()">
     <aside>
+
         <section>
             <section class="menu-container">
                 <img class="img-logo-curta" src="assets/logo/LOGO_CURTA.png" alt="">
                 <h1>MENU</h1>
 
                 <div class="paginas-container">
-                    <a class="a-pagina" onclick="cargoDash()" id="agora">
-                        <img class="icon-pagina" src="assets/icones/dash_icon.png" alt="">
-                        Dashboard
-                    </a>
+
+                    <div class="menu-dropdown-container">
+
+                        <button class="a-pagina" onclick="menu(event)" id="selecionado" tag="agora">
+                            <img class="icon-pagina" src="assets/icones/dash_icon.png" alt="">
+                            Dashboards
+                            <img class="icon-pagina" src="assets/icones/arrow_down.png" alt="">
+                        </button>
+
+                        
+                        <div class="menu-dropdown-items" id="menuDropdown">
+                        </div>
+                    </div>
+
+
                     <a class="a-pagina" href="alerta.html">
                         <img class="icon-pagina" src="assets/icones/alerta_icon.png" alt="">
                         Alertas
@@ -36,7 +50,7 @@
                         <img class="icon-pagina" src="assets/icones/parametros_icon.png" alt="">
                         Parâmetros
                     </a>
-                    
+
                     <a class="a-pagina" href="setor.html">
                         <img class="icon-pagina" src="assets/icones/setor_icon.png" alt="">
                         Setores
@@ -57,6 +71,7 @@
                     Sair
                 </button>
             </a>
+
     </aside>
 
     <section class="container-content">

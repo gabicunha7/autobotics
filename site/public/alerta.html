@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="css/teste.css">
     <link rel="stylesheet" href="css/alerta.css">
     <link rel="shortcut icon" href="assets\logo\LOGO_CURTA.png" type="image/x-icon">
+    <script src="js/rotaDash.js"></script>
 
 </head>
 
@@ -20,12 +21,23 @@
                 <img class="img-logo-curta" src="assets/logo/LOGO_CURTA.png" alt="">
                 <h1>MENU</h1>
 
+                
+
                 <div class="paginas-container">
-                    <a class="a-pagina" onclick="cargoDash()">
-                        <img class="icon-pagina" src="assets/icones/dash_icon.png" alt="">
-                        Dashboard
-                    </a>
-                    <a class="a-pagina" href="alerta.html" id="agora">
+
+                    <div class="menu-dropdown-container">
+
+                        <button class="a-pagina" onclick="menu(event)" tag="agora">
+                            <img class="icon-pagina" src="assets/icones/dash_icon.png" alt="">
+                            Dashboards
+                            <img class="icon-pagina" src="assets/icones/arrow_down.png" alt="">
+                        </button>
+                        
+                        <div class="menu-dropdown-items" id="menuDropdown">
+                        </div>
+                    </div>
+                    
+                    <a class="a-pagina" href="alerta.html" id="selecionado">
                         <img class="icon-pagina" src="assets/icones/alerta_icon.png" alt="">
                         Alertas
                     </a>
@@ -132,8 +144,6 @@
         </section>
     </main>
 </body>
-
-<script src="js/rotaDash.js"></script>
 
 <script>
     document.getElementById("nome-usuario").innerHTML = sessionStorage.NOME_USUARIO;

@@ -11,7 +11,7 @@ aside {
     align-items: center;
 }
 
-#agora{
+#selecionado{
     background-color: #E78433;
     color: black;
     transition: 0.5s;
@@ -48,6 +48,7 @@ a {
     display: flex;
     padding: 10px;
     font-size: 25px;
+    background-color: #fff;
 }
 
 .a-pagina:hover{
@@ -83,4 +84,69 @@ a {
 
 .icon-sair{
     width: 30px;
+}
+
+
+/*   DROPDOWN  */
+
+.menu-dropdown-container { 
+    position: relative; 
+}
+
+.menu-dropdown-items {
+    display: none;
+    position: absolute; 
+    top: 100%; 
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    z-index: 1000; 
+}
+
+.menu-dropdown-items.active {
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    text-decoration: none;
+    color: #000;
+}
+
+.menu-dropdown-items {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: auto;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    transform-origin: top center;
+
+    
+    transform: translateY(-8px) scale(0.98);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 220ms ease, transform 220ms ease-in-out;
+}
+
+.menu-dropdown-items.active {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.menu-dropdown-item:hover{
+    background-color: #E78433;
 }

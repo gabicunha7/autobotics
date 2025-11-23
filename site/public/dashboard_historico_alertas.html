@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet" href="css/dash_historico_alertas.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/rotaDash.js"></script>
 </head>
 
 
@@ -21,10 +22,21 @@
                 <h1>MENU</h1>
 
                 <div class="paginas-container">
-                    <a class="a-pagina" onclick="cargoDash()" id="agora">
-                        <img class="icon-pagina" src="assets/icones/dash_icon.png" alt="">
-                        Dashboard
-                    </a>
+
+                    <div class="menu-dropdown-container">
+
+                        <button class="a-pagina" onclick="menu(event)" id="selecionado" tag="agora">
+                            <img class="icon-pagina" src="assets/icones/dash_icon.png" alt="">
+                            Dashboards
+                            <img class="icon-pagina" src="assets/icones/arrow_down.png" alt="">
+                        </button>
+
+                        
+                        <div class="menu-dropdown-items" id="menuDropdown">
+                        </div>
+                    </div>
+
+
                     <a class="a-pagina" href="alerta.html">
                         <img class="icon-pagina" src="assets/icones/alerta_icon.png" alt="">
                         Alertas
@@ -87,9 +99,22 @@
                 <h1>Alertas por setor:</h1>
 
                 <table class="tabela">
+                    <tr>
                         <th>Setor</th>
                         <th>Total de Alertas</th>
                         <th>Status</th>
+                    </tr>
+
+                    <a href="">
+
+                        <tr>
+                            <td>Setor A</td>
+                            <td>25</td>
+                            <td><span class="status status-alto">Alto</span></td>
+                        </tr>
+
+                    </a>
+
                 </table>
 
             </div>
@@ -174,7 +199,7 @@
         data: {
             labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
             datasets: [{
-                label: '', 
+                label: '',
                 data: [12, 19, 15, 25, 22, 30, 28, 35, 40, 38, 45, 50],
                 backgroundColor: 'rgba(75, 192, 192, 0.6)',
                 borderColor: 'rgba(75, 192, 192, 1)',
@@ -183,24 +208,19 @@
         },
         options: {
             plugins: {
-            title: {
-                display: true,
-                text: 'Número de Alertas por Mês',
-                position: 'top',
-                font: {
-                    size: 18,
-                    color: '#000000',
-                    weight: 'bold'
+                title: {
+                    display: true,
+                    text: 'Número de Alertas por Mês',
+                    position: 'top',
+                    font: {
+                        size: 18,
+                        color: '#000000',
+                        weight: 'bold'
+                    }
                 }
             }
         }
-        }
     });
-
-
-
-
-
 </script>
 
 
