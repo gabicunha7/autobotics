@@ -30,6 +30,8 @@ var controladorRouter = require("./src/routes/controladores")
 //Dashboards
 
 var roboticaRouter = require("./src/routes/robotica")
+var discoRouter = require("./src/routes/disco")
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -46,6 +48,8 @@ app.use("/parametros", parametroRouter);
 app.use("/controladores", controladorRouter);
 app.use("/robotica", roboticaRouter);
 app.use("/api", emailRouter);
+app.use("/disco", discoRouter);
+
 
 
 

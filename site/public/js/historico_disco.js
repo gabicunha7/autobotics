@@ -17,6 +17,11 @@
       	noResults: function() {
         return "nenhum setor encontrado";}}
     });
+
+    $('#slc_setor').on('change', function () {
+    buscarSerial();
+    });
+
     $('#slc_controlador').select2({language: {
       	noResults: function() {
         return "nenhum controlador encontrado";}}
@@ -120,3 +125,81 @@
             somaX += list
         }
     }
+
+
+    
+function buscarSetor() {
+    varEmpresa = sessionStorage.EMPRESA_USUARIO;
+    
+    fetch("/disco/buscarSetor", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            empresa: varEmpresa,
+
+        })
+    })
+    .then(resposta => {
+        if (resposta.ok) {
+            return resposta.json(); 
+
+        } else {
+            throw "Erro ao buscar setores.";
+        }
+    })
+    .then(dados => {
+        listarSetores(dados); 
+    })
+    .catch(erro => {
+        console.error(erro);
+    });
+}
+
+function listarSetores(dados) {
+    const select_setor = document.getElementById('slc_setor');
+    dados.forEach(dado => {
+        select_setor.innerHTML += `<option value="${dado.id_setor}">${dado.nome}</option>`;
+    });
+    buscarSerial()
+}
+
+function buscarSerial() {
+    select_setor = document.getElementById("slc_setor");
+    select_index = select_setor.selectedIndex;
+    varSetor = select_setor.options[select_index].value;
+    
+    fetch("/disco/buscarSerial", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            setor: varSetor,
+
+        })
+    })
+    .then(resposta => {
+        if (resposta.ok) {
+            return resposta.json(); 
+        } else {
+            throw "Erro ao buscar numeros Seriais.";
+        }
+    })
+    .then(dados => {
+        listarNumSeriais(dados); 
+    })
+    .catch(erro => {
+        console.error(erro);
+    });
+}
+
+function listarNumSeriais(dados) {
+    const select_controlador = document.getElementById('slc_controlador');
+    select_controlador.innerHTML = "";
+
+    dados.forEach(dado => {
+        select_controlador.innerHTML += `<option value="${dado.numero_serial}">${dado.numero_serial}</option>`;
+    });
+}

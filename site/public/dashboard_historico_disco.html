@@ -16,7 +16,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.1.0"></script>
 </head>
 
-<body>
+<body onload="buscarSetor()">
     <aside>
         <section>
             <section class="menu-container">
@@ -66,10 +66,7 @@
                 <div class="div_select">
                     <p>Setor: </p>
                     <select id="slc_setor">
-                        <option value="Setor_A">Setor A</option>
-                        <option value="Setor_B">Setor B</option>
-                        <option value="Setor_C">Setor C</option>
-                        <option value="Setor_D">Setor D</option>
+
                     </select>
                 </div>
             </div>
@@ -207,16 +204,7 @@
                                 <div class="div_select">
                                     <p>Controlador: </p>
                                     <select id="slc_controlador">
-                                        <option value="ABS123">ABS123</option>
-                                        <option value="BDA543">BDA543</option>
-                                        <option value="NSJ754">NSJ754</option>
-                                        <option value="NDH839">NDH839</option>
-                                        <option value="LDS920">LDS920</option>
-                                        <option value="NDA819">NDA819</option>
-                                        <option value="NDS728">NDS728</option>
-                                        <option value="KSI123">KSI123</option>
-                                        <option value="YSH839">YSH839</option>
-                                        <option value="ISJ459">ISJ459</option>
+
                                 </select>
                             </div>
                             <div class="div_grafico_uso_historico">
@@ -363,11 +351,10 @@
 </body>
 
 <div id="overlay"></div>
-
 <script src="js/historico_disco.js"></script>
 
-<script>
 
+<script>
     // function corBarra(list){
     //     cores = []
     //     list.forEach(e => {
