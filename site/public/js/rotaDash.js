@@ -41,6 +41,16 @@ function menu(event) {
             <a class="menu-dropdown-item" href="dashboard_historico_alertas.html">
                 Dashboard Histórico de Alertas
             </a>
+
+            <a class="menu-dropdown-item" href="dashboard_robotica.html">
+                Dashboard Robótica
+            </a>
+            <a class="menu-dropdown-item" href="dashboards_alertas_tempo_real.html">
+                Dashboard Alertas Tempo Real
+            </a>
+            <a class="menu-dropdown-item" href="dashboard_cpu_ram.html">
+                Dashboard Controlador
+            </a>
         `;
     }
     
