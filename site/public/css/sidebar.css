@@ -149,4 +149,5 @@ a {
 
 .menu-dropdown-item:hover{
     background-color: #E78433;
+    border-radius: 10px;
 }
