@@ -41,79 +41,9 @@
     document.getElementById("email-usuario").innerHTML = sessionStorage.EMAIL_USUARIO;
 
     
-    const ctx_historico = document.getElementById('grafico_historico');    
+    ctx_historico = document.getElementById('grafico_historico');    
+    graficoHistorico = null
     valores_grafico_historico = [39,41,44,47,50,60,62,68,75,77];
-
-    new Chart(ctx_historico, {
-        type: 'line',
-        data: {
-            labels: ['Janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'],
-            datasets: [{
-                label: 'Último dado uso de disco',
-                data: valores_grafico_historico, 
-                borderWidth: 2,
-                borderColor: '#4c5caf'
-            },{
-                label: 'regressão',
-                data: valores_grafico_historico, 
-                borderWidth: 2,
-                borderColor: 'purple'
-            }
-        ]
-        },
-        options: {
-            scales: {
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Meses',
-                        font: {
-                            size: 18
-                        }
-                    },
-                    ticks: {
-                        font: {
-                            size: 16
-                        }
-                    }
-                },
-                y: {
-                    title: {
-                        display: true,
-                        text: 'Uso de disco em porcentagem %',
-                        font: {
-                            size: 18
-                        }
-                    },
-                    ticks: {
-                        font: {
-                            size: 16
-                        }
-                    }
-                }
-            },
-            plugins: {
-                annotation: {
-                    annotations: {
-                        regressao: {
-                            type: 'line',
-                            yMin: Math.min(...valores_grafico_historico),
-                            yMax: 87,
-                            borderColor: 'purple',
-                            borderWidth: 2
-                        },                        
-                        Crítico: {
-                            type: 'line',
-                            yMin: 80,
-                            yMax: 80,
-                            borderColor: 'red',
-                            borderWidth: 2
-                        },
-                        
-                    }
-                }
-    }
-        }});
 
     let regressao = []
     const meses_ano = [1,2,3,4,5,6,7,8,9,10,11,12]
@@ -193,6 +123,7 @@ function buscarSerial() {
     })
     .then(dados => {
         listarNumSeriais(dados); 
+        buscarCriticoSetor();
     })
     .catch(erro => {
         console.error(erro);
@@ -299,4 +230,112 @@ function listarQtdDiscosAlerta(dados) {
         qtd_alertas.innerHTML = dado.contagem;
     });
 }
+
+
+function buscarCriticoSetor() {
+    select_setor = document.getElementById("slc_setor");
+    select_index = select_setor.selectedIndex;
+    varSetor = select_setor.options[select_index].value;
+    
+    fetch("/disco/buscarCriticoSetor", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            setor: varSetor,
+
+        })
+    })
+    .then(resposta => {
+        if (resposta.ok) {
+            return resposta.json(); 
+        } else {
+            throw "Erro ao buscar critico do setor.";
+        }
+    })
+    .then(dados => {
+        trocarGrafico(dados); 
+    })
+    .catch(erro => {
+        console.error(erro);
+    });
+}
+
+function trocarGrafico(dados) {
+    if(graficoHistorico != null){
+        graficoHistorico.destroy();
+    }
+    graficoHistorico = new Chart(ctx_historico, {
+        type: 'line',
+        data: {
+            labels: ['Janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'],
+            datasets: [{
+                label: 'Último dado uso de disco',
+                data: valores_grafico_historico, 
+                borderWidth: 2,
+                borderColor: '#4c5caf'
+            },{
+                label: 'regressão',
+                data: valores_grafico_historico, 
+                borderWidth: 2,
+                borderColor: 'purple'
+            }
+        ]
+        },
+        options: {
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Meses',
+                        font: {
+                            size: 18
+                        }
+                    },
+                    ticks: {
+                        font: {
+                            size: 16
+                        }
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Uso de disco em porcentagem %',
+                        font: {
+                            size: 18
+                        }
+                    },
+                    ticks: {
+                        font: {
+                            size: 16
+                        }
+                    }
+                }
+            },
+            plugins: {
+                annotation: {
+                    annotations: {
+                        regressao: {
+                            type: 'line',
+                            yMin: Math.min(...valores_grafico_historico),
+                            yMax: 87,
+                            borderColor: 'purple',
+                            borderWidth: 2
+                        },                        
+                        Crítico: {
+                            type: 'line',
+                            yMin: dados[0].valor,
+                            yMax: dados[0].valor,
+                            borderColor: 'red',
+                            borderWidth: 2
+                        },
+                        
+                    }
+                }
+            }
+        }
+    }
+)};
 

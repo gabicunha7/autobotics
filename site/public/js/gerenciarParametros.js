@@ -30,7 +30,8 @@ function buscarSetorParametro(){
 
 function buscarComponenteParametro(){
     var selectComponente = document.getElementById('slc_componente_parametro'); 
-    selectComponente.style.display = 'block';
+    selectComponente.innerHTML = ""
+    // selectComponente.style.display = 'block';
     varEmpresa = sessionStorage.EMPRESA_USUARIO;
     fetch("/parametros/buscarComponenteParametro", {
         method: "POST",
@@ -52,6 +53,7 @@ function buscarComponenteParametro(){
         dados.forEach(dados => {
             slc_componente_parametro.innerHTML+=`<option value='${dados.id_componente}'>${dados.nome}</option>`
         });
+        buscarParametro()
     })
 }
 

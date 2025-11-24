@@ -20,4 +20,9 @@ router.post("/buscarQtdDiscosAlerta", function(req, res){
     discoController.buscarQtdDiscosAlerta(req,res);
 });
 
+
+router.post("/buscarCriticoSetor", function(req, res){
+    discoController.buscarCriticoSetor(req,res);
+});
+
 module.exports = router;

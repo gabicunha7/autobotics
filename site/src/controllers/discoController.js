@@ -54,9 +54,24 @@ function buscarQtdDiscosAlerta(req, res) {
 }
 
 
+function buscarCriticoSetor(req, res) {
+    var setor = req.body.setor;
+
+    discoModel.buscarCriticoSetor(setor)
+        .then(function (resultado) {
+            res.status(200).json(resultado);
+        })
+        .catch(function (erro) {
+            console.log("Erro ao buscar critico do setor:", erro);
+            res.status(500).json(erro);
+        });
+}
+
+
 module.exports = {
     buscarSetor,
     buscarSerial,
     buscarAlertasSemana,
-    buscarQtdDiscosAlerta
+    buscarQtdDiscosAlerta,
+    buscarCriticoSetor
 };

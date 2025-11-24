@@ -41,9 +41,23 @@ function buscarQtdDiscosAlerta(setor){
     return database.executar(sql)
 }
 
+function buscarCriticoSetor(setor){
+    var sql = `select * from setor s
+                inner join componente c
+                    on c.fk_setor = s.id_setor
+                inner join parametro p
+                    on c.id_componente = p.fk_componente
+                where s.id_setor = ${setor} and c.nome = "Disco"
+                and criticidade = 2;
+                `
+    return database.executar(sql)
+}
+
+
 module.exports = {
     buscarSetor,
     buscarSerial,
     buscarAlertasSemana,
-    buscarQtdDiscosAlerta
+    buscarQtdDiscosAlerta,
+    buscarCriticoSetor
 }
