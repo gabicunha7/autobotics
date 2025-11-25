@@ -1,49 +1,57 @@
+const overlay_element = document.getElementById('overlay');
+document.getElementById("nome-usuario").innerHTML = sessionStorage.NOME_USUARIO;
+document.getElementById("email-usuario").innerHTML = sessionStorage.EMAIL_USUARIO;
+ctx_historico = document.getElementById('grafico_historico');    
+graficoHistorico = null
+const dataAtual = new Date();
+const dia = dataAtual.getDate();
+const mes = dataAtual.getMonth() + 1; 
+const ano = dataAtual.getFullYear();
+document.getElementById("data_atual").innerHTML = `Data: ${dia}/${mes}/${ano}`;
+valores_grafico_historico = [50,60,62,68,75,77];
+if (overlay_element) overlay_element.addEventListener('click', fecharTodosPopups);
 
-    function fecharPopUp(id) {
+function fecharTodosPopups(){
+    const ids = ['alertas_semana'];
+    ids.forEach(id => {
+        const p = document.getElementById(id);
+        if (p) p.style.display = 'none';
+    });
+
+    const overlay = document.getElementById('overlay');
+    if (overlay) overlay.classList.remove('active');
+}
+
+    
+function fecharPopUp(id) {
     popup = document.getElementById(id)
     if (popup) popup.style.display = "none";
     const overlay = document.getElementById('overlay');
     if (overlay) overlay.classList.remove('active');
-    }
+}
 
-    function abrirPopUpCadastro(id) {
-        popup = document.getElementById(id)
-        if (popup) popup.style.display = "flex";
-        const overlay = document.getElementById('overlay');
-        if (overlay) overlay.classList.add('active');
-    }
+function abrirPopUpCadastro(id) {
+    popup = document.getElementById(id)
+    if (popup) popup.style.display = "flex";
+    const overlay = document.getElementById('overlay');
+    if (overlay) overlay.classList.add('active');
+}
 
-    $('#slc_setor').select2({language: {
-      	noResults: function() {
-        return "nenhum setor encontrado";}}
-    });
+$('#slc_setor').select2({language: {
+    noResults: function() {
+    return "nenhum setor encontrado";}}
+});
 
-    $('#slc_setor').on('change', function () {
+$('#slc_setor').on('change', function () {
     buscarSerial();
     buscarAlertasSemana();
     buscarQtdDiscosAlerta();
-    });
+});
 
-    $('#slc_controlador').select2({language: {
-      	noResults: function() {
-        return "nenhum controlador encontrado";}}
-    });
-
-    const dataAtual = new Date();
-    const dia = dataAtual.getDate();
-    const mes = dataAtual.getMonth() + 1; 
-    const ano = dataAtual.getFullYear();
-
-    document.getElementById("data_atual").innerHTML = `Data: ${dia}/${mes}/${ano}`;
-
-
-    document.getElementById("nome-usuario").innerHTML = sessionStorage.NOME_USUARIO;
-    document.getElementById("email-usuario").innerHTML = sessionStorage.EMAIL_USUARIO;
-
-    
-    ctx_historico = document.getElementById('grafico_historico');    
-    graficoHistorico = null
-    valores_grafico_historico = [39,41,44,47,50,60,62,68,75,77];
+$('#slc_controlador').select2({language: {
+    noResults: function() {
+    return "nenhum controlador encontrado";}}
+});
 
     let regressao = []
     const meses_ano = [1,2,3,4,5,6,7,8,9,10,11,12]
@@ -269,7 +277,7 @@ function trocarGrafico(dados) {
     graficoHistorico = new Chart(ctx_historico, {
         type: 'line',
         data: {
-            labels: ['Janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'],
+            labels: ['julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'],
             datasets: [{
                 label: 'Último dado uso de disco',
                 data: valores_grafico_historico, 
