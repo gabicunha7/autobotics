@@ -8,10 +8,15 @@
     <link rel="stylesheet" href="css/sidebar.css">
     <link rel="stylesheet" href="css/dash_manutencao.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <script src="js/rotaDash.js"></script>
 </head>
 
-<body>
+<body onload="buscarSetor()">
     <aside>
 
         <section>
@@ -29,7 +34,7 @@
                             <img class="icon-pagina" src="assets/icones/arrow_down.png" alt="">
                         </button>
 
-                        
+
                         <div class="menu-dropdown-items" id="menuDropdown">
                         </div>
                     </div>
@@ -70,10 +75,17 @@
     <section class="container-content">
         <div class="div-superior">
             <div class="div-filtro">
-                <p>Controlador: </p>
-                <select name="Controlador" id="">
-                    <option value="Controlador A">Controlador A</option>
-                </select>
+                <div class="div_select">
+                    <p>Setor: </p>
+                    <select id="slc_setor">
+
+                    </select>
+
+                    <p>Controlador: </p>
+                    <select id="slc_controlador">
+
+                    </select>
+                </div>
             </div>
 
             <div class="div-usuario">
@@ -109,7 +121,8 @@
                         <canvas id="grafico_ram"></canvas>
                     </div>
                     <div class="div-controlador">
-                        <h1>Controlador</h1>
+                        <h1>Controlador:</h1>
+                        <h1 id="nome-controlador"></h1>
                         <p>Escolha o componente:</p>
                         <select name="Controlador" id="">
                             <option value="RAM">RAM</option>
@@ -134,7 +147,10 @@
                             <p class="componente-alertas">CPU</p>
                         </div>
                     </div>
-                    <h1>Setor</h1>
+                    <div class="tituloSetor">
+                        <h1 id="nome-setor"></h1>
+                        <h1>Setor: </h1>
+                    </div>
                 </div>
             </div>
         </div>
@@ -144,7 +160,7 @@
 
 </body>
 
-
+<script src="js/dashManutencao.js"></script>
 
 <script>
 

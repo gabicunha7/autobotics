@@ -44,11 +44,16 @@ body {
     font-size: 20px;
 }
 
-.div-filtro select {
-    font-size: 20px;
-    height: 40px;
-    width: 150px;
-    margin: 20px;
+.div_select{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    font-size: 22px;
+    gap: 20px;
+}
+
+#slc_setor , #slc_controlador{
+    width: 20rem;
 }
 
 .div-usuario {
@@ -134,6 +139,13 @@ body {
     padding-left: 10px;
     text-align: center;
     border-radius: 10px;
+}
+
+.tituloSetor{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    gap: 20px;
 }
 
 .div-controlador{
