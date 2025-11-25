@@ -78,8 +78,13 @@ const data_cpu_line = {
   datasets: [{
     label: 'Média CPU (%)',
     data: [22, 24, 28, 21, 33, 30, 37, 35, 33, 75, 89, 93, 95],
-    fill: true,
     borderColor: 'rgb(75, 192, 192)',
+    tension: 0.1
+  },
+  { 
+    label: 'Média RAM (%)',
+    data: [57, 50, 55, 59, 62, 61, 63, 55, 70, 71, 65, 78, 75],
+    borderColor: 'rgb(255, 75, 75)',
     tension: 0.1
   }]
 };

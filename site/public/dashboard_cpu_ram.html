@@ -102,7 +102,7 @@
       <div class="left-main-container">
         <div class="left-main-item top-kpis">
           <div class="kpi-mean-container">
-            <p>Média de uso CPU:</p>
+            <p><span class="text-bold">Média de uso CPU:</span></p>
             <div class="pie-chart-container">
               <p>85%</p>
               <canvas class="pie-chart" id="cpu-mean-pie"></canvas>
@@ -110,16 +110,16 @@
           </div>
           <div class="kpi-alert-process">
             <div class="top-kpi-flat" id="total-alerts">
-              <p>Total de alertas:</p>
+              <p>Total de alertas</p>
               <p>20</p>
             </div>
             <div class="top-kpi-flat" id="active-processes">
-              <p>Processos ativos:</p>
+              <p>Processos ativos</p>
               <p>120</p>
             </div>
           </div>
           <div class="kpi-mean-container">
-            <p>Média de uso RAM:</p>
+            <p><span class="text-bold">Média de uso RAM</span></p>
             <div class="pie-chart-container">
                 <p class="ram-percent">55%</p>
                 <p class="ram-total">8.5/16GB</p>
@@ -130,58 +130,38 @@
         <div class="left-main-item chart-info">
 
           <div class="chart-container">
-            <p>Registros de CPU (%) última hora:</p>
+            <p><span class="text-bold">Registros de CPU e RAM (%) última hora</span></p>
             <canvas class="line-chart" id="cpu-line-chart"></canvas>
           </div>
 
           <div class="kpis-chart-container">
 
             <div class="kpi-container">
-              <p>Pico da última hora(CPU):</p>
+              <p><span class="text-bold">Picos da última hora</span></p>
               <div class="kpi-chart-info">
-                <p>Uso da CPU: <span class="text-red">94%</span></p>
-                <p>Horário: 12:50</p>
+                <p>CPU: <span class="text-red">94%</span> - 12:50</p>
+                <p>RAM: <span class="text-green">30%</span> - 13:00</p>
+                <p></p>
               </div>
             </div>
 
             <div class="kpi-container">
-              <p>Último registro(CPU):</p>
+              <p><span class="text-bold">Últimos registros</span></p>
               <div class="kpi-chart-info">
-                <p>Uso da CPU: <span class="text-yellow">77%</span></p>
-                <p>Horário: 13:00</p>
+                <p>CPU: <span class="text-yellow">77%</span> - 13:00</p>
+                <p>RAM: <span class="text-green">30%</span> - 13:00</p>
               </div>
             </div>
 
           </div>
         </div>
         
-        <div class="left-main-item chart-info">
-          <div class="chart-container">
-            <p>Registros de RAM (%) última hora:</p>
-            <canvas class="line-chart" id="ram-line-chart"></canvas>
-          </div>
-          <div class="kpis-chart-container">
-            <div class="kpi-container">
-              <p>Pico da última hora(RAM):</p>
-              <div class="kpi-chart-info">
-                <p>Uso da RAM: <span class="text-green">30%</span></p>
-                <p>Horário: 13:00</p>
-              </div>
-            </div>
-            <div class="kpi-container">
-              <p>Último registro(RAM):</p>
-              <div class="kpi-chart-info">
-                <p>Uso da RAM: <span class="text-green">30%</span></p>
-                <p>Horário: 13:00</p>
-              </div>
-            </div>
-          </div>
-        </div>
+       
       </div>
       <div class="right-main-container">
         <div class="process-list-container">
           <div class="process-list-header">
-            <p>Processos consumindo recursos:</p>
+            <p><span class="text-bold">Processos consumindo recursos:</span></p>
             <span style="font-size: 35px;" class="material-symbols-outlined">
               info
             </span>
@@ -259,26 +239,7 @@
 
           </div>
         </div>
-        <div class="measures-chart-container">
-          <div class="measures-chart-header">
-            <p>Classificação de Capturas:</p>
-            <div class="measures-chart-legend">
-              <div class="measures-chart-legend-item">
-                <div class="green-square"></div>
-                <p>Estável</p>
-              </div>
-              <div class="measures-chart-legend-item">
-                <div class="yellow-square"></div>
-                <p>Alerta médio</p>
-              </div>
-              <div class="measures-chart-legend-item">
-                <div class="red-square"></div>
-                <p>Alerta crítico</p>
-              </div>
-            </div>
-          </div>
-
-          <canvas class="pie-measures-chart" id="pie-measures-chart"></canvas>
+        
         </div>
       </div>
     </div>
