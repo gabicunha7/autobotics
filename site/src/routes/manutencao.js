@@ -28,5 +28,9 @@ router.post("/totalAlertasNoSetor", function(req, res){
     manutencaoController.totalAlertasNoSetor(req,res);
 });
 
+router.post("/componenteComMaisAlertas", function(req, res){
+    manutencaoController.componenteComMaisAlertas(req,res);
+});
+
 
 module.exports = router;

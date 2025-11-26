@@ -30,10 +30,24 @@ function totalAlertasNoSetor(setor){
     return database.executar(sql)
 }
 
+function componenteComMaisAlertas(setor){
+    var sql = `SELECT comp.nome AS componente_mais_alerta, COUNT(a.fk_componente) AS quantidade_de_alertas
+        FROM alerta AS a INNER JOIN controlador AS c ON a.fk_controlador = c.id_controlador
+        INNER JOIN setor AS s ON c.fk_setor = s.id_setor
+        INNER JOIN componente AS comp ON a.fk_componente = comp.id_componente 
+        WHERE DATE(a.timestamp) = DATE(NOW())
+        AND s.id_setor = ${setor}
+        GROUP BY comp.nome, comp.id_componente
+        ORDER BY quantidade_de_alertas DESC
+        LIMIT 1;`
+        return database.executar(sql)
+}
+
 module.exports = {
     buscarSetor,
     buscarSerial,
     buscarNomeSetor,
     buscarNomeControlador,
-    totalAlertasNoSetor
+    totalAlertasNoSetor,
+    componenteComMaisAlertas
 }

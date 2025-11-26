@@ -6,8 +6,9 @@
     $('#slc_setor').on('change', function () {
     buscarSerial();
     listarAlertasNoSetor();
+    componenteComMaisAlertas();
     totalAlertasNoSetor();
-    
+    listarComponenteAlertas();
     });
 
 
@@ -58,6 +59,7 @@ function listarSetores(dados) {
     });
     buscarSerial()
     totalAlertasNoSetor()
+    componenteComMaisAlertas()
 }
 
 function buscarSerial() {
@@ -137,7 +139,7 @@ function buscarNomeControlador() {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            setor: varSetor,
+            setor: varSetor,    
 
         })
     })
@@ -202,7 +204,6 @@ function totalAlertasNoSetor() {
         }
     })
     .then(dados => {
-        console.log("dados:" + dados[0].total_alertas)
             listarAlertasNoSetor(dados);    
     })
     .catch(erro => {
@@ -221,3 +222,42 @@ function listarAlertasNoSetor(dado){
     }
 }
 
+function componenteComMaisAlertas() {
+    select_setor = document.getElementById("slc_setor");
+    select_index = select_setor.selectedIndex;
+    varSetor = select_setor.options[select_index].value;
+    
+    fetch("/manutencao/componenteComMaisAlertas", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            setor: varSetor,
+
+        })
+    })
+    .then(resposta => {
+        if (resposta.ok) {
+            return resposta.json(); 
+        } else {
+            throw "Erro ao buscar componente com mais alertas.";
+        }
+    })
+    .then(dados => {
+            listarComponenteAlertas(dados);    
+    })
+    .catch(erro => {
+        console.error(erro);
+    });
+}
+
+function listarComponenteAlertas(dado){
+    componenteAlertas = document.getElementById("alertas-componente-controlador");
+    console.log("Componente com mais alertas: " + dado)
+    if(typeof dado != "object"){
+        componenteAlertas.innerHTML = "Nenhum"
+    } else {
+        componenteAlertas.innerHTML = dado[0].componente_mais_alerta;
+    }
+}
