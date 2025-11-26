@@ -5,10 +5,13 @@
 
     $('#slc_setor').on('change', function () {
     buscarSerial();
+    listarAlertasNoSetor();
+    totalAlertasNoSetor();
+    
     });
 
 
-$('#slc_controlador').on('change', function () {
+    $('#slc_controlador').on('change', function () {
     buscarNomeControlador();
     });
 
@@ -54,6 +57,7 @@ function listarSetores(dados) {
         select_setor.innerHTML += `<option value="${dado.id_setor}">${dado.nome}</option>`;
     });
     buscarSerial()
+    totalAlertasNoSetor()
 }
 
 function buscarSerial() {
@@ -173,3 +177,47 @@ function mudarNomeControlador(dado){
     console.log(dado)
     nomeControlador.innerHTML = dado[0].numero_serial
 }
+
+
+function totalAlertasNoSetor() {
+    select_setor = document.getElementById("slc_setor");
+    select_index = select_setor.selectedIndex;
+    varSetor = select_setor.options[select_index].value;
+    
+    fetch("/manutencao/totalAlertasNoSetor", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            setor: varSetor,
+
+        })
+    })
+    .then(resposta => {
+        if (resposta.ok) {
+            return resposta.json(); 
+        } else {
+            throw "Erro ao buscar alertas do setor.";
+        }
+    })
+    .then(dados => {
+        console.log("dados:" + dados[0].total_alertas)
+            listarAlertasNoSetor(dados);    
+    })
+    .catch(erro => {
+        console.error(erro);
+    });
+}
+
+
+function listarAlertasNoSetor(dado){
+    totalAlertas = document.getElementById("total-alertas-hoje");
+    console.log("Dado: " + dado)
+    if(typeof dado != "object"){
+        totalAlertas.innerHTML = 0;
+    } else{
+        totalAlertas.innerHTML = dado[0].total_alertas;
+    }
+}
+

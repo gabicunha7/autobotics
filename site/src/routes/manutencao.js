@@ -20,4 +20,13 @@ router.post("/buscarNomeControlador", function(req, res){
     manutencaoController.buscarNomeControlador(req,res);
 });
 
+router.post("/buscarNomeControlador", function(req, res){
+    manutencaoController.buscarNomeControlador(req,res);
+});
+
+router.post("/totalAlertasNoSetor", function(req, res){
+    manutencaoController.totalAlertasNoSetor(req,res);
+});
+
+
 module.exports = router;

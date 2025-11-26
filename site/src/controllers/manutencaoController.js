@@ -52,11 +52,24 @@ function buscarNomeControlador(req, res) {
         });
 }
 
+function totalAlertasNoSetor(req, res) {
+    var setor = req.body.setor;
+
+    manutencaoModel.totalAlertasNoSetor(setor)
+        .then(function (resultado) {
+            res.status(200).json(resultado);
+        })
+        .catch(function (erro) {
+            console.log("Erro ao buscar total de alertas hoje no setor:", erro);
+            res.status(500).json(erro);
+        });
+}
 
 
 module.exports = {
     buscarSetor,
     buscarSerial,
     buscarNomeSetor,
-    buscarNomeControlador
+    buscarNomeControlador,
+    totalAlertasNoSetor
 };

@@ -21,9 +21,19 @@ function buscarNomeControlador(controlador){
     return database.executar(sql)
 }
 
+function totalAlertasNoSetor(setor){
+    var sql = `SELECT COUNT(a.fk_controlador) AS total_alertas FROM alerta AS a
+    INNER JOIN controlador AS c ON a.fk_controlador = c.id_controlador 
+    INNER JOIN setor AS s ON c.fk_setor = s.id_setor
+    WHERE a.criticidade IN (1, 2) AND s.id_setor = ${setor} AND date(a.timestamp) = DATE(NOW())
+    GROUP BY s.nome;`
+    return database.executar(sql)
+}
+
 module.exports = {
     buscarSetor,
     buscarSerial,
     buscarNomeSetor,
-    buscarNomeControlador
+    buscarNomeControlador,
+    totalAlertasNoSetor
 }
