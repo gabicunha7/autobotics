@@ -33,6 +33,7 @@ var roboticaRouter = require("./src/routes/robotica")
 var discoRouter = require("./src/routes/disco")
 var manutencaoRouter = require("./src/routes/manutencao")
 var historicoAlertasRouter = require("./src/routes/historicoAlerta")
+var s3Router = require("./src/routes/s3Route")
 
 
 app.use(express.json());
@@ -53,6 +54,7 @@ app.use("/api", emailRouter);
 app.use("/disco", discoRouter);
 app.use("/manutencao", manutencaoRouter)
 app.use("/historicoAlerta", historicoAlertasRouter);
+app.use("/s3Route", s3Router);
 
 
 

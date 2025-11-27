@@ -347,3 +347,16 @@ function trocarGrafico(dados) {
     }
 )};
 
+async function carregarUltimoJson() {
+  try {
+    const resposta = await fetch(`/s3Route/dados/ultimo`);
+    const data = await resposta.json();
+
+    console.log("ultimo JSON do bucket:", data);
+
+  } catch (err) {
+    res.status(500).json({ error: "Erro ao buscar último arquivo", message: err.message });
+  }
+}
+
+carregarUltimoJson();
