@@ -120,7 +120,7 @@ body {
 .tabela th {
     background-color: #E78433;
     font-size: x-large;
-    width: 33%;
+    width: 20%;
 }
 
 .tabela td{
@@ -223,6 +223,14 @@ body {
     color: #e53935;
 }
 
+.comp-percentual.aumento {
+    color: #e74c3c;
+}
+
+.comp-percentual.diminuicao {
+    color: #27ae60;
+}
+
 /* KPI's  */
 
 .kpis {
@@ -248,13 +256,10 @@ body {
     text-align: center;
 }
 
-
-
 .kpi1 .componente{
     font-size: 64px;
     font-weight: 700;
 }
-
 
 .kpi2{
     height: 150px;
@@ -267,9 +272,7 @@ body {
     text-align: center;
 }
 
-
-
-.kpi2 .qtdAlertasComponente{
+.kpi2 .qtd_alertasComponente{
     font-size: 64px;
     font-weight: 700;
 }
@@ -287,6 +290,47 @@ body {
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
     border: 1px solid rgba(0,0,0,0.14);
     justify-content: center;
+}
+
+/* MENSAGEM INICIAL */
+
+.mensagem-inicial {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    gap: 20px;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+.icone-mensagem {
+    font-size: 80px;
+    opacity: 0.5;
+}
+
+.texto-mensagem h2 {
+    font-size: 32px;
+    color: #222;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.texto-mensagem p {
+    font-size: 18px;
+    color: #666;
+    max-width: 400px;
+}
+
+.conteudo-dados {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    justify-content: space-around;
 }
 
 
