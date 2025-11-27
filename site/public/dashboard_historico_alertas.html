@@ -32,7 +32,7 @@
                             <img class="icon-pagina" src="assets/icones/arrow_down.png" alt="">
                         </button>
 
-                        
+
                         <div class="menu-dropdown-items" id="menuDropdown">
                         </div>
                     </div>
@@ -99,16 +99,24 @@
 
                 <h1>Alertas por setor:</h1>
 
+                <div class="esquerda-subtitulo">
+
+                    <p style="font-size: medium; margin-right: 25px;">(Clique em um setor para exibir seus dados.)</p>
+
+                    <div class="esquerda-subtitulo-texto">Neste mês</div>
+                </div>
+
                 <table class="tabela" id="tabelaSetores">
                     <tr>
                         <th>Setor</th>
-                        <th>Total de Alertas</th>
-                        <th>Média dos Alertas em CPU</th>
-                        <th>Média dos alertas em RAM</th>
-                        <th>Média de Alertas em Disco</th>
+                        <th>Mês atual</th>
+                        <th>Totais</th>
+                        <th>Média em CPU</th>
+                        <th>Média em RAM</th>
+                        <th>Média em Disco</th>
                     </tr>
 
-                    
+
 
                 </table>
 
@@ -116,19 +124,14 @@
 
             <div class="direita">
 
-                
-                <div class="mensagem-inicial" id="mensagemInicial">
-                    <div class="texto-mensagem">
-                        <h2>Selecione um setor</h2>
-                        <p>Clique em um dos setores na listagem à esquerda para visualizar os dados de alertas</p>
-                    </div>
-                </div>
 
-                
-                <div class="conteudo-dados" style="display: none;" id="conteudoDados">
+
+
+
+                <div class="conteudo-dados" id="conteudoDados">
 
                     <div class="comparacao">
-                        <div class="comparacao-titulo">Comparação de alertas:</div>
+                        <div class="comparacao-titulo" id="tituloComparacao">Comparação de alertas:</div>
 
                         <div class="comparacao-colunas">
                             <div class="comparacao-col">
@@ -200,7 +203,7 @@
         if (Chart.defaults.plugins.title) Chart.defaults.plugins.title.display = false;
     }
 
-    
+
     grafico_alertas = new Chart(ctx, {
         type: 'bar',
         data: {

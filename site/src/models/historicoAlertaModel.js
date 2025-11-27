@@ -56,11 +56,11 @@ function alertasPorMes(empresa, setor){
     SUM(CASE WHEN MONTH(a.timestamp) = 10 THEN 1 ELSE 0 END) AS Outubro,
     SUM(CASE WHEN MONTH(a.timestamp) = 11 THEN 1 ELSE 0 END) AS Novembro,
     SUM(CASE WHEN MONTH(a.timestamp) = 12 THEN 1 ELSE 0 END) AS Dezembro
-FROM alerta a
-INNER JOIN controlador c ON a.fk_controlador = c.id_controlador
-INNER JOIN setor s ON c.fk_setor = s.id_setor
-WHERE YEAR(a.timestamp) = YEAR(NOW())
-  AND s.id_setor = ${setor}
+    FROM alerta a
+    INNER JOIN controlador c ON a.fk_controlador = c.id_controlador
+    INNER JOIN setor s ON c.fk_setor = s.id_setor
+    WHERE YEAR(a.timestamp) = YEAR(NOW())
+    AND s.id_setor = ${setor}
   AND c.fk_empresa = ${empresa};
     `
 
@@ -72,7 +72,8 @@ function buscarSetoresComAlertasTotal(empresa) {
     SELECT 
         s.id_setor,
         s.nome,
-        COUNT(a.id) AS total_alertas
+        COUNT(a.id) AS total_alertas,
+        SUM(CASE WHEN YEAR(a.timestamp) = YEAR(NOW()) AND MONTH(a.timestamp) = MONTH(NOW()) THEN 1 ELSE 0 END) AS total_alertas_mes_atual
     FROM setor s
     LEFT JOIN controlador c ON s.id_setor = c.fk_setor AND s.fk_empresa = c.fk_empresa
     LEFT JOIN alerta a ON c.id_controlador = a.fk_controlador

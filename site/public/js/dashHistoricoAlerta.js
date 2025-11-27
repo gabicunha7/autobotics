@@ -32,33 +32,37 @@ function buscarSetor() {
 function listarSetores(dados) {
     var tabela = document.getElementById("tabelaSetores");
 
+    console.log("Dados dos setores com alertas:", dados);
+
     dados.forEach(dado => {
         tabela.innerHTML += `<tr onclick="selecionarSetor(${dado.id_setor}, '${dado.nome}')">
                             <td>${dado.nome}</td>
+                            <td>${dado.total_alertas_mes_atual}</td>
                             <td>${dado.total_alertas}</td>
                             <td>80%</td>
                             <td>75%</td>
                             <td>60%</td>
                             </tr>`
     });
+
+    
+    if (dados && dados.length > 0) {
+        var primeiroSetor = dados[0];
+        selecionarSetor(primeiroSetor.id_setor, primeiroSetor.nome);
+    }
 }
 
 
 function selecionarSetor(idSetor, nomeSetor) {
     console.log(`Setor selecionado: ${nomeSetor} (ID: ${idSetor})`);
     
-    
-    var mensagemInicial = document.getElementById("mensagemInicial");
-    var conteudoDados = document.getElementById("conteudoDados");
-    
-    if (mensagemInicial) {
-        mensagemInicial.style.display = "none";
-    }
-    if (conteudoDados) {
-        conteudoDados.style.display = "flex";
-    }
-    
     var empresa = sessionStorage.EMPRESA_USUARIO;
+    
+    
+    var tituloComparacao = document.getElementById("tituloComparacao");
+    if (tituloComparacao) {
+        tituloComparacao.textContent = `Comparação de alertas no setor ${nomeSetor}:`;
+    }
     
     buscarAlertaSetorMesAtual(empresa, idSetor);
     buscarAlertaSetorMesAnterior(empresa, idSetor);
