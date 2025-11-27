@@ -32,5 +32,9 @@ router.post("/componenteComMaisAlertas", function(req, res){
     manutencaoController.componenteComMaisAlertas(req,res);
 });
 
+router.post("/topControladores", function(req, res){
+    manutencaoController.topControladores(req,res);
+});
+
 
 module.exports = router;

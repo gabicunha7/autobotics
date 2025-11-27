@@ -78,6 +78,19 @@ function componenteComMaisAlertas(req, res) {
         });
 }
 
+function topControladores(req, res) {
+    var setor = req.body.setor;
+
+    manutencaoModel.topControladores(setor)
+    .then(function (resultado) {
+            res.status(200).json(resultado);
+        })
+        .catch(function (erro) {
+            console.log("Erro ao buscar o componente com mais alertas hoje no setor:", erro);
+            res.status(500).json(erro);
+        });
+}
+
 
 module.exports = {
     buscarSetor,
@@ -85,5 +98,6 @@ module.exports = {
     buscarNomeSetor,
     buscarNomeControlador,
     totalAlertasNoSetor,
-    componenteComMaisAlertas
+    componenteComMaisAlertas,
+    topControladores
 };

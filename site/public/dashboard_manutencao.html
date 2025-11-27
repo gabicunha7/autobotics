@@ -133,7 +133,7 @@
 
                 <div class="div-grafico-ram-kpi">
                     <div class="div_grafico">
-                        <p>Top 5 Controladores com mais alertas hoje</p>
+                        <p>Controladores com mais alertas no setor (hoje)</p>
                         <canvas id="grafico_alerta"></canvas>
                     </div>
                     <hr>
@@ -163,6 +163,8 @@
 <script src="js/dashManutencao.js"></script>
 
 <script>
+
+    let graficoControladores = null;
 
     const dataAtual = new Date();
     const dia = dataAtual.getDate();
@@ -282,60 +284,63 @@
         }
     });
 
-    const ctx_alerta = document.getElementById('grafico_alerta');
 
-    new Chart(ctx_alerta, {
-        type: 'bar',
-        data: {
-            labels: ['Controlador A', 'Controlador B', 'Controlador C', 'Controlador D', 'Controlador E'],
-            datasets: [{
-                label: 'Quantidade de Alertas',
-                data: [5, 4, 1, 2, 3, 4, 6],
-                borderWidth: 2,
-                backgroundColor: [
-                    '#E91E63',
-                    '#FFB6C1',
-                    '#FF4081',
-                    '#880E4F',
-                    '#C2185B',
+    function criarGraficoTopControladores(controladores, qtdAlertas) {
+        const ctx_alerta = document.getElementById('grafico_alerta');
 
-                ],
-            }
-            ]
-        },
-        options: {
-            scales: {
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Dia',
-                        font: {
-                            size: 18
+        if (graficoControladores !== null) {
+            graficoControladores.destroy();
+        }
+
+        graficoControladores = new Chart(ctx_alerta, {
+            type: 'bar',
+            data: {
+                labels: controladores,
+                datasets: [{
+                    label: 'Quantidade de Alertas',
+                    data: qtdAlertas,
+                    borderWidth: 2,
+                    backgroundColor: [
+                        '#E91E63'
+
+                    ],
+                }
+                ]
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Controladores',
+                            font: {
+                                size: 18
+                            }
+                        },
+                        ticks: {
+                            font: {
+                                size: 16
+                            }
                         }
                     },
-                    ticks: {
-                        font: {
-                            size: 16
-                        }
-                    }
-                },
-                y: {
-                    title: {
-                        display: true,
-                        text: 'Quantidade de Alertas',
-                        font: {
-                            size: 18
-                        }
-                    },
-                    ticks: {
-                        font: {
-                            size: 16
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Quantidade de Alertas',
+                            font: {
+                                size: 18
+                            }
+                        },
+                        ticks: {
+                            font: {
+                                size: 16
+                            }
                         }
                     }
                 }
             }
-        }
-    });
+        });
+    }
 </script>
 
 

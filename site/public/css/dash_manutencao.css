@@ -161,11 +161,19 @@ body {
     margin: 20px;
 }
 
+#grafico_alerta {
+    max-width: 100%;
+    height: 500px !important;
+    margin: 0 auto;
+}
+
+
+
 #grafico_cpu,
 #grafico_ram,
 #grafico_alerta {
     width: 100% !important;
-    height: 290px !important;
+    height: 320px !important;
 }
 
 .kpis {
