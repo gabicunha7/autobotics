@@ -1,38 +1,56 @@
 const AWS = require('aws-sdk');
-
+const { param } = require('../routes/s3Route');
 AWS.config.update({ region: process.env.AWS_REGION });
 const s3 = new AWS.S3();
 
-async function lerArquivo(req, res) {
+async function lerUltimoArquivo(req, res) {
   try {
-    const fileKey = req.params.arquivo;
-
-    if (!/^[\w.\-\/]+$/.test(fileKey)) {
-      return res.status(400).send('❌ Nome de arquivo inválido.');
-    }
-
     const params = {
       Bucket: process.env.S3_BUCKET,
-      Key: "dashboard_historico_disco/jsons/2025-11-26-22-27-11_historico_disco.json"
+      Prefix: "dashboard_historico_disco/jsons/"
     };
 
-    console.log(`📥 Lendo do S3: ${params.Bucket}/${params.Key}`);
+    let ultimoArquivo = false;
+    
+    const listaBuckets = await s3.listObjectsV2(params).promise();
 
-    const data = await s3.getObject(params).promise();
-    const text = data.Body.toString('utf-8').trim();
+    for (let i = 0; i < (listaBuckets.Contents || []).length; i++) {
+      const objetoAtualI = listaBuckets.Contents[i];
+      if (!ultimoArquivo || objetoAtualI.LastModified > ultimoArquivo.LastModified) {
+        ultimoArquivo = objetoAtualI; 
+      }
+    }
 
-    const content = JSON.parse(text);
+    if (!ultimoArquivo) {
+      return res.status(404).json({ error: "arquico não foi encontrado." });
+    }
+
+    console.log(`📥 Último arquivo encontrado: ${ultimoArquivo.Key}`);
+
+    const dadosClient = await s3.getObject({ 
+      Bucket: params.Bucket, 
+      Key: ultimoArquivo.Key 
+    }).promise();
+    
+    const text = dadosClient.Body.toString("utf-8").trim();
+
+    let content;
+    if (text.startsWith("{") || text.startsWith("[")) {
+      content = JSON.parse(text);
+    } else {
+      content = text;
+    }
 
     res.json(content);
   } catch (err) {
-    console.error('❌ Erro ao buscar arquivo:', err.message);
-    res.status(500).send('Erro ao buscar arquivo: ' + err.message);
+      console.error('❌ Erro ao buscar arquivo:', err.message);
+      res.status(500).send('Erro ao buscar arquivo: ' + err.message);
   }
 }
 
 
 module.exports = {
-  lerArquivo,
+  lerUltimoArquivo
 };
 
 

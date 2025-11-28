@@ -353,10 +353,21 @@ async function carregarUltimoJson() {
     const data = await resposta.json();
 
     console.log("ultimo JSON do bucket:", data);
+    criticoDoSetor(data);
 
   } catch (err) {
     res.status(500).json({ error: "Erro ao buscar último arquivo", message: err.message });
   }
 }
 
-carregarUltimoJson();
+ function criticoDoSetor(dados){
+    do{
+        select_controlador = document.getElementById("slc_controlador");
+        select_index = select_setor.selectedIndex;
+        varSetor = select_controlador.options[select_index].value;
+    }while(varSetor == undefined);
+    console.log(varSetor);
+
+    varPorcentagem = document.getElementById("porc-media-setor");
+
+}
