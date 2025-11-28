@@ -4,6 +4,8 @@ var grafico_alertas = null;
 var alertasMesAtual = 0;
 var alertasMesAnterior = 0;
 
+var dadosS3 = {};
+
 function buscarSetor() {
     fetch("/historicoAlerta/buscarSetoresComAlertasTotal", {
         method: "POST",
@@ -34,14 +36,18 @@ function listarSetores(dados) {
 
     console.log("Dados dos setores com alertas:", dados);
 
-    dados.forEach(dado => {
+    const dadosJson = JSON.parse(sessionStorage.JSON_ALERTA);
+
+    
+    dados.forEach(dado => {        
+
         tabela.innerHTML += `<tr onclick="selecionarSetor(${dado.id_setor}, '${dado.nome}')">
                             <td>${dado.nome}</td>
                             <td>${dado.total_alertas_mes_atual}</td>
                             <td>${dado.total_alertas}</td>
-                            <td>80%</td>
-                            <td>75%</td>
-                            <td>60%</td>
+                            <td>${dadosJson[dado.nome].cpu + "%"}</td>
+                            <td>${dadosJson[dado.nome].ram + "%"}</td>
+                            <td>${dadosJson[dado.nome].disco + "%"}</td>
                             </tr>`
     });
 
@@ -70,6 +76,42 @@ function selecionarSetor(idSetor, nomeSetor) {
     
     buscarAlertasGrafico(empresa, idSetor);
 }
+
+async function lerJsonS3() {
+  try {
+    const resposta = await fetch('/s3RouteHistoricoAlerta/dados/ultimo');
+    const texto = await resposta.text();
+
+    if (!resposta.ok) {
+      console.error('Erro na requisição /s3RouteHistoricoAlerta/dados/ultimo', resposta.status, texto);
+      const msgEl = document.getElementById('erroBuscaS3');
+      if (msgEl) msgEl.textContent = 'Erro do servidor ao buscar dados: ' + (texto || resposta.status);
+      return null;
+    }
+
+    let data;
+    try {
+      data = JSON.parse(texto);
+    } catch (e) {
+      console.warn('Resposta não é JSON, usando texto:', texto);
+      data = texto;
+    }
+
+    console.log('ultimo JSON do bucket (histórico de alertas):', data);
+    
+    sessionStorage.JSON_ALERTA = JSON.stringify(data);
+    
+    
+    return data;
+
+  } catch (err) {
+    console.error('Erro ao buscar último arquivo do S3:', err);
+    const msgEl = document.getElementById('erroBuscaS3');
+    if (msgEl) msgEl.textContent = 'Falha ao buscar dados do S3: ' + (err.message || err);
+    return null;
+  }
+}
+
 
 function buscarAlertaSetorMesAtual(varEmpresa, varSetor) {
     fetch("/historicoAlerta/alertaSetorMesAtual", {
@@ -306,3 +348,4 @@ function exibirComponenteMaisAlertas(dados){
 
 
 buscarSetor();
+lerJsonS3();
