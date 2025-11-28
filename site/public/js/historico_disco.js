@@ -51,6 +51,7 @@ $('#slc_setor').on('change', function () {
 
 $('#slc_controlador').on('change', function () {
     previsaoCritico();
+    buscarCriticoSetor();
 });
 
 $('#slc_controlador').select2({language: {
@@ -343,7 +344,7 @@ function trocarGrafico(dados) {
                         regressao: {
                             type: 'line',
                             yMin: jsonData[i].coeficientes[1],
-                            yMax: jsonData[i].coeficientes[1] + (jsonData[i].coeficientes[0]),
+                            yMax: jsonData[i].coeficientes[1] + (jsonData[i].coeficientes[0] * jsonData[i].mudaCadaData[5]),
                             borderColor: 'purple',
                             borderWidth: 2
                         },                        
