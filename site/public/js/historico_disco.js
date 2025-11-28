@@ -277,23 +277,32 @@ function buscarCriticoSetor() {
 }
 
 function trocarGrafico(dados) {
+    const jsonData = JSON.parse(sessionStorage.JSON_DISCO);
+
+    select_controlador = document.getElementById("slc_controlador");
+    campoCritico = document.getElementById("previsao-critico");
+    select_index = select_controlador.selectedIndex;
+    varControlador = select_controlador.options[select_index].value;
+
+    for(i = 0; i < jsonData.length; i++){
+        if(jsonData[i].codigo == varControlador){
+            break;
+        }
+    }
+
     if(graficoHistorico != null){
         graficoHistorico.destroy();
     }
+
     graficoHistorico = new Chart(ctx_historico, {
         type: 'line',
         data: {
-            labels: ['julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'],
+            labels: jsonData[i].datas,
             datasets: [{
                 label: 'Último dado uso de disco',
-                data: valores_grafico_historico, 
+                data: jsonData[i].medias, 
                 borderWidth: 2,
                 borderColor: '#4c5caf'
-            },{
-                label: 'regressão',
-                data: valores_grafico_historico, 
-                borderWidth: 2,
-                borderColor: 'purple'
             }
         ]
         },
@@ -333,8 +342,8 @@ function trocarGrafico(dados) {
                     annotations: {
                         regressao: {
                             type: 'line',
-                            yMin: Math.min(...valores_grafico_historico),
-                            yMax: 87,
+                            yMin: jsonData[i].coeficientes[1],
+                            yMax: jsonData[i].coeficientes[1] + (jsonData[i].coeficientes[0]),
                             borderColor: 'purple',
                             borderWidth: 2
                         },                        
