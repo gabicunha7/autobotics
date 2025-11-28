@@ -20,10 +20,6 @@ router.post("/buscarNomeControlador", function(req, res){
     manutencaoController.buscarNomeControlador(req,res);
 });
 
-router.post("/buscarNomeControlador", function(req, res){
-    manutencaoController.buscarNomeControlador(req,res);
-});
-
 router.post("/totalAlertasNoSetor", function(req, res){
     manutencaoController.totalAlertasNoSetor(req,res);
 });
@@ -34,6 +30,10 @@ router.post("/componenteComMaisAlertas", function(req, res){
 
 router.post("/topControladores", function(req, res){
     manutencaoController.topControladores(req,res);
+});
+
+router.post("/qtdAlertasPorNivelNaSemana", function(req, res){
+    manutencaoController.qtdAlertasPorNivelNaSemana(req,res);
 });
 
 

@@ -91,6 +91,19 @@ function topControladores(req, res) {
         });
 }
 
+function qtdAlertasPorNivelNaSemana(req, res) {
+    var setor = req.body.setor;
+
+    manutencaoModel.qtdAlertasPorNivelNaSemana(setor)
+    .then(function (resultado) {
+            res.status(200).json(resultado);
+        })
+        .catch(function (erro) {
+            console.log("Erro ao buscar a quantidade de alertas por nível (na semana):", erro);
+            res.status(500).json(erro);
+        });
+}
+
 
 module.exports = {
     buscarSetor,
@@ -99,5 +112,6 @@ module.exports = {
     buscarNomeControlador,
     totalAlertasNoSetor,
     componenteComMaisAlertas,
-    topControladores
+    topControladores,
+    qtdAlertasPorNivelNaSemana
 };

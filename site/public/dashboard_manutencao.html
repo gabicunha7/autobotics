@@ -12,8 +12,6 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-    <script src="js/rotaDash.js"></script>
 </head>
 
 <body onload="buscarSetor()">
@@ -113,7 +111,7 @@
                 <div class="div-grafico-cpu-alertas">
                     <div class="div_grafico">
                         <p>Quantidade de alertas por nivel (na semana)</p>
-                        <canvas id="grafico_cpu"></canvas>
+                        <canvas id="grafico_qtd_alerta_nivel"></canvas>
                     </div>
 
                     <div class="div_grafico">
@@ -165,6 +163,7 @@
 <script>
 
     let graficoControladores = null;
+    let graficoAlertasNivel = null;
 
     const dataAtual = new Date();
     const dia = dataAtual.getDate();
@@ -178,58 +177,65 @@
     document.getElementById("email-usuario").innerHTML = sessionStorage.EMAIL_USUARIO;
 
 
-    const ctx_cpu = document.getElementById('grafico_cpu');
+    function criarGraficoAlertasPorNivel(dataALerta, alertasMedios, alertasCriticos) {
+        const ctx_cpu = document.getElementById('grafico_qtd_alerta_nivel');
 
-    new Chart(ctx_cpu, {
-        type: 'line',
-        data: {
-            labels: ['25/09/25', '26/09/25', '27/09/25', '28/09/25', '29/09/25', '30/09/25', '01/10/25'],
-            datasets: [{
-                label: 'Nível Médio (60% a 85%)',
-                data: [64, 61, 82, 68, 72, 76, 77], // linha fixa
-                borderWidth: 3,
-                borderColor: '#e6ac00'
-            },
-            {
-                label: 'Nível Crítico (>85%)',
-                data: [89, 88, 93, 86, 90, 87, 90], // linha fixa
-                borderWidth: 3,
-                borderColor: '#E71831'
-            }]
-        },
-        options: {
-            scales: {
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Dia',
-                        font: {
-                            size: 18
-                        }
-                    },
-                    ticks: {
-                        font: {
-                            size: 16
-                        }
-                    }
+        if (graficoAlertasNivel !== null) {
+            graficoAlertasNivel.destroy();
+        }
+
+
+        graficoAlertasNivel = new Chart(ctx_cpu, {
+            type: 'line',
+            data: {
+                labels: dataALerta,
+                datasets: [{
+                    label: 'Nível Médio',
+                    data: alertasMedios, // linha fixa
+                    borderWidth: 3,
+                    borderColor: '#e6ac00'
                 },
-                y: {
-                    title: {
-                        display: true,
-                        text: 'Uso em porcentagem',
-                        font: {
-                            size: 18
+                {
+                    label: 'Nível Crítico',
+                    data: alertasCriticos, // linha fixa
+                    borderWidth: 3,
+                    borderColor: '#E71831'
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Dia',
+                            font: {
+                                size: 18
+                            }
+                        },
+                        ticks: {
+                            font: {
+                                size: 16
+                            }
                         }
                     },
-                    ticks: {
-                        font: {
-                            size: 16
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Uso em porcentagem',
+                            font: {
+                                size: 18
+                            }
+                        },
+                        ticks: {
+                            font: {
+                                size: 16
+                            }
                         }
                     }
                 }
             }
-        }
-    });
+        });
+    }
 
     const ctx_ram = document.getElementById('grafico_ram');
 

@@ -55,6 +55,30 @@ function topControladores(setor){
     return database.executar(sql)
 }
 
+function qtdAlertasPorNivelNaSemana(controlador){
+    var sql = `SELECT
+    c.numero_serial AS nome_controlador,
+    DATE(a.timestamp) AS data_alerta,
+    SUM(CASE WHEN a.criticidade = 1 THEN 1 ELSE 0 END) AS qtd_nivel_medio,
+    SUM(CASE WHEN a.criticidade = 2 THEN 1 ELSE 0 END) AS qtd_nivel_critico
+    FROM
+        alerta AS a
+    INNER JOIN
+        controlador AS c ON a.fk_controlador = c.id_controlador
+    WHERE
+        a.timestamp BETWEEN DATE_SUB(NOW(), INTERVAL 7 DAY) AND NOW()
+        AND c.id_controlador = ${controlador} 
+    GROUP BY
+        c.numero_serial,
+        c.id_controlador,
+        data_alerta
+    ORDER BY
+        data_alerta,
+        c.numero_serial;
+    `
+    return database.executar(sql)
+}
+
 module.exports = {
     buscarSetor,
     buscarSerial,
@@ -62,5 +86,6 @@ module.exports = {
     buscarNomeControlador,
     totalAlertasNoSetor,
     componenteComMaisAlertas,
-    topControladores
+    topControladores,
+    qtdAlertasPorNivelNaSemana
 }

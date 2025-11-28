@@ -12,6 +12,8 @@ $('#slc_setor').on('change', function () {
     componenteComMaisAlertas();
     totalAlertasNoSetor();
     listarComponenteAlertas();
+    qtdAlertasPorNivelNaSemana();
+    exibirGraficosAlertasPorNivel();
     topControladores();
     exibirGraficoControladoresAlertas();
 });
@@ -19,6 +21,7 @@ $('#slc_setor').on('change', function () {
 
 $('#slc_controlador').on('change', function () {
     buscarNomeControlador();
+    qtdAlertasPorNivelNaSemana();
 });
 
 
@@ -65,11 +68,22 @@ function listarSetores(dados) {
     dados.forEach(dado => {
         select_setor.innerHTML += `<option value="${dado.id_setor}">${dado.nome}</option>`;
     });
+
+    $('#slc_setor').select2({
+        language: {
+            noResults: function () {
+                return "nenhum setor encontrado";
+            }
+        }
+    });
+
     buscarSerial()
+    exibirGraficoControladoresAlertas()
     totalAlertasNoSetor()
     componenteComMaisAlertas()
     topControladores()
 }
+
 
 function buscarSerial() {
     select_setor = document.getElementById("slc_setor");
@@ -140,8 +154,6 @@ function buscarNomeControlador() {
     select_index = select_controlador.selectedIndex;
     varSetor = select_controlador.options[select_index].value;
 
-
-
     fetch("/manutencao/buscarNomeControlador", {
         method: "POST",
         headers: {
@@ -175,6 +187,8 @@ function listarNumSeriais(dados) {
         select_controlador.innerHTML += `<option value="${dado.numero_serial}">${dado.numero_serial}</option>`;
     });
     buscarNomeControlador();
+    exibirGraficoControladoresAlertas();
+    qtdAlertasPorNivelNaSemana()
 }
 
 function mudarNomeSetor(dado) {
@@ -323,4 +337,59 @@ function exibirGraficoControladoresAlertas(dado) {
     }
 
     criarGraficoTopControladores(controladores, qtdAlertas);
+}
+
+// Gráfico de quantidade de alertas por nível na semana
+
+function qtdAlertasPorNivelNaSemana() {
+    select_controlador = document.getElementById("slc_controlador");
+    select_index = select_controlador.selectedIndex;
+    varSetor = select_controlador.options[select_index].value;
+
+    fetch("/manutencao/qtdAlertasPorNivelNaSemana", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            setor: varSetor,
+
+        })
+    })
+        .then(resposta => {
+            if (resposta.ok) {
+                return resposta.json();
+            } else {
+                throw "Erro ao quantidade de alertas por nível";
+            }
+        })
+        .then(dados => {
+            exibirGraficosAlertasPorNivel(dados);
+        })
+        .catch(erro => {
+            console.error(erro);
+        });
+}
+
+function exibirGraficosAlertasPorNivel(dado) {
+    console.log("Quantidade de alertas por nível (na semana):", dado);
+
+    dataAlertasFormatadas = [];
+    alertasMedios = [];
+    alertasCriticos = [];
+
+    if (!Array.isArray(dado) || dado.length === 0) {
+        dataAlertasFormatadas = [];
+        alertasMedios = [];
+        alertasCriticos = [];
+    } else {
+        for (let i = 0; i < dado.length; i++) {
+            const dataOriginal = new Date(dado[i].data_alerta);
+            dataAlertasFormatadas[i] = dataOriginal.toLocaleDateString('pt-BR');
+
+            alertasMedios[i] = dado[i].qtd_nivel_medio;
+            alertasCriticos[i] = dado[i].qtd_nivel_critico;
+        }
+    }
+    criarGraficoAlertasPorNivel(dataAlertasFormatadas, alertasMedios, alertasCriticos);
 }
