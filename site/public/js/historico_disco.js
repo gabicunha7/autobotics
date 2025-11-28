@@ -10,7 +10,10 @@ const dia = dataAtual.getDate();
 const mes = dataAtual.getMonth() + 1; 
 const ano = dataAtual.getFullYear();
 document.getElementById("data_atual").innerHTML = `Data: ${dia}/${mes}/${ano}`;
-valores_grafico_historico = [50,60,62,68,75,77];
+const meses_texto = [
+  "janeiro", "fevereiro", "março", "abril", "maio", "junho",
+  "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"
+];
 if (overlay_element) overlay_element.addEventListener('click', fecharTodosPopups);
 
 function fecharTodosPopups(){
@@ -114,7 +117,6 @@ function listarSetores(dados) {
     buscarSerial()
     buscarAlertasSemana()
     buscarQtdDiscosAlerta()
-    listarStatusControladores()
 }
 
 function buscarSerial() {
@@ -156,6 +158,7 @@ function listarNumSeriais(dados) {
         select_controlador.innerHTML += `<option value="${dado.numero_serial}">${dado.numero_serial}</option>`;
     });
     previsaoCritico()
+    listarStatusControladores()
 }
 
 
@@ -299,14 +302,21 @@ function trocarGrafico(dados) {
 
     if(graficoHistorico != null){
         graficoHistorico.destroy();
-    }
+    } 
+
+    meses = []
+    
+    jsonData[i].datas.forEach(e => {
+        e = new Date(e)
+        meses.push(meses_texto[e.getMonth()])
+    });
 
     graficoHistorico = new Chart(ctx_historico, {
         type: 'line',
         data: {
-            labels: jsonData[i].datas,
+            labels: meses,
             datasets: [{
-                label: 'Último dado uso de disco',
+                label: 'Média do uso de disco no mês',
                 data: jsonData[i].medias, 
                 borderWidth: 2,
                 borderColor: '#4c5caf'
