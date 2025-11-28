@@ -47,7 +47,6 @@ $('#slc_setor').on('change', function () {
     buscarAlertasSemana();
     buscarQtdDiscosAlerta();
     criticoDoSetor();
-    previsaoCritico();
 });
 
 $('#slc_controlador').on('change', function () {
@@ -151,6 +150,7 @@ function listarNumSeriais(dados) {
     dados.forEach(dado => {
         select_controlador.innerHTML += `<option value="${dado.numero_serial}">${dado.numero_serial}</option>`;
     });
+    previsaoCritico()
 }
 
 
