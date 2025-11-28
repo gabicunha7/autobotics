@@ -176,7 +176,7 @@ body {
     height: 320px !important;
 }
 
-.kpis {
+#kpis {
     display: flex;
 
     .container-content {
@@ -199,7 +199,6 @@ body {
     font-size: 1.5rem;
     width: 15vw;
     height: 22vh;
-    background-color: white;
     margin: 20px;
     padding: 30px;
     align-items: center;
