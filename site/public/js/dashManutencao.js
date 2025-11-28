@@ -76,7 +76,7 @@ function listarSetores(dados) {
             }
         }
     });
-
+    listarAlertasNoSetor()
     buscarSerial()
     exibirGraficoControladoresAlertas()
     totalAlertasNoSetor()
@@ -238,12 +238,24 @@ function totalAlertasNoSetor() {
 
 function listarAlertasNoSetor(dado) {
     totalAlertas = document.getElementById("total-alertas-hoje");
+    divKpis = document.getElementById("kpis");
+    corKpi = ""
+
     console.log("Dado: " + dado)
     if (typeof dado != "object") {
         totalAlertas.innerHTML = 0;
     } else {
+        if (dado[0].total_alertas > 10) {
+            corKpi = "#e6ac00"
+        } else if (dado[0].total_alertas > 30) {
+            corKpi = "#E71831"
+        } else{
+            corKpi = "#4CAF50"
+        }
         totalAlertas.innerHTML = dado[0].total_alertas;
     }
+
+    trocaCorKpiAlertas(corKpi);
 }
 
 //KPI de componente de controlador com mais alertas no setor (hoje)
@@ -393,3 +405,4 @@ function exibirGraficosAlertasPorNivel(dado) {
     }
     criarGraficoAlertasPorNivel(dataAlertasFormatadas, alertasMedios, alertasCriticos);
 }
+

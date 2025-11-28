@@ -136,7 +136,7 @@
                         <canvas id="grafico_alerta"></canvas>
                     </div>
                     <hr>
-                    <div class="kpis">
+                    <div id="kpis">
                         <div class="kpi_dashboard" id="total-alertas">
                             <h3>Total de alertas (hoje): </h3>
                             <p id="total-alertas-hoje" class="total-alertas"></p>
@@ -347,6 +347,13 @@
                 }
             }
         });
+    }
+
+    function trocaCorKpiAlertas(cor){
+        kpiQtdAlerta = document.getElementById("total-alertas");
+
+        kpiQtdAlerta.style.backgroundColor = cor;
+
     }
 </script>
 
