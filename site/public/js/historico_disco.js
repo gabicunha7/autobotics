@@ -46,6 +46,12 @@ $('#slc_setor').on('change', function () {
     buscarSerial();
     buscarAlertasSemana();
     buscarQtdDiscosAlerta();
+    criticoDoSetor();
+    previsaoCritico();
+});
+
+$('#slc_controlador').on('change', function () {
+    previsaoCritico();
 });
 
 $('#slc_controlador').select2({language: {
@@ -353,21 +359,45 @@ async function carregarUltimoJson() {
     const data = await resposta.json();
 
     console.log("ultimo JSON do bucket:", data);
-    criticoDoSetor(data);
+    sessionStorage.JSON_DISCO = JSON.stringify(data);
+    criticoDoSetor()
+    previsaoCritico()
 
   } catch (err) {
     res.status(500).json({ error: "Erro ao buscar último arquivo", message: err.message });
   }
 }
 
- function criticoDoSetor(dados){
-    do{
-        select_controlador = document.getElementById("slc_controlador");
-        select_index = select_setor.selectedIndex;
-        varSetor = select_controlador.options[select_index].value;
-    }while(varSetor == undefined);
-    console.log(varSetor);
+ function criticoDoSetor(){
+    const dados = JSON.parse(sessionStorage.JSON_DISCO);
+
+    select_setor = document.getElementById("slc_setor");
+    select_index = select_setor.selectedIndex;
+    varSetor = select_setor.options[select_index].value;
+    mediaSetor = null;
 
     varPorcentagem = document.getElementById("porc-media-setor");
 
+    do{
+        mediaSetor = dados[0].mediaSetor[varSetor];
+    }while(mediaSetor == null);
+
+    varPorcentagem.innerHTML = mediaSetor;
+}
+
+function previsaoCritico(){
+    const dados = JSON.parse(sessionStorage.JSON_DISCO);
+
+    select_controlador = document.getElementById("slc_controlador");
+    campoCritico = document.getElementById("previsao-critico");
+    select_index = select_controlador.selectedIndex;
+    varControlador = select_controlador.options[select_index].value;
+
+    for(i = 0; i < dados.length; i++){
+        if(dados[i].codigo == varControlador){
+            break;
+        }
+    }
+
+    campoCritico.innerHTML = dados[i].dataCritica
 }
