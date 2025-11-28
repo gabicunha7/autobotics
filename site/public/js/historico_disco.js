@@ -3,6 +3,8 @@ document.getElementById("nome-usuario").innerHTML = sessionStorage.NOME_USUARIO;
 document.getElementById("email-usuario").innerHTML = sessionStorage.EMAIL_USUARIO;
 ctx_historico = document.getElementById('grafico_historico');    
 graficoHistorico = null
+setorCRITICO = null;
+setorMEDIO = null;
 const dataAtual = new Date();
 const dia = dataAtual.getDate();
 const mes = dataAtual.getMonth() + 1; 
@@ -47,6 +49,7 @@ $('#slc_setor').on('change', function () {
     buscarAlertasSemana();
     buscarQtdDiscosAlerta();
     criticoDoSetor();
+    listarStatusControladores()
 });
 
 $('#slc_controlador').on('change', function () {
@@ -111,6 +114,7 @@ function listarSetores(dados) {
     buscarSerial()
     buscarAlertasSemana()
     buscarQtdDiscosAlerta()
+    listarStatusControladores()
 }
 
 function buscarSerial() {
@@ -270,6 +274,8 @@ function buscarCriticoSetor() {
         }
     })
     .then(dados => {
+        setorCRITICO = dados[0].valor
+        setorMEDIO = dados[1].valor
         trocarGrafico(dados); 
     })
     .catch(erro => {
@@ -372,6 +378,8 @@ async function carregarUltimoJson() {
     sessionStorage.JSON_DISCO = JSON.stringify(data);
     criticoDoSetor()
     previsaoCritico()
+    buscarCriticoSetor();
+
 
   } catch (err) {
     res.status(500).json({ error: "Erro ao buscar último arquivo", message: err.message });
@@ -410,4 +418,49 @@ function previsaoCritico(){
     }
 
     campoCritico.innerHTML = dados[i].dataCritica
+}
+
+function listarStatusControladores() {
+    const dados = JSON.parse(sessionStorage.JSON_DISCO);
+
+    select_setor = document.getElementById("slc_setor");
+    select_index = select_setor.selectedIndex;
+    varSetor = select_setor.options[select_index].value;
+
+    const tabela = document.getElementById('controlador-table');
+    tabela.innerHTML = "";
+
+    tabela.innerHTML = `<tr>
+                            <th>Número Serial</th>
+                            <th>Previsão</th>
+                            <th>Status</th>
+                            <th>Visualizar</th>
+                        </tr>
+                        `;
+
+    for(i = 0; i < dados.length; i++){
+        if(varSetor == dados[i].idSetor){
+            if(dados[i].medias[5] >= setorCRITICO){
+                status_alerta = '<p style="background-color: #ff3f2e!important;border-radius: 10px;">Crítico</p>'
+            }else if(dados[i].medias[5] >= setorMEDIO){
+                status_alerta = '<p style="background-color: #e6ac00!important;border-radius: 10px;">Médio</p>' 
+            }else{
+                status_alerta = '<p style="background-color: #4CAF50!important;border-radius: 10px;">Estável</p>' 
+            }
+            tabela.innerHTML += `
+                                <tr>
+                                    <td>${dados[i].codigo}</td>
+                                    <td>${dados[i].quantoFalta}</td>
+                                    <td>${status_alerta}</td>
+                                    <td onclick=""><img src="assets/icones/dashboard.png"></td>
+                                </tr>`;
+        }
+    }
+}
+
+function mudarValorSelect(codigo){
+    select_controlador = document.getElementById("slc_controlador");
+    select_controlador.selectedIndex
+
+    varControlador.innerHTML = codigo;
 }

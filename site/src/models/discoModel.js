@@ -48,7 +48,7 @@ function buscarCriticoSetor(setor){
                 inner join parametro p
                     on c.id_componente = p.fk_componente
                 where s.id_setor = ${setor} and c.nome = "Disco"
-                and criticidade = 2;
+                order by criticidade desc;
                 `
     return database.executar(sql)
 }
