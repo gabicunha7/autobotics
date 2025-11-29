@@ -474,3 +474,16 @@ function mudarValorSelect(codigo){
 
     varControlador.innerHTML = codigo;
 }
+
+function calculaRquad(){
+    const dados = JSON.parse(sessionStorage.JSON_DISCO);
+
+    select_controlador = document.getElementById("slc_controlador");
+    select_index = select_controlador.selectedIndex;
+    varControlador = select_controlador.options[select_index].value;
+
+    
+
+
+
+}
