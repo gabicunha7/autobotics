@@ -1,3 +1,11 @@
+(async function initJsonS3() {
+    console.log("Carregando JSON do S3...");
+    await criarVariavelJsonS3();
+    console.log("JSON S3 pronto.");
+})();
+
+let meuJsonRecebido = null;
+
 $('#slc_setor').select2({
     language: {
         noResults: function () {
@@ -22,6 +30,7 @@ $('#slc_setor').on('change', function () {
 $('#slc_controlador').on('change', function () {
     buscarNomeControlador();
     qtdAlertasPorNivelNaSemana();
+    exibirPicoMediaComponente();
 });
 
 
@@ -31,6 +40,11 @@ $('#slc_controlador').select2({
             return "nenhum controlador encontrado";
         }
     }
+});
+
+$('#slc_componente').on('change', function () {
+    exibirPicoMediaComponente();
+    buscarNomeControlador();
 });
 
 function buscarSetor() {
@@ -249,7 +263,7 @@ function listarAlertasNoSetor(dado) {
             corKpi = "#e6ac00"
         } else if (dado[0].total_alertas > 30) {
             corKpi = "#E71831"
-        } else{
+        } else {
             corKpi = "#4CAF50"
         }
         totalAlertas.innerHTML = dado[0].total_alertas;
@@ -405,4 +419,81 @@ function exibirGraficosAlertasPorNivel(dado) {
     }
     criarGraficoAlertasPorNivel(dataAlertasFormatadas, alertasMedios, alertasCriticos);
 }
+
+//Gráfico de Pico e Média de uso do "Componente" (na semana)
+
+//Primeiro faço a conexão do s3
+async function carregarUltimoJson() {
+    try {
+        const resposta = await fetch(`/s3RouteManutencao/dados/ultimo`);
+        const data = await resposta.json();
+
+        console.log("ultimo JSON do bucket:", data);
+        sessionStorage.JSON_DISCO = JSON.stringify(data);
+
+        return data;
+
+    } catch (err) {
+        res.status(500).json({ error: "Erro ao buscar último arquivo", message: err.message });
+    }
+}
+
+async function criarVariavelJsonS3() {
+    meuJsonRecebido = await carregarUltimoJson();
+
+    console.log("Json recebido:" + meuJsonRecebido.mediaRam["0010"])
+    exibirPicoMediaComponente();
+}
+
+function exibirPicoMediaComponente() {
+    if (!meuJsonRecebido) {
+        console.warn("JSON ainda não carregado.");
+        return;
+    }
+
+    select_componente = document.getElementById("slc_componente");
+    select_index = select_componente.selectedIndex;
+    varComponente = select_componente.options[select_index].value;
+
+    select_controlador = document.getElementById("slc_controlador");
+    select_index = select_controlador.selectedIndex;
+    varControlador = select_controlador.options[select_index].value;
+
+    nomeComponente = document.getElementById("nome-componente")
+
+    console.log("Controlador selecionado:", varControlador);
+
+    if (!varControlador) {
+        console.warn("Nenhum controlador selecionado.");
+        return;
+    }
+
+    dias = [];
+
+    for (let i = 6; i >= 0; i--) {
+        let dia = new Date();
+        dia.setDate(dia.getDate() - i);
+        dias.push(dia.toLocaleDateString("pt-BR"));
+    }
+
+    console.log(dias)
+
+    media = [];
+    pico = [];
+
+    if (varComponente === "RAM") {
+        media = meuJsonRecebido.mediaRam[varControlador];
+        pico = meuJsonRecebido.picoRam[varControlador];
+        nomeComponente.innerHTML = varComponente
+
+    } else if (varComponente === "CPU") {
+        media = meuJsonRecebido.mediaCpu[varControlador];
+        pico = meuJsonRecebido.picoCpu[varControlador];
+        nomeComponente.innerHTML = varComponente
+    }
+
+    criarGraficoPicoMediaComponente(media, pico, dias)
+}
+
+
 

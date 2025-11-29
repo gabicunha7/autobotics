@@ -79,6 +79,7 @@ function qtdAlertasPorNivelNaSemana(controlador){
     return database.executar(sql)
 }
 
+
 module.exports = {
     buscarSetor,
     buscarSerial,

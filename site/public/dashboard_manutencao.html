@@ -111,19 +111,19 @@
 
                 <div class="div-grafico-cpu-alertas">
                     <div class="div_grafico">
-                        <p>Quantidade de alertas por nivel (na semana)</p>
+                        <p>Quantidade de alertas diário por criticidade (na semana)</p>
                         <canvas id="grafico_qtd_alerta_nivel"></canvas>
                     </div>
 
                     <div class="div_grafico">
-                        <p>Picos e Média de uso de "Componente" (na semana)</p>
-                        <canvas id="grafico_ram"></canvas>
+                        <p>Picos e Médias de uso de <span id="nome-componente">"Componente"</span> diário (na semana)</p>
+                        <canvas id="grafico_picos_medias"></canvas>
                     </div>
                     <div class="div-controlador">
                         <h1>Controlador:</h1>
                         <h1 id="nome-controlador"></h1>
                         <p>Escolha o componente:</p>
-                        <select name="Controlador" id="">
+                        <select name="Controlador" id="slc_componente">
                             <option value="RAM">RAM</option>
                             <option value="CPU">CPU</option>
                         </select>
@@ -165,6 +165,7 @@
 
     let graficoControladores = null;
     let graficoAlertasNivel = null;
+    let graficoPicoMedia = null;
 
     const dataAtual = new Date();
     const dia = dataAtual.getDate();
@@ -222,7 +223,7 @@
                     y: {
                         title: {
                             display: true,
-                            text: 'Uso em porcentagem',
+                            text: 'Quantidade de Alertas',
                             font: {
                                 size: 18
                             }
@@ -238,59 +239,64 @@
         });
     }
 
-    const ctx_ram = document.getElementById('grafico_ram');
+    function criarGraficoPicoMediaComponente(media, pico, dias) {
+        const ctx_ram = document.getElementById('grafico_picos_medias');
 
-    new Chart(ctx_ram, {
-        type: 'line',
-        data: {
-            labels: ['25/09/25', '26/09/25', '27/09/25', '28/09/25', '29/09/25', '30/09/25', '01/10/25'],
-            datasets: [{
-                label: 'Média de Uso',
-                data: [54, 67, 64, 59, 61, 69, 65], // linha fixa
-                borderWidth: 3,
-                borderColor: 'Grey'
-            },
-            {
-                label: 'Pico de Uso',
-                data: [90, 90, 91, 89, 89, 90, 90], // linha fixa
-                borderWidth: 3,
-                borderColor: '#890B59'
-            }]
-        },
-        options: {
-            scales: {
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Dia',
-                        font: {
-                            size: 18
-                        }
-                    },
-                    ticks: {
-                        font: {
-                            size: 16
-                        }
-                    }
+        if (graficoPicoMedia !== null) {
+            graficoPicoMedia.destroy();
+        }
+
+        graficoPicoMedia = new Chart(ctx_ram, {
+            type: 'line',
+            data: {
+                labels: dias,
+                datasets: [{
+                    label: 'Média de Uso',
+                    data: media,
+                    borderWidth: 3,
+                    borderColor: 'Grey'
                 },
-                y: {
-                    title: {
-                        display: true,
-                        text: 'Uso em porcentagem',
-                        font: {
-                            size: 18
+                {
+                    label: 'Pico de Uso',
+                    data: pico,
+                    borderWidth: 3,
+                    borderColor: '#890B59'
+                }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Dia',
+                            font: {
+                                size: 18
+                            }
+                        },
+                        ticks: {
+                            font: {
+                                size: 16
+                            }
                         }
                     },
-                    ticks: {
-                        font: {
-                            size: 16
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Uso em porcentagem',
+                            font: {
+                                size: 18
+                            }
+                        },
+                        ticks: {
+                            font: {
+                                size: 16
+                            }
                         }
                     }
                 }
             }
-        }
-    });
-
+        });
+    }
 
     function criarGraficoTopControladores(controladores, qtdAlertas) {
         const ctx_alerta = document.getElementById('grafico_alerta');
@@ -349,7 +355,7 @@
         });
     }
 
-    function trocaCorKpiAlertas(cor){
+    function trocaCorKpiAlertas(cor) {
         kpiQtdAlerta = document.getElementById("total-alertas");
 
         kpiQtdAlerta.style.backgroundColor = cor;

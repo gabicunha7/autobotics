@@ -35,6 +35,7 @@ var manutencaoRouter = require("./src/routes/manutencao")
 var historicoAlertasRouter = require("./src/routes/historicoAlerta")
 var s3Router = require("./src/routes/s3Route")
 var s3RouteHistoricoAlerta = require("./src/routes/s3RouteHistoricoAlerta")
+var s3RouteManutencao = require("./src/routes/s3RouteManutencao")
 
 
 app.use(express.json());
@@ -57,6 +58,7 @@ app.use("/manutencao", manutencaoRouter)
 app.use("/historicoAlerta", historicoAlertasRouter);
 app.use("/s3Route", s3Router);
 app.use("/s3RouteHistoricoAlerta", s3RouteHistoricoAlerta);
+app.use("/s3RouteManutencao", s3RouteManutencao)
 
 
 
