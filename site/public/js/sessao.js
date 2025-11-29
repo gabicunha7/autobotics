@@ -22,6 +22,11 @@ function aguardar() {
     divAguardar.style.display = "flex";
 }
 
+function acabouAguardar(){
+    var divAguardar = document.getElementById("div_aguardar");
+    divAguardar.style.display = "none";
+}
+
 function finalizarAguardar(texto) {
     var divAguardar = document.getElementById("div_aguardar");
     divAguardar.style.display = "none";

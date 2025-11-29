@@ -16,9 +16,11 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.1.0"></script>
 
     <script src="js/rotaDash.js"></script>
+    <script src="js/sessao.js"></script>
+
 </head>
 
-<body onload="buscarSetor(), carregarUltimoJson()">
+<body onload="carregarUltimoJson()">
     <aside>
 
         <section>
@@ -167,10 +169,17 @@
         </div>
     </section>
 
+    
+        <div id="div_aguardar" class="loading-div">
+            <img src="assets\logo\LOGO_CURTA.png" alt="Icone logo aguardar">
+            <div class="borda_aguardar"></div>
+        </div>
+
 </body>
 
 <div id="overlay"></div>
 <script src="js/historico_disco.js"></script>
+
 
 
 <script>

@@ -48,11 +48,10 @@ $('#slc_setor').select2({language: {
 });
 
 $('#slc_setor').on('change', function () {
+    buscarCriticoSetor();
     buscarSerial();
     buscarAlertasSemana();
     buscarQtdDiscosAlerta();
-    mediaDoSetor();
-    listarStatusControladores()
 });
 
 $('#slc_controlador').on('change', function () {
@@ -145,6 +144,7 @@ function buscarSerial() {
     .then(dados => {
         listarNumSeriais(dados); 
         buscarCriticoSetor();
+        listarStatusControladores()
     })
     .catch(erro => {
         console.error(erro);
@@ -159,8 +159,13 @@ function listarNumSeriais(dados) {
         select_controlador.innerHTML += `<option value="${dado.numero_serial}">${dado.numero_serial}</option>`;
     });
     previsaoCritico()
-    listarStatusControladores()
     calculaRquad()
+    let timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+        mediaDoSetor()
+        listarStatusControladores();
+    }, 200);
 }
 
 
@@ -383,15 +388,14 @@ function trocarGrafico(dados) {
 
 async function carregarUltimoJson() {
   try {
+    aguardar()
     const resposta = await fetch(`/s3Route/dados/ultimo`);
     const data = await resposta.json();
 
     console.log("ultimo JSON do bucket:", data);
     sessionStorage.JSON_DISCO = JSON.stringify(data);
-    mediaDoSetor()
-    previsaoCritico()
-    buscarCriticoSetor();
-    calculaRquad()
+    acabouAguardar()
+    buscarSetor()
 
 
   } catch (err) {
@@ -447,9 +451,9 @@ function listarStatusControladores() {
     varSetor = select_setor.options[select_index].value;
 
     const tabela = document.getElementById('controlador-table');
-    tabela.innerHTML = "";
+    linhas = ""
 
-    tabela.innerHTML = `<tr>
+    linhas += `<tr>
                             <th>Número Serial</th>
                             <th>Previsão</th>
                             <th>Status</th>
@@ -466,7 +470,7 @@ function listarStatusControladores() {
             }else{
                 status_alerta = '<p style="background-color: #4CAF50!important;border-radius: 10px;">Estável</p>' 
             }
-            tabela.innerHTML += `
+            linhas += `
                                 <tr>
                                     <td>${dados[i].codigo}</td>
                                     <td>${dados[i].quantoFalta}</td>
@@ -475,6 +479,8 @@ function listarStatusControladores() {
                                 </tr>`;
         }
     }
+
+    tabela.innerHTML = linhas
 }
 
 function mudarValorSelect(codigo){
