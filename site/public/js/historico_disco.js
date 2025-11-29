@@ -51,13 +51,14 @@ $('#slc_setor').on('change', function () {
     buscarSerial();
     buscarAlertasSemana();
     buscarQtdDiscosAlerta();
-    criticoDoSetor();
+    mediaDoSetor();
     listarStatusControladores()
 });
 
 $('#slc_controlador').on('change', function () {
     previsaoCritico();
     buscarCriticoSetor();
+    calculaRquad();
 });
 
 $('#slc_controlador').select2({language: {
@@ -159,6 +160,7 @@ function listarNumSeriais(dados) {
     });
     previsaoCritico()
     listarStatusControladores()
+    calculaRquad()
 }
 
 
@@ -386,17 +388,18 @@ async function carregarUltimoJson() {
 
     console.log("ultimo JSON do bucket:", data);
     sessionStorage.JSON_DISCO = JSON.stringify(data);
-    criticoDoSetor()
+    mediaDoSetor()
     previsaoCritico()
     buscarCriticoSetor();
+    calculaRquad()
 
 
   } catch (err) {
-    res.status(500).json({ error: "Erro ao buscar último arquivo", message: err.message });
+    console.log("Erro ao buscar último arquivo" + err.message );
   }
 }
 
- function criticoDoSetor(){
+ function mediaDoSetor(){
     const dados = JSON.parse(sessionStorage.JSON_DISCO);
 
     select_setor = document.getElementById("slc_setor");
@@ -410,7 +413,13 @@ async function carregarUltimoJson() {
         mediaSetor = dados[0].mediaSetor[varSetor];
     }while(mediaSetor == null);
 
-    varPorcentagem.innerHTML = mediaSetor;
+    if(mediaSetor >= setorCRITICO){
+        varPorcentagem.innerHTML = '<p style="color:#ff3f2e;font-size:2.5rem;">'+ mediaSetor + '</p>';
+    } else if(mediaSetor >= setorMEDIO){
+        varPorcentagem.innerHTML = '<p style="color:#e6ac00;font-size:2.5rem;">'+ mediaSetor + '</p>';
+    }else{
+        varPorcentagem.innerHTML = '<p style="color:#4CAF50;font-size:2.5rem;">'+ mediaSetor + '</p>';
+    }
 }
 
 function previsaoCritico(){
@@ -450,9 +459,9 @@ function listarStatusControladores() {
 
     for(i = 0; i < dados.length; i++){
         if(varSetor == dados[i].idSetor){
-            if(dados[i].medias[5] >= setorCRITICO){
+            if(Number(dados[i].medias[5]) >= Number(setorCRITICO)){
                 status_alerta = '<p style="background-color: #ff3f2e!important;border-radius: 10px;">Crítico</p>'
-            }else if(dados[i].medias[5] >= setorMEDIO){
+            }else if(Number(dados[i].medias[5]) >= Number(setorMEDIO)){
                 status_alerta = '<p style="background-color: #e6ac00!important;border-radius: 10px;">Médio</p>' 
             }else{
                 status_alerta = '<p style="background-color: #4CAF50!important;border-radius: 10px;">Estável</p>' 
@@ -462,7 +471,7 @@ function listarStatusControladores() {
                                     <td>${dados[i].codigo}</td>
                                     <td>${dados[i].quantoFalta}</td>
                                     <td>${status_alerta}</td>
-                                    <td onclick=""><img src="assets/icones/dashboard.png"></td>
+                                    <td onclick="mudarValorSelect('${dados[i].codigo}')"><img src="assets/icones/dashboard.png"></td>
                                 </tr>`;
         }
     }
@@ -470,9 +479,14 @@ function listarStatusControladores() {
 
 function mudarValorSelect(codigo){
     select_controlador = document.getElementById("slc_controlador");
-    select_controlador.selectedIndex
 
-    varControlador.innerHTML = codigo;
+    for(i = 0; i < select_controlador.options.length; i++){
+        if(select_controlador.options[i].value == codigo){
+            select_controlador.selectedIndex = i
+            break;
+        }
+    }
+    select_controlador.dispatchEvent(new Event("change"));
 }
 
 function calculaRquad(){
@@ -482,8 +496,32 @@ function calculaRquad(){
     select_index = select_controlador.selectedIndex;
     varControlador = select_controlador.options[select_index].value;
 
+    i = 0
+    for(; dados.length; i++){
+        if(dados[i].codigo == varControlador){
+            break;
+        }
+    }
     
+    
+    dados[i].mudaCadaData
+    somaMedias = 0;
+    SQT = 0;
+    SQres = 0;
 
+    for(j = 0; j < dados[i].medias.length; j++){
+        somaMedias += dados[i].medias[j]
+    }
+    media = somaMedias / dados[i].medias.length
 
+    for(j = 0; j < dados[i].medias.length; j++){
+        SQT += Math.pow(dados[i].medias[j] - media,2)
+    }
 
+    for(j = 0; j < dados[i].medias.length; j++){
+        SQres += Math.pow(dados[i].medias[j] - ((dados[i].mudaCadaData[j] * dados[i].coeficientes[0]) + dados[i].coeficientes[1]),2)
+    }
+
+    valor_squad = document.getElementById("squad");
+    valor_squad.innerHTML = (1 - (SQres / SQT)).toFixed(2) * 100 + "%"
 }

@@ -163,9 +163,6 @@ body{
     height: 100vh;
 }
 
-.config-disco{
-    color: #fff;
-}
 
 .kpi_dashboard_controlador{
     display: flex;
@@ -208,13 +205,21 @@ body{
 
 #previsao-disco{
     font-weight: 700;
-    color: #fff;
-    background-color: #4CAF50;
+    background-color: #fff;
+    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
+
+}
+
+.data-previsao-critico{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    justify-content: center;
 }
 
 #config-disco{
-    background-color: #ff3f2e;
-    color: #fff;
+    box-shadow: 0 0px 5px rgba(0, 0, 0, 0.3);
+    background-color: #fff;
     font-weight: 700;
 }
 
