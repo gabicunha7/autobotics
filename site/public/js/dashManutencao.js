@@ -24,6 +24,7 @@ $('#slc_setor').on('change', function () {
     exibirGraficosAlertasPorNivel();
     topControladores();
     exibirGraficoControladoresAlertas();
+    exibirPicoMediaComponente();
 });
 
 
@@ -96,6 +97,7 @@ function listarSetores(dados) {
     totalAlertasNoSetor()
     componenteComMaisAlertas()
     topControladores()
+    exibirPicoMediaComponente()
 }
 
 
@@ -429,7 +431,6 @@ async function carregarUltimoJson() {
         const data = await resposta.json();
 
         console.log("ultimo JSON do bucket:", data);
-        sessionStorage.JSON_DISCO = JSON.stringify(data);
 
         return data;
 
