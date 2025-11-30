@@ -19,6 +19,7 @@ var indexRouter = require("./src/routes/index");
 var usuarioRouter = require("./src/routes/usuarios");
 var empresasRouter = require("./src/routes/empresas");
 var emailRouter = require("./src/routes/email");
+var setores = require("./src/routes/setores")
 
 // CRUD FUNCIONARIO
 
@@ -59,6 +60,7 @@ app.use("/disco", discoRouter);
 app.use("/manutencao", manutencaoRouter)
 app.use("/historicoAlerta", historicoAlertasRouter);
 app.use("/cpuRam", cpuRam)
+app.use("/setores", setores)
 app.use("/s3Route", s3Router);
 app.use("/s3RouteHistoricoAlerta", s3RouteHistoricoAlerta);
 app.use("/s3RouteManutencao", s3RouteManutencao)

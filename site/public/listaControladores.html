@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Autobotics | Dashboard</title>
+  <link rel="stylesheet" href="css/sidebar.css" />
+  <link rel="stylesheet" href="css/dash_cpu_ram.css">
+  <link rel="stylesheet" href="css/setores.css">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=info" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/rotaDash.js"></script>
+</head>
+
+<body>
+
+  <aside>
+
+        <section>
+            <section class="menu-container">
+                <img class="img-logo-curta" src="assets/logo/LOGO_CURTA.png" alt="">
+                <h1>MENU</h1>
+
+                <div class="paginas-container">
+
+                    <div class="menu-dropdown-container">
+
+                        <button class="a-pagina" onclick="menu(event)" id="selecionado" tag="agora">
+                            <img class="icon-pagina" src="assets/icones/dash_icon.png" alt="">
+                            Dashboards
+                            <img class="icon-pagina" src="assets/icones/arrow_down.png" alt="">
+                        </button>
+
+                        
+                        <div class="menu-dropdown-items" id="menuDropdown">
+                        </div>
+                    </div>
+
+
+                    <a class="a-pagina" href="alerta.html">
+                        <img class="icon-pagina" src="assets/icones/alerta_icon.png" alt="">
+                        Alertas
+                    </a>
+                    <a class="a-pagina" href="parametros.html">
+                        <img class="icon-pagina" src="assets/icones/parametros_icon.png" alt="">
+                        Parâmetros
+                    </a>
+
+                    <a class="a-pagina" href="setor.html">
+                        <img class="icon-pagina" src="assets/icones/setor_icon.png" alt="">
+                        Setores
+                    </a>
+                    <a class="a-pagina" href="controladores.html">
+                        <img class="icon-pagina" src="assets/icones/controlador_icon.png" alt="">
+                        Controladores
+                    </a>
+                    <a class="a-pagina" href="funcionario.html">
+                        <img class="icon-pagina" src="assets/icones/userImg.png" alt="">
+                        Funcionários
+                    </a>
+                </div>
+            </section>
+            <a href="index.html">
+                <button id="btn-sair" onclick="limparSessao()">
+                    <img class="icon-sair" src="assets/icones/sair_icon.png" alt="">
+                    Sair
+                </button>
+            </a>
+
+    </aside>
+
+  <section class="container-content">
+
+    <!-- CABECALHO -->
+
+    <div class="div-superior">
+      <div class="div-filtro">
+        <p>Controlador: </p>
+        <select onchange="trocarControlador()" id="selectControlador">
+
+        </select>
+        <p id="capture-time" style="margin-left: 55%; font-weight: 600;">
+          12:00 - 13:00
+        </p>
+      </div>
+
+      <div class="div-usuario">
+        <div class="div-img-usuario"><img src="assets/icones/foto_usuario.png" alt=""></div>
+        <div>
+          <h6 id="nome-usuario">Usuário</h6>
+          <p id="email-usuario">usuario@email.com</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="setor-container" class="setor-container">
+        
+    </div>
+
+  </section>
+
+
+  <script src="js/controladores.js"></script>
+</body>
+
+</html>

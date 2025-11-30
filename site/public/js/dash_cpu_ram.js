@@ -273,12 +273,12 @@ async function criarKpis(dadosControlador) {
   kpi_chart_ram.innerHTML = dadosControlador.picoCpuRam.ram.valor
 
   var kpi_chart_ram_time = document.getElementById("kpi-info-ram-time")
-  kpi_chart_ram_time.innerHTML += dadosControlador.picoCpuRam.ram.timestamp
+  kpi_chart_ram_time.innerHTML = dadosControlador.picoCpuRam.ram.timestamp
 
   // KPIS ultimos dados
 
   var kpi_chart_cpu_last_time = document.getElementById("kpi-info-cpu-time-last")
-  kpi_chart_cpu_last_time.innerHTML += dadosControlador.ultimasCapturas.cpu.timestamp
+  kpi_chart_cpu_last_time.innerHTML = dadosControlador.ultimasCapturas.cpu.timestamp
 
   var kpi_chart_cpu_last = document.getElementById("kpi-chart-info-value-cpu-last")
 
@@ -293,7 +293,7 @@ async function criarKpis(dadosControlador) {
   kpi_chart_cpu_last.innerHTML = dadosControlador.ultimasCapturas.cpu.valor
 
   var kpi_chart_ram_time_last = document.getElementById("kpi-info-ram-time-last")
-  kpi_chart_ram_time_last.innerHTML += dadosControlador.ultimasCapturas.ram.timestamp
+  kpi_chart_ram_time_last.innerHTML = dadosControlador.ultimasCapturas.ram.timestamp
 
   var kpi_chart_ram_last = document.getElementById("kpi-chart-info-value-ram-last")
   kpi_chart_ram_last.innerHTML = dadosControlador.ultimasCapturas.cpu.valor
@@ -311,7 +311,9 @@ async function criarKpis(dadosControlador) {
 async function popularDashboard(controlador) {
   let dados = await lerJsonS3();
   let nomeControlador = controlador
+  document.getElementById("selectControlador").value = controlador
   console.log("NOME CONTROLADOR: ", nomeControlador);
+  console.log(dados);
   
   let dadosControlador = dados[nomeControlador]
   let horario = dados[nomeControlador].ultimasCapturas.ram.timestamp
@@ -478,5 +480,5 @@ async function lerJsonS3() {
 }
 listarControladores()
 trocarControlador()
-popularDashboard("0010")
+popularDashboard(sessionStorage.getItem("CONTROLADOR"))
 exibirParametros()
