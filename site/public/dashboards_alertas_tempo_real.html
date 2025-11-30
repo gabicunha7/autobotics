@@ -175,15 +175,15 @@ function makeAlertKey(item) {
 
 /* ================= PROCESSA ALERTAS ================= */
 function usarDadosReais(dados) {
+    const setorUsuario = sessionStorage.getItem("SETOR_USUARIO");
     let resolvidosHoje = 0;
 
     dados.forEach(item => {
-        const status = item.Status;
         const payloadKey = makeAlertKey(item);
+        const existing = activeAlerts.get(payloadKey) || {};
+        const criadoEm = item.CriadoEm || existing.CriadoEm || new Date().toISOString();
 
-        if (status === 'Aberto') {
-            const existing = activeAlerts.get(payloadKey) || {};
-            const criadoEm = item.CriadoEm || existing.CriadoEm || new Date().toISOString();
+        if (item.Status === 'Aberto') {
             activeAlerts.set(payloadKey, {
                 ID: item.ID,
                 Key: item.Key,
@@ -193,10 +193,8 @@ function usarDadosReais(dados) {
                 Summary: item.Summary || existing.Summary || '',
                 firstSeen: existing.firstSeen || new Date().toISOString()
             });
-            return;
-        }
-
-        if (status === 'Concluído') {
+        } else if (item.Status === 'Concluído') {
+            // Remove do mapa de ativos
             const id = item.ID ? String(item.ID) : null;
             const key = item.Key ? String(item.Key) : null;
             let removed = false;
@@ -207,8 +205,12 @@ function usarDadosReais(dados) {
         }
     });
 
-    const ativos = Array.from(activeAlerts.values()).sort((a,b)=>new Date(b.CriadoEm)-new Date(a.CriadoEm));
+    // Apenas para exibição, filtramos pelo setor do usuário
+    const ativos = Array.from(activeAlerts.values())
+        .filter(a => a.Descricao?.Setor === setorUsuario)
+        .sort((a,b)=>new Date(b.CriadoEm)-new Date(a.CriadoEm));
 
+    // KPIs
     const totals = ativos.reduce((acc,item)=>{
         const criticidade = normalizaSemAcento(item.Descricao?.Criticidade||'').toUpperCase();
         if (criticidade==='CRITICO') acc.critico++;
@@ -237,7 +239,7 @@ function usarDadosReais(dados) {
 
     atualizarGraficoPorComponentePorHora(ativos,12);
 
-    ultimoLoteAlertas = dados;
+    ultimoLoteAlertas = dados; // Mantemos todos os dados para heatmap
     tentarAtualizarHeatmap();
 }
 
@@ -303,6 +305,7 @@ function tentarAtualizarHeatmap(){
 }
 
 function atualizarHeatmap(dadosAlertas, janelaHoras=12){
+    const setorUsuario = sessionStorage.getItem("SETOR_USUARIO");
     const agora = new Date();
     const slots = [];
     for(let i=janelaHoras-1;i>=0;i--){
@@ -318,6 +321,7 @@ function atualizarHeatmap(dadosAlertas, janelaHoras=12){
             let melhorAlerta = null;
             dadosAlertas.forEach(alerta=>{
                 if(!alerta.Descricao || alerta.Descricao.Maquina!==serial) return;
+                if(alerta.Descricao.Setor !== setorUsuario) return; // FILTRO PELO SETOR
                 const inicio = new Date(alerta.CriadoEm || alerta.firstSeen);
                 const fim = alerta.ConcluidoEm?new Date(alerta.ConcluidoEm):null;
                 const ativo = slot.date>=inicio && (!fim || slot.date<=fim);
@@ -362,13 +366,15 @@ criarGraficoComponentes();
 
     // Aqui você coloca o fetch real dos alertas do S3
     const dadosAlertasMock = [
-        {ID:"a1", Key:"AL-001", Status:"Aberto", Summary:"CPU acima de 90%", CriadoEm:new Date(Date.now()-3*3600e3).toISOString(), Descricao:{Componente:"CPU", Criticidade:"CRÍTICO", Maquina:"0001", ValorAtual:"92.5", Setor:"Teste"}},
-        {ID:"a2", Key:"AL-002", Status:"Aberto", Summary:"RAM em 80%", CriadoEm:new Date(Date.now()-2*3600e3).toISOString(), Descricao:{Componente:"RAM", Criticidade:"MÉDIO", Maquina:"0002", ValorAtual:"80", Setor:"Teste"}}
+        {ID:"a1", Key:"AL-001", Status:"Aberto", Summary:"CPU acima de 90%", CriadoEm:new Date(Date.now()-3*3600e3).toISOString(), Descricao:{Componente:"CPU", Criticidade:"CRÍTICO", Maquina:"0001", ValorAtual:"92.5", Setor: sessionStorage.getItem("SETOR_USUARIO") }},
+        {ID:"a2", Key:"AL-002", Status:"Aberto", Summary:"RAM em 80%", CriadoEm:new Date(Date.now()-2*3600e3).toISOString(), Descricao:{Componente:"RAM", Criticidade:"MÉDIO", Maquina:"0002", ValorAtual:"80", Setor: sessionStorage.getItem("SETOR_USUARIO") }}
     ];
 
     usarDadosReais(dadosAlertasMock);
 })();
 </script>
+
+
 
 </body>
 </html>
