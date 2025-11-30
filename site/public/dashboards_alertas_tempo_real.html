@@ -115,6 +115,14 @@ function normalizaSemAcento(s) {
     return (s || "").toString().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
+/* ================= VARIÁVEIS ================= */
+let activeAlerts = new Map();
+let ultimoLoteAlertas = [];
+let controladoresSetor = [];
+let heatmapChart = null;
+let graficoComponentes = null;
+let controladorFiltroSelecionado = "Todos";
+
 /* ================= BUSCA CONTROLADORES ================= */
 async function buscarControladores() {
     try {
@@ -134,13 +142,6 @@ async function buscarControladores() {
         return [];
     }
 }
-
-/* ================= VARIÁVEIS ================= */
-let activeAlerts = new Map();
-let ultimoLoteAlertas = [];
-let controladoresSetor = [];
-let heatmapChart = null;
-let graficoComponentes = null;
 
 /* ================= CRIAÇÃO GRÁFICO COMPONENTES ================= */
 function criarGraficoComponentes() {
@@ -173,11 +174,35 @@ function makeAlertKey(item) {
     return `${maquina}||${summary}||${criado}`;
 }
 
+/* ================= POPULA SELECT DE CONTROLADORES ================= */
+function popularSelectControladores() {
+    const select = document.querySelector('.div-filtro select');
+    select.innerHTML = '';
+    const optionTodos = document.createElement('option');
+    optionTodos.value = "Todos";
+    optionTodos.text = "Todos";
+    select.appendChild(optionTodos);
+
+    controladoresSetor.forEach(ctrl=>{
+        const option = document.createElement('option');
+        option.value = ctrl.numero_serial;
+        option.text = "Controlador " + ctrl.numero_serial;
+        select.appendChild(option);
+    });
+
+    select.value = "Todos";
+    select.addEventListener('change', (e)=>{
+        controladorFiltroSelecionado = e.target.value;
+        usarDadosReais(ultimoLoteAlertas);
+    });
+}
+
 /* ================= PROCESSA ALERTAS ================= */
 function usarDadosReais(dados) {
     const setorUsuario = sessionStorage.getItem("SETOR_USUARIO");
     let resolvidosHoje = 0;
 
+    // Atualiza mapa de alertas ativos
     dados.forEach(item => {
         const payloadKey = makeAlertKey(item);
         const existing = activeAlerts.get(payloadKey) || {};
@@ -194,7 +219,6 @@ function usarDadosReais(dados) {
                 firstSeen: existing.firstSeen || new Date().toISOString()
             });
         } else if (item.Status === 'Concluído') {
-            // Remove do mapa de ativos
             const id = item.ID ? String(item.ID) : null;
             const key = item.Key ? String(item.Key) : null;
             let removed = false;
@@ -205,10 +229,14 @@ function usarDadosReais(dados) {
         }
     });
 
-    // Apenas para exibição, filtramos pelo setor do usuário
-    const ativos = Array.from(activeAlerts.values())
-        .filter(a => a.Descricao?.Setor === setorUsuario)
-        .sort((a,b)=>new Date(b.CriadoEm)-new Date(a.CriadoEm));
+    // Filtra apenas alertas do setor do usuário
+    let ativos = Array.from(activeAlerts.values())
+        .filter(a => a.Descricao?.Setor === setorUsuario);
+
+    // Aplica filtro do select, se não for "Todos"
+    if(controladorFiltroSelecionado !== "Todos") {
+        ativos = ativos.filter(a => a.Descricao?.Maquina === controladorFiltroSelecionado);
+    }
 
     // KPIs
     const totals = ativos.reduce((acc,item)=>{
@@ -364,7 +392,9 @@ criarGraficoComponentes();
         ];
     }
 
-    // Aqui você coloca o fetch real dos alertas do S3
+    popularSelectControladores();
+
+    // Fetch real dos alertas do S3
     const dadosAlertasMock = [
         {ID:"a1", Key:"AL-001", Status:"Aberto", Summary:"CPU acima de 90%", CriadoEm:new Date(Date.now()-3*3600e3).toISOString(), Descricao:{Componente:"CPU", Criticidade:"CRÍTICO", Maquina:"0001", ValorAtual:"92.5", Setor: sessionStorage.getItem("SETOR_USUARIO") }},
         {ID:"a2", Key:"AL-002", Status:"Aberto", Summary:"RAM em 80%", CriadoEm:new Date(Date.now()-2*3600e3).toISOString(), Descricao:{Componente:"RAM", Criticidade:"MÉDIO", Maquina:"0002", ValorAtual:"80", Setor: sessionStorage.getItem("SETOR_USUARIO") }}
@@ -373,6 +403,7 @@ criarGraficoComponentes();
     usarDadosReais(dadosAlertasMock);
 })();
 </script>
+
 
 
 
