@@ -44,6 +44,7 @@
     <a href="index.html">
       <button id="btn-sair" onclick="limparSessao()">Sair</button>
     </a>
+  </section>
 </aside>
 
 <section class="container-content">
@@ -59,7 +60,7 @@
     </div>
 
     <div class="div-usuario">
-      <div class="div-img-usuario"><img src="assets/icones/foto_usuario.png"></div>
+      <div class="div-img-usuario"><img src="assets/icones/foto_usuario.png" alt=""></div>
       <div>
         <h6 id="nome-usuario">Usuário</h6>
         <p id="email-usuario">usuario@email.com</p>
@@ -72,7 +73,6 @@
   <div class="div-conteudo">
     <div class="dashboard-wrapper">
 
-      <!-- === ALTERAÇÃO MÍNIMA AQUI: KPI 1 COM 3 LINHAS (QUEBRA DE LINHA REAL) === -->
       <div class="card area-kpi1">
         <h4>Alertas Ativos no Setor</h4>
         <div class="kpi_dashboard">
@@ -81,7 +81,6 @@
           <div class="kpi-line"><span class="kpi-label">Críticos:</span> <span id="kpi_critico">0</span></div>
         </div>
       </div>
-      <!-- =================================================================== -->
 
       <div class="card area-kpi2">
         <h4>Alertas Resolvidos (hoje)</h4>
@@ -98,7 +97,6 @@
         <canvas id="grafico_componentes" class="canvas-full"></canvas>
       </div>
 
-      <!-- ⭐ NOVO HEATMAP INTEGRADO -->
       <div class="card area-heatmap">
         <h2>Estabilidade dos Controladores</h2>
         <div id="container" style="height:100%; width:100%; min-height:260px;"></div>
@@ -110,62 +108,220 @@
 </section>
 
 <script>
-// DADOS USUÁRIO
+/* ================= utilidades ================= */
 document.getElementById('nome-usuario').innerText = sessionStorage.NOME_USUARIO || 'Usuário';
 document.getElementById('email-usuario').innerText = sessionStorage.EMAIL_USUARIO || 'usuario@email.com';
 
-// FEED MOCK
-const MOCK = {
-  feed: [
-    {time:'10:25', msg:'Alerta crítico de CPU (95%) - Controlador 0001', sev:'critico'},
-    {time:'10:20', msg:'Alerta médio de RAM (85%) - Controlador 0007', sev:'medio'},
-    {time:'10:15', msg:'Alerta crítico de Disco resolvido - Controlador 0006', sev:'estavel'}
-  ],
-  counts: { critico: 6, medio: 5, estavel: 30 }
-};
+function normalizaSemAcento(s) {
+  return (s || "").toString().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
 
-function renderFeed() {
+function formatHoraFrom(item) {
+  const dtString = item.ConcluidoEm || item.CriadoEm || item.firstSeen;
+  if (!dtString) return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+  const dt = new Date(dtString);
+  if (isNaN(dt.getTime())) return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+  return dt.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+}
+
+/* ================= estado local de ativos ================= */
+const activeAlerts = new Map();
+
+function makeAlertKey(item) {
+  if (item.ID) return String(item.ID);
+  if (item.Key) return String(item.Key);
+  const maquina = item.Descricao?.Maquina || '';
+  const summary = item.Summary || '';
+  const criado = item.CriadoEm ? String(item.CriadoEm) : (item.firstSeen || '');
+  return `${maquina}||${summary}||${criado}`;
+}
+
+/* ================= KPIs, Feed e Persistência ================= */
+function usarDadosReais(dados) {
+
+  let resolvidosHoje = 0;
+
+  // process payload: upsert open, remove closed
+  dados.forEach(item => {
+    const status = item.Status;
+    const payloadKey = makeAlertKey(item);
+
+    if (status === 'Aberto') {
+      const existing = activeAlerts.get(payloadKey) || {};
+      const criadoEm = item.CriadoEm || existing.CriadoEm || new Date().toISOString();
+      const toStore = {
+        ID: item.ID,
+        Key: item.Key,
+        Status: 'Aberto',
+        Descricao: item.Descricao || existing.Descricao || {},
+        CriadoEm: criadoEm,
+        Summary: item.Summary || existing.Summary || '',
+        firstSeen: existing.firstSeen || new Date().toISOString()
+      };
+      activeAlerts.set(payloadKey, toStore);
+      return;
+    }
+
+    if (status === 'Concluído') {
+      const id = item.ID ? String(item.ID) : null;
+      const key = item.Key ? String(item.Key) : null;
+      let removed = false;
+
+      if (id) {
+        for (const [k,v] of activeAlerts.entries()) {
+          if (String(v.ID) === id) { activeAlerts.delete(k); removed = true; break; }
+        }
+      }
+      if (!removed && key) {
+        for (const [k,v] of activeAlerts.entries()) {
+          if (String(v.Key) === key) { activeAlerts.delete(k); removed = true; break; }
+        }
+      }
+      if (!removed) {
+        if (activeAlerts.has(payloadKey)) { activeAlerts.delete(payloadKey); removed = true; }
+        else {
+          for (const [k,v] of activeAlerts.entries()) {
+            const sameSummary = (v.Summary||'') === (item.Summary||'');
+            const sameMaquina = (v.Descricao?.Maquina||'') === (item.Descricao?.Maquina||'');
+            if (sameSummary && sameMaquina) { activeAlerts.delete(k); removed = true; break; }
+          }
+        }
+      }
+
+      resolvidosHoje++;
+      return;
+    }
+
+    // ignore other statuses for now
+  });
+
+  // recalc KPIs from activeAlerts
+  const ativos = Array.from(activeAlerts.values()).sort((a,b) => new Date(b.CriadoEm) - new Date(a.CriadoEm));
+
+  const totals = ativos.reduce((acc, item) => {
+    const criticidade = normalizaSemAcento(item.Descricao?.Criticidade || '').toUpperCase();
+    if (criticidade === 'CRITICO') acc.critico++;
+    else if (criticidade === 'MEDIO' || criticidade === 'MÉDIO') acc.medio++;
+    else acc.outros++;
+    acc.total++;
+    return acc;
+  }, { total:0, medio:0, critico:0, outros:0 });
+
+  // render feed: ativos first
   const feed = document.getElementById('feed_area');
   feed.innerHTML = '';
-  MOCK.feed.forEach(it => {
+
+  ativos.forEach(item => {
+    const hora = formatHoraFrom(item);
+    const maquina = item.Descricao?.Maquina || 'N/A';
+    const mensagem = `${item.Summary || 'Alerta'} - ${maquina}`;
+
+    const criticidade = normalizaSemAcento(item.Descricao?.Criticidade || '').toUpperCase();
     const div = document.createElement('div');
-    div.className = 'feed-item ' + it.sev;
-    div.innerHTML = `<div>${it.msg}</div><div>${it.time}</div>`;
+    if (criticidade === 'CRITICO') div.className = 'feed-item critico';
+    else if (criticidade === 'MEDIO') div.className = 'feed-item medio';
+    else div.className = 'feed-item estavel';
+    div.innerHTML = `<div>${mensagem}</div><div>${hora}</div>`;
     feed.appendChild(div);
+  });
+
+  // append resolved from batch
+  const resolvidosBatch = dados.filter(it => it.Status === 'Concluído')
+    .sort((a,b) => new Date(b.ConcluidoEm || b.CriadoEm || 0) - new Date(a.ConcluidoEm || a.CriadoEm || 0));
+  resolvidosBatch.forEach(item => {
+    const hora = formatHoraFrom(item);
+    const maquina = item.Descricao?.Maquina || 'N/A';
+    const mensagem = `Resolvido: ${item.Summary || 'Alerta'} - ${maquina}`;
+
+    const div = document.createElement('div');
+    div.className = 'feed-item estavel';
+    div.innerHTML = `<div>Resolvido: ${mensagem}</div><div>${hora}</div>`;
+    feed.appendChild(div);
+  });
+
+  // update KPIs
+  document.getElementById('kpi_total').innerText = totals.total;
+  document.getElementById('kpi_medio').innerText = totals.medio;
+  document.getElementById('kpi_critico').innerText = totals.critico;
+  document.getElementById('kpi_resolvidos').innerText = resolvidosHoje;
+
+  // update chart from ativos
+  atualizarGraficoPorComponentePorHora(ativos, 12);
+}
+
+/* ========== GRÁFICO ========== */
+let graficoComponentes;
+function criarGraficoComponentes() {
+  const ctx = document.getElementById('grafico_componentes').getContext('2d');
+  graficoComponentes = new Chart(ctx, {
+    type: 'line',
+    data: { labels: [], datasets: [
+      { label:'CPU', data:[], borderColor:'#E71831', backgroundColor:'transparent', tension:0.2, fill:false, pointRadius:3 },
+      { label:'RAM', data:[], borderColor:'#E6AC00', backgroundColor:'transparent', tension:0.2, fill:false, pointRadius:3 },
+      { label:'Disco', data:[], borderColor:'#4CAF50', backgroundColor:'transparent', tension:0.2, fill:false, pointRadius:3 }
+    ]},
+    options: { responsive:true, plugins:{legend:{position:'top'}}, scales:{ x:{display:true,title:{display:true,text:'Hora'}}, y:{beginAtZero:true,ticks:{stepSize:1}} } }
   });
 }
 
-// === ALTERAÇÃO MÍNIMA NO JS: atualizar 3 campos ===
-function renderKPIs() {
-  // total = críticos + médios (mesma regra sua)
-  const total = MOCK.counts.critico + MOCK.counts.medio;
+function atualizarGraficoPorComponentePorHora(lista, janelaHoras = 12) {
 
-  document.getElementById('kpi_total').innerText = total;
-  document.getElementById('kpi_medio').innerText = MOCK.counts.medio;
-  document.getElementById('kpi_critico').innerText = MOCK.counts.critico;
+  const now = new Date();
+  const labels = [];
 
-  document.getElementById('kpi_resolvidos').innerText = 19;
-}
-// ===================================================================
-
-renderFeed();
-renderKPIs();
-
-// GRAFICO
-const horas = Array.from({length: 24}, (_, i) => `${String(i).padStart(2,'0')}:00`);
-new Chart(document.getElementById('grafico_componentes'), {
-  type: 'line',
-  data: {
-    labels: horas,
-    datasets: [
-      { label:'CPU', data: horas.map(()=>Math.random()*30), borderColor:'#E71831' },
-      { label:'RAM', data: horas.map(()=>Math.random()*20), borderColor:'#e6ac00' },
-      { label:'Disco', data: horas.map(()=>Math.random()*10), borderColor:'#4CAF50' }
-    ]
+  for (let i = janelaHoras - 1; i >= 0; i--) {
+    const dt = new Date(now.getTime() - i * 3600 * 1000);
+    labels.push({
+      label: String(dt.getHours()).padStart(2, '0') + ':00',
+      hora: dt
+    });
   }
-});
 
-// 🔥 HEATMAP ANYCHART
+  const cpu = Array(labels.length).fill(0);
+  const ram = Array(labels.length).fill(0);
+  const disco = Array(labels.length).fill(0);
+
+  const normaliza = s => normalizaSemAcento((s || '')).toUpperCase();
+
+  lista.forEach(alerta => {
+
+    const inicio = new Date(alerta.CriadoEm || alerta.firstSeen);
+    if (isNaN(inicio.getTime())) return;
+
+    let fim = null; // se não tem concluído, permanece ativo
+    if (alerta.ConcluidoEm) {
+      fim = new Date(alerta.ConcluidoEm);
+      if (isNaN(fim.getTime())) fim = null;
+    }
+
+    labels.forEach((slot, idx) => {
+
+      const horaSlot = slot.hora;
+
+      const ativoNestaHora =
+        horaSlot >= inicio &&
+        (!fim || horaSlot <= fim);
+
+      if (!ativoNestaHora) return;
+
+      const comp = normaliza(alerta.Descricao?.Componente || '');
+
+      if (comp.includes('CPU')) cpu[idx]++;
+      else if (comp.includes('RAM')) ram[idx]++;
+      else if (comp.includes('DISCO') || comp.includes('DISK')) disco[idx]++;
+    });
+  });
+
+  graficoComponentes.data.labels = labels.map(l => l.label);
+  graficoComponentes.data.datasets[0].data = cpu;
+  graficoComponentes.data.datasets[1].data = ram;
+  graficoComponentes.data.datasets[2].data = disco;
+
+  graficoComponentes.update();
+}
+
+
+/* ========== HEATMAP (mantido) ========== */
 anychart.onDocumentReady(function () {
   var rawData = getData();
   var chart = anychart.heatMap(rawData);
@@ -179,8 +335,8 @@ anychart.onDocumentReady(function () {
 
   chart.colorScale(colorScale);
   chart.labels(false);
-
   chart.tooltip().useHtml(true);
+
   chart.tooltip().titleFormat(function () {
     var v = this.heat;
     if (v < 800) return "Criticidade: Estável";
@@ -196,25 +352,63 @@ anychart.onDocumentReady(function () {
   chart.draw();
 });
 
-// DADOS (mesmos que você enviou originalmente)
 function getData() {
   return [
-    {x:"10:00",y:"Controlador 0001",heat:700},
-    {x:"10:00",y:"Controlador 0002",heat:713},
-    {x:"10:00",y:"Controlador 0003",heat:657},
-    {x:"10:00",y:"Controlador 0004",heat:957},
-    {x:"10:00",y:"Controlador 0005",heat:1137},
-    {x:"10:00",y:"Controlador 0006",heat:956},
-
-    {x:"14:00",y:"Controlador 0001",heat:715},
-    {x:"14:00",y:"Controlador 0002",heat:747},
-    {x:"14:00",y:"Controlador 0003",heat:738},
-    {x:"14:00",y:"Controlador 0004",heat:1056},
-    {x:"14:00",y:"Controlador 0005",heat:1426},
-    {x:"14:00",y:"Controlador 0006",heat:1631}
+    { x: "10:00", y: "Controlador 0001", heat: 700 },
+    { x: "10:00", y: "Controlador 0002", heat: 713 },
+    { x: "10:00", y: "Controlador 0003", heat: 657 },
+    { x: "10:00", y: "Controlador 0004", heat: 957 },
+    { x: "10:00", y: "Controlador 0005", heat: 1137 },
+    { x: "10:00", y: "Controlador 0006", heat: 956 },
+    { x: "11:00", y: "Controlador 0001", heat: 715 },
+    { x: "11:00", y: "Controlador 0002", heat: 747 },
+    { x: "11:00", y: "Controlador 0003", heat: 738 },
+    { x: "11:00", y: "Controlador 0004", heat: 1056 },
+    { x: "11:00", y: "Controlador 0005", heat: 1426 },
+    { x: "11:00", y: "Controlador 0006", heat: 1631 },
+      { x: "12:00", y: "Controlador 0001", heat: 715 },
+    { x: "12:00", y: "Controlador 0002", heat: 747 },
+    { x: "12:00", y: "Controlador 0003", heat: 738 },
+    { x: "12:00", y: "Controlador 0004", heat: 1056 },
+    { x: "12:00", y: "Controlador 0005", heat: 1426 },
+    { x: "12:00", y: "Controlador 0006", heat: 1631 },
+      { x: "13:00", y: "Controlador 0001", heat: 715 },
+    { x: "13:00", y: "Controlador 0002", heat: 747 },
+    { x: "13:00", y: "Controlador 0003", heat: 738 },
+    { x: "13:00", y: "Controlador 0004", heat: 1056 },
+    { x: "13:00", y: "Controlador 0005", heat: 1426 },
+    { x: "13:00", y: "Controlador 0006", heat: 1631 },
+      { x: "14:00", y: "Controlador 0001", heat: 715 },
+    { x: "14:00", y: "Controlador 0002", heat: 747 },
+    { x: "14:00", y: "Controlador 0003", heat: 738 },
+    { x: "14:00", y: "Controlador 0004", heat: 1056 },
+    { x: "14:00", y: "Controlador 0005", heat: 1426 },
+    { x: "14:00", y: "Controlador 0006", heat: 1631 },
+      { x: "15:00", y: "Controlador 0001", heat: 715 },
+    { x: "15:00", y: "Controlador 0002", heat: 747 },
+    { x: "15:00", y: "Controlador 0003", heat: 738 },
+    { x: "15:00", y: "Controlador 0004", heat: 1056 },
+    { x: "15:00", y: "Controlador 0005", heat: 1426 },
+    { x: "15:00", y: "Controlador 0006", heat: 1631 },
+    
   ];
 }
-</script>
 
+/* ========== INICIALIZAÇÃO + MOCK ========== */
+criarGraficoComponentes();
+
+// MOCK de teste
+const mock = [
+  { ID: "a1", Status: "Aberto", Descricao: { Componente: "CPU", Criticidade: "CRÍTICO", Maquina:"0001" }, Summary: "CPU 1", CriadoEm: new Date(Date.now() - 3*3600e3).toISOString() },
+  { ID: "a2", Status: "Aberto", Descricao: { Componente: "CPU", Criticidade: "MÉDIO", Maquina:"0002" }, Summary: "CPU 2", CriadoEm: new Date(Date.now() - 2*3600e3).toISOString() },
+  { ID: "a3", Status: "Aberto", Descricao: { Componente: "CPU", Criticidade: "MÉDIO", Maquina:"0003" }, Summary: "CPU 3", CriadoEm: new Date(Date.now() - 2*3600e3).toISOString() },
+  { ID: "b1", Status: "Aberto", Descricao: { Componente: "RAM", Criticidade: "MÉDIO", Maquina:"0004" }, Summary: "RAM 1", CriadoEm: new Date(Date.now() - 2*3600e3).toISOString() },
+  { ID: "d1", Status: "Aberto", Descricao: { Componente: "Disco", Criticidade: "MÉDIO", Maquina:"0005" }, Summary: "DISCO 1", CriadoEm: new Date(Date.now() - 1*3600e3).toISOString() },
+  { ID: "x-res", Status: "Concluído", Descricao: { Componente: "CPU", Criticidade: "CRÍTICO", Maquina:"0006" }, Summary: "RESOLVIDO", CriadoEm: new Date().toISOString(), ConcluidoEm: new Date().toISOString() }
+];
+
+usarDadosReais(mock);
+
+</script>
 </body>
 </html>
