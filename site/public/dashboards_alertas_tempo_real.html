@@ -108,452 +108,267 @@
 </section>
 
 <script>
-/* ================= utilidades ================= */
 document.getElementById('nome-usuario').innerText = sessionStorage.NOME_USUARIO || 'Usuário';
 document.getElementById('email-usuario').innerText = sessionStorage.EMAIL_USUARIO || 'usuario@email.com';
 
 function normalizaSemAcento(s) {
-  return (s || "").toString().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    return (s || "").toString().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 
+/* ================= BUSCA CONTROLADORES ================= */
+async function buscarControladores() {
+    try {
+        const resposta = await fetch("/setores/buscarControladores", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                setor: sessionStorage.getItem("SETOR_USUARIO"),
+                empresa: sessionStorage.getItem("EMPRESA_USUARIO")
+            })
+        });
+        if (!resposta.ok) throw "Erro ao buscar controladores do setor.";
+        const dados = await resposta.json();
+        return dados;
+    } catch (erro) {
+        console.error(erro);
+        return [];
+    }
+}
+
+/* ================= VARIÁVEIS ================= */
+let activeAlerts = new Map();
+let ultimoLoteAlertas = [];
+let controladoresSetor = [];
+let heatmapChart = null;
+let graficoComponentes = null;
+
+/* ================= CRIAÇÃO GRÁFICO COMPONENTES ================= */
+function criarGraficoComponentes() {
+    const ctx = document.getElementById('grafico_componentes').getContext('2d');
+    graficoComponentes = new Chart(ctx, {
+        type: 'line',
+        data: { labels: [], datasets: [
+            { label:'CPU', data:[], borderColor:'#E71831', backgroundColor:'transparent', tension:0.2, fill:false, pointRadius:3 },
+            { label:'RAM', data:[], borderColor:'#E6AC00', backgroundColor:'transparent', tension:0.2, fill:false, pointRadius:3 },
+            { label:'Disco', data:[], borderColor:'#4CAF50', backgroundColor:'transparent', tension:0.2, fill:false, pointRadius:3 }
+        ]},
+        options: { responsive:true, plugins:{legend:{position:'top'}}, scales:{ x:{display:true,title:{display:true,text:'Hora'}}, y:{beginAtZero:true,ticks:{stepSize:1}} } }
+    });
+}
+
+/* ================= FUNÇÕES AUXILIARES ================= */
 function formatHoraFrom(item) {
-  const dtString = item.ConcluidoEm || item.CriadoEm || item.firstSeen;
-  if (!dtString) return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-  const dt = new Date(dtString);
-  if (isNaN(dt.getTime())) return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-  return dt.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+    const dtString = item.ConcluidoEm || item.CriadoEm || item.firstSeen;
+    if (!dtString) return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+    const dt = new Date(dtString);
+    return isNaN(dt.getTime()) ? new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : dt.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
 }
-
-/* ================= estado local de ativos ================= */
-const activeAlerts = new Map();
 
 function makeAlertKey(item) {
-  if (item.ID) return String(item.ID);
-  if (item.Key) return String(item.Key);
-  const maquina = item.Descricao?.Maquina || '';
-  const summary = item.Summary || '';
-  const criado = item.CriadoEm ? String(item.CriadoEm) : (item.firstSeen || '');
-  return `${maquina}||${summary}||${criado}`;
+    if (item.ID) return String(item.ID);
+    if (item.Key) return String(item.Key);
+    const maquina = item.Descricao?.Maquina || '';
+    const summary = item.Summary || '';
+    const criado = item.CriadoEm ? String(item.CriadoEm) : (item.firstSeen || '');
+    return `${maquina}||${summary}||${criado}`;
 }
 
-/* ================= KPIs, Feed e Persistência ================= */
-let ultimoLoteAlertas = []; // para o heatmap usar depois que o gráfico estiver pronto
-
+/* ================= PROCESSA ALERTAS ================= */
 function usarDadosReais(dados) {
+    let resolvidosHoje = 0;
 
-  let resolvidosHoje = 0;
+    dados.forEach(item => {
+        const status = item.Status;
+        const payloadKey = makeAlertKey(item);
 
-  // process payload: upsert open, remove closed
-  dados.forEach(item => {
-    const status = item.Status;
-    const payloadKey = makeAlertKey(item);
-
-    if (status === 'Aberto') {
-      const existing = activeAlerts.get(payloadKey) || {};
-      const criadoEm = item.CriadoEm || existing.CriadoEm || new Date().toISOString();
-      const toStore = {
-        ID: item.ID,
-        Key: item.Key,
-        Status: 'Aberto',
-        Descricao: item.Descricao || existing.Descricao || {},
-        CriadoEm: criadoEm,
-        Summary: item.Summary || existing.Summary || '',
-        firstSeen: existing.firstSeen || new Date().toISOString()
-      };
-      activeAlerts.set(payloadKey, toStore);
-      return;
-    }
-
-    if (status === 'Concluído') {
-      const id = item.ID ? String(item.ID) : null;
-      const key = item.Key ? String(item.Key) : null;
-      let removed = false;
-
-      if (id) {
-        for (const [k,v] of activeAlerts.entries()) {
-          if (String(v.ID) === id) { activeAlerts.delete(k); removed = true; break; }
+        if (status === 'Aberto') {
+            const existing = activeAlerts.get(payloadKey) || {};
+            const criadoEm = item.CriadoEm || existing.CriadoEm || new Date().toISOString();
+            activeAlerts.set(payloadKey, {
+                ID: item.ID,
+                Key: item.Key,
+                Status: 'Aberto',
+                Descricao: item.Descricao || existing.Descricao || {},
+                CriadoEm: criadoEm,
+                Summary: item.Summary || existing.Summary || '',
+                firstSeen: existing.firstSeen || new Date().toISOString()
+            });
+            return;
         }
-      }
-      if (!removed && key) {
-        for (const [k,v] of activeAlerts.entries()) {
-          if (String(v.Key) === key) { activeAlerts.delete(k); removed = true; break; }
+
+        if (status === 'Concluído') {
+            const id = item.ID ? String(item.ID) : null;
+            const key = item.Key ? String(item.Key) : null;
+            let removed = false;
+            if (id) for (const [k,v] of activeAlerts.entries()) { if (String(v.ID)===id){activeAlerts.delete(k); removed=true; break;} }
+            if (!removed && key) for (const [k,v] of activeAlerts.entries()) { if (String(v.Key)===key){activeAlerts.delete(k); removed=true; break;} }
+            if (!removed && activeAlerts.has(payloadKey)) activeAlerts.delete(payloadKey);
+            resolvidosHoje++;
         }
-      }
-      if (!removed) {
-        if (activeAlerts.has(payloadKey)) { activeAlerts.delete(payloadKey); removed = true; }
-        else {
-          for (const [k,v] of activeAlerts.entries()) {
-            const sameSummary = (v.Summary||'') === (item.Summary||'');
-            const sameMaquina = (v.Descricao?.Maquina||'') === (item.Descricao?.Maquina||'');
-            if (sameSummary && sameMaquina) { activeAlerts.delete(k); removed = true; break; }
-          }
-        }
-      }
-
-      resolvidosHoje++;
-      return;
-    }
-
-    // ignore other statuses for now
-  });
-
-  // recalc KPIs from activeAlerts
-  const ativos = Array.from(activeAlerts.values()).sort((a,b) => new Date(b.CriadoEm) - new Date(a.CriadoEm));
-
-  const totals = ativos.reduce((acc, item) => {
-    const criticidade = normalizaSemAcento(item.Descricao?.Criticidade || '').toUpperCase();
-    if (criticidade === 'CRITICO') acc.critico++;
-    else if (criticidade === 'MEDIO' || criticidade === 'MÉDIO') acc.medio++;
-    else acc.outros++;
-    acc.total++;
-    return acc;
-  }, { total:0, medio:0, critico:0, outros:0 });
-
-  // render feed: ativos first
-  const feed = document.getElementById('feed_area');
-  feed.innerHTML = '';
-
-  ativos.forEach(item => {
-    const hora = formatHoraFrom(item);
-    const maquina = item.Descricao?.Maquina || 'N/A';
-    const mensagem = `${item.Summary || 'Alerta'} - ${maquina}`;
-
-    const criticidade = normalizaSemAcento(item.Descricao?.Criticidade || '').toUpperCase();
-    const div = document.createElement('div');
-    if (criticidade === 'CRITICO') div.className = 'feed-item critico';
-    else if (criticidade === 'MEDIO') div.className = 'feed-item medio';
-    else div.className = 'feed-item estavel';
-    div.innerHTML = `<div>${mensagem}</div><div>${hora}</div>`;
-    feed.appendChild(div);
-  });
-
-  // append resolved from batch (apenas para aparecer no feed)
-  const resolvidosBatch = dados.filter(it => it.Status === 'Concluído')
-    .sort((a,b) => new Date(b.ConcluidoEm || b.CriadoEm || 0) - new Date(a.ConcluidoEm || a.CriadoEm || 0));
-  resolvidosBatch.forEach(item => {
-    const hora = formatHoraFrom(item);
-    const maquina = item.Descricao?.Maquina || 'N/A';
-    const mensagem = `Resolvido: ${item.Summary || 'Alerta'} - ${maquina}`;
-
-    const div = document.createElement('div');
-    div.className = 'feed-item estavel';
-    div.innerHTML = `<div>${mensagem}</div><div>${hora}</div>`;
-    feed.appendChild(div);
-  });
-
-  // update KPIs
-  document.getElementById('kpi_total').innerText = totals.total;
-  document.getElementById('kpi_medio').innerText = totals.medio;
-  document.getElementById('kpi_critico').innerText = totals.critico;
-  document.getElementById('kpi_resolvidos').innerText = resolvidosHoje;
-
-  // update chart from ativos
-  atualizarGraficoPorComponentePorHora(ativos, 12);
-
-  // guarda o lote para o heatmap e tenta atualizar
-  ultimoLoteAlertas = dados;
-  tentarAtualizarHeatmap();
-}
-
-/* ========== GRÁFICO ========== */
-let graficoComponentes;
-function criarGraficoComponentes() {
-  const ctx = document.getElementById('grafico_componentes').getContext('2d');
-  graficoComponentes = new Chart(ctx, {
-    type: 'line',
-    data: { labels: [], datasets: [
-      { label:'CPU', data:[], borderColor:'#E71831', backgroundColor:'transparent', tension:0.2, fill:false, pointRadius:3 },
-      { label:'RAM', data:[], borderColor:'#E6AC00', backgroundColor:'transparent', tension:0.2, fill:false, pointRadius:3 },
-      { label:'Disco', data:[], borderColor:'#4CAF50', backgroundColor:'transparent', tension:0.2, fill:false, pointRadius:3 }
-    ]},
-    options: { responsive:true, plugins:{legend:{position:'top'}}, scales:{ x:{display:true,title:{display:true,text:'Hora'}}, y:{beginAtZero:true,ticks:{stepSize:1}} } }
-  });
-}
-
-function atualizarGraficoPorComponentePorHora(lista, janelaHoras = 12) {
-
-  const now = new Date();
-  const labels = [];
-
-  for (let i = janelaHoras - 1; i >= 0; i--) {
-    const dt = new Date(now.getTime() - i * 3600 * 1000);
-    labels.push({
-      label: String(dt.getHours()).padStart(2, '0') + ':00',
-      hora: dt
     });
-  }
 
-  const cpu = Array(labels.length).fill(0);
-  const ram = Array(labels.length).fill(0);
-  const disco = Array(labels.length).fill(0);
+    const ativos = Array.from(activeAlerts.values()).sort((a,b)=>new Date(b.CriadoEm)-new Date(a.CriadoEm));
 
-  const normaliza = s => normalizaSemAcento((s || '')).toUpperCase();
+    const totals = ativos.reduce((acc,item)=>{
+        const criticidade = normalizaSemAcento(item.Descricao?.Criticidade||'').toUpperCase();
+        if (criticidade==='CRITICO') acc.critico++;
+        else if (criticidade==='MEDIO'||criticidade==='MÉDIO') acc.medio++;
+        acc.total++;
+        return acc;
+    }, {total:0,medio:0,critico:0});
 
-  lista.forEach(alerta => {
+    document.getElementById('kpi_total').innerText = totals.total;
+    document.getElementById('kpi_medio').innerText = totals.medio;
+    document.getElementById('kpi_critico').innerText = totals.critico;
+    document.getElementById('kpi_resolvidos').innerText = resolvidosHoje;
 
-    const inicio = new Date(alerta.CriadoEm || alerta.firstSeen);
-    if (isNaN(inicio.getTime())) return;
-
-    let fim = null; // se não tem concluído, permanece ativo
-    if (alerta.ConcluidoEm) {
-      fim = new Date(alerta.ConcluidoEm);
-      if (isNaN(fim.getTime())) fim = null;
-    }
-
-    labels.forEach((slot, idx) => {
-
-      const horaSlot = slot.hora;
-
-      const ativoNestaHora =
-        horaSlot >= inicio &&
-        (!fim || horaSlot <= fim);
-
-      if (!ativoNestaHora) return;
-
-      const comp = normaliza(alerta.Descricao?.Componente || '');
-
-      if (comp.includes('CPU')) cpu[idx]++;
-      else if (comp.includes('RAM')) ram[idx]++;
-      else if (comp.includes('DISCO') || comp.includes('DISK')) disco[idx]++;
+    // Feed
+    const feed = document.getElementById('feed_area');
+    feed.innerHTML = '';
+    ativos.forEach(item=>{
+        const hora = formatHoraFrom(item);
+        const mensagem = `${item.Summary||'Alerta'} - ${item.Descricao?.Maquina||'N/A'}`;
+        const criticidade = normalizaSemAcento(item.Descricao?.Criticidade||'').toUpperCase();
+        const div = document.createElement('div');
+        div.className = criticidade==='CRITICO'?'feed-item critico':criticidade==='MEDIO'?'feed-item medio':'feed-item estavel';
+        div.innerHTML = `<div>${mensagem}</div><div>${hora}</div>`;
+        feed.appendChild(div);
     });
-  });
 
-  graficoComponentes.data.labels = labels.map(l => l.label);
-  graficoComponentes.data.datasets[0].data = cpu;
-  graficoComponentes.data.datasets[1].data = ram;
-  graficoComponentes.data.datasets[2].data = disco;
+    atualizarGraficoPorComponentePorHora(ativos,12);
 
-  graficoComponentes.update();
+    ultimoLoteAlertas = dados;
+    tentarAtualizarHeatmap();
 }
 
-/* ========== HEATMAP NOVO ========== */
+/* ================= GRÁFICO POR COMPONENTE ================= */
+function atualizarGraficoPorComponentePorHora(lista, janelaHoras=12){
+    const now = new Date();
+    const labels = [];
+    for(let i=janelaHoras-1;i>=0;i--){
+        const dt = new Date(now.getTime() - i*3600*1000);
+        labels.push({label:String(dt.getHours()).padStart(2,'0')+':00', hora: dt});
+    }
+    const cpu = Array(labels.length).fill(0);
+    const ram = Array(labels.length).fill(0);
+    const disco = Array(labels.length).fill(0);
+    const normaliza = s=>normalizaSemAcento((s||'')).toUpperCase();
 
-let heatmapChart = null;
+    lista.forEach(alerta=>{
+        const inicio = new Date(alerta.CriadoEm || alerta.firstSeen);
+        if(isNaN(inicio.getTime())) return;
+        const fim = alerta.ConcluidoEm?new Date(alerta.ConcluidoEm):null;
 
-anychart.onDocumentReady(function () {
-  heatmapChart = anychart.heatMap([]);
+        labels.forEach((slot,idx)=>{
+            const horaSlot = slot.hora;
+            const ativo = horaSlot>=inicio && (!fim || horaSlot<=fim);
+            if(!ativo) return;
+            const comp = normaliza(alerta.Descricao?.Componente||'');
+            if(comp.includes('CPU')) cpu[idx]++;
+            else if(comp.includes('RAM')) ram[idx]++;
+            else if(comp.includes('DISCO')||comp.includes('DISK')) disco[idx]++;
+        });
+    });
 
-  const colorScale = anychart.scales.ordinalColor();
-  colorScale.ranges([
-    { from: 0, to: 0, color: "#4CAF50" },  // Estável
-    { from: 1, to: 1, color: "#e6ac00" },  // Médio
-    { from: 2, to: 2, color: "#E71831" }   // Crítico
-  ]);
+    graficoComponentes.data.labels = labels.map(l=>l.label);
+    graficoComponentes.data.datasets[0].data = cpu;
+    graficoComponentes.data.datasets[1].data = ram;
+    graficoComponentes.data.datasets[2].data = disco;
+    graficoComponentes.update();
+}
 
-  heatmapChart.colorScale(colorScale);
-  heatmapChart.labels(false);
-  heatmapChart.tooltip().useHtml(true);
-
-  // título do tooltip: Criticidade
-  heatmapChart.tooltip().titleFormat(function () {
-    const crit = this.getData("critLabel") || "Estável";
-    return "Criticidade: " + crit;
-  });
-
-  // corpo do tooltip
-  heatmapChart.tooltip().format(function () {
-    const controlador = this.getData("controlador") || this.y;
-    const hora = this.x;
-    const valor = this.getData("valorAtual");
-    return (
-      "Controlador: " + controlador +
-      "<br>Hora: " + hora +
-      "<br>Valor atual: " + (valor != null ? valor + "%" : "Sem alerta")
-    );
-  });
-
-  heatmapChart.container("container");
-  heatmapChart.draw();
-
-  // se já tiver recebido alertas, tenta atualizar
-  tentarAtualizarHeatmap();
+/* ================= HEATMAP ================= */
+anychart.onDocumentReady(function(){
+    heatmapChart = anychart.heatMap([]);
+    const colorScale = anychart.scales.ordinalColor();
+    colorScale.ranges([{from:0,to:0,color:"#4CAF50"},{from:1,to:1,color:"#e6ac00"},{from:2,to:2,color:"#E71831"}]);
+    heatmapChart.colorScale(colorScale);
+    heatmapChart.labels(false);
+    heatmapChart.tooltip().useHtml(true);
+    heatmapChart.tooltip().titleFormat(()=>`Criticidade: ${this.getData("critLabel")||"Estável"}`);
+    heatmapChart.tooltip().format(function(){
+        const controlador = this.getData("controlador")||this.y;
+        const hora = this.x;
+        const valor = this.getData("valorAtual");
+        return `Controlador: ${controlador}<br>Hora: ${hora}<br>Valor atual: ${valor!=null?valor+'%':'Sem alerta'}`;
+    });
+    heatmapChart.container("container");
+    heatmapChart.draw();
 });
 
-function tentarAtualizarHeatmap() {
-  if (!heatmapChart) return;
-  if (!ultimoLoteAlertas || ultimoLoteAlertas.length === 0) return;
-  atualizarHeatmap(ultimoLoteAlertas, 12);
+/* ================= ATUALIZA HEATMAP ================= */
+function tentarAtualizarHeatmap(){
+    if(!heatmapChart || !ultimoLoteAlertas || !controladoresSetor.length) return;
+    atualizarHeatmap(ultimoLoteAlertas,12);
 }
 
-/**
- * Atualiza o heatmap:
- *  - X: últimas 12 horas
- *  - Y: controladores do setor (mockControladoresSetor)
- *  - Cor:
- *      0 = Estável (sem alerta naquele intervalo)
- *      1 = Médio   (alerta médio ativo naquela hora)
- *      2 = Crítico (alerta crítico ativo naquela hora)
- */
-function atualizarHeatmap(dadosAlertas, janelaHoras = 12) {
-  const agora = new Date();
-  const slots = [];
+function atualizarHeatmap(dadosAlertas, janelaHoras=12){
+    const agora = new Date();
+    const slots = [];
+    for(let i=janelaHoras-1;i>=0;i--){
+        const dt = new Date(agora.getTime() - i*3600*1000);
+        slots.push({label:String(dt.getHours()).padStart(2,'0')+':00', date: dt});
+    }
 
-  // slots de hora
-  for (let i = janelaHoras - 1; i >= 0; i--) {
-    const dt = new Date(agora.getTime() - i * 3600 * 1000);
-    slots.push({
-      label: String(dt.getHours()).padStart(2, '0') + ':00',
-      date: dt
+    const dataHeat = [];
+    controladoresSetor.forEach(ctrl=>{
+        const serial = ctrl.numero_serial;
+        slots.forEach(slot=>{
+            let melhorCodigo = 0;
+            let melhorAlerta = null;
+            dadosAlertas.forEach(alerta=>{
+                if(!alerta.Descricao || alerta.Descricao.Maquina!==serial) return;
+                const inicio = new Date(alerta.CriadoEm || alerta.firstSeen);
+                const fim = alerta.ConcluidoEm?new Date(alerta.ConcluidoEm):null;
+                const ativo = slot.date>=inicio && (!fim || slot.date<=fim);
+                if(!ativo) return;
+                const critStr = normalizaSemAcento(alerta.Descricao.Criticidade||'').toUpperCase();
+                let code=0;
+                if(critStr==='MEDIO'||critStr==='MÉDIO') code=1;
+                else if(critStr==='CRITICO'||critStr==='CRÍTICO') code=2;
+                if(code>melhorCodigo){melhorCodigo=code; melhorAlerta=alerta;}
+            });
+            let critLabel='Estável';
+            if(melhorCodigo===1) critLabel='Média';
+            else if(melhorCodigo===2) critLabel='Crítica';
+
+            dataHeat.push({
+                x: slot.label,
+                y: "Controlador "+serial,
+                heat: melhorCodigo,
+                critLabel: critLabel,
+                controlador: serial,
+                valorAtual: melhorAlerta?.Descricao?.ValorAtual||null
+            });
+        });
     });
-  }
 
-  const dataHeat = [];
-
-  mockControladoresSetor.forEach(ctrl => {
-    const serial = ctrl.numero_serial;
-
-    slots.forEach(slot => {
-      let melhorCodigo = 0; // 0 Estável, 1 Médio, 2 Crítico
-      let melhorAlerta = null;
-
-      dadosAlertas.forEach(alerta => {
-        if (!alerta.Descricao || alerta.Descricao.Maquina !== serial) return;
-
-        const inicio = new Date(alerta.CriadoEm || alerta.firstSeen);
-        if (isNaN(inicio.getTime())) return;
-
-        let fim = null;
-        if (alerta.ConcluidoEm) {
-          fim = new Date(alerta.ConcluidoEm);
-          if (isNaN(fim.getTime())) fim = null;
-        }
-
-        const t = slot.date;
-        const ativo =
-          t >= inicio &&
-          (!fim || t <= fim);
-
-        if (!ativo) return;
-
-        const critStr = normalizaSemAcento(alerta.Descricao.Criticidade || '').toUpperCase();
-        let code = 0;
-        if (critStr === 'MEDIO' || critStr === 'MÉDIO') code = 1;
-        else if (critStr === 'CRITICO' || critStr === 'CRÍTICO') code = 2;
-
-        if (code > melhorCodigo) {
-          melhorCodigo = code;
-          melhorAlerta = alerta;
-        }
-      });
-
-      let critLabel = 'Estável';
-      if (melhorCodigo === 1) critLabel = 'Média';
-      else if (melhorCodigo === 2) critLabel = 'Crítica';
-
-      const valorAtual = melhorAlerta?.Descricao?.ValorAtual || null;
-
-      dataHeat.push({
-        x: slot.label,
-        y: "Controlador " + serial,
-        heat: melhorCodigo,
-        critLabel: critLabel,
-        controlador: serial,
-        valorAtual: valorAtual
-      });
-    });
-  });
-
-  heatmapChart.data(dataHeat);
+    heatmapChart.data(dataHeat);
 }
 
-/* ========== INICIALIZAÇÃO + MOCKS DE TESTE ========== */
+/* ================= INICIALIZAÇÃO ================= */
 criarGraficoComponentes();
 
-/**
- * MOCK DE CONTROLADORES DO SETOR DO FUNCIONÁRIO
- * (no real você vai substituir isso por um fetch baseado em SETOR_USUARIO)
- */
-const mockControladoresSetor = [
-  { id_controlador: 1, numero_serial: "0001" },
-  { id_controlador: 2, numero_serial: "0002" },
-  { id_controlador: 3, numero_serial: "0003" },
-  { id_controlador: 4, numero_serial: "0004" },
-  { id_controlador: 5, numero_serial: "0005" },
-  { id_controlador: 6, numero_serial: "0006" }
-];
+(async function inicializarDashboard(){
+    controladoresSetor = await buscarControladores();
+    if(!controladoresSetor.length){
+        console.warn("Nenhum controlador retornado do setor, usando mock.");
+        controladoresSetor = [
+            {id_controlador:1, numero_serial:"0001"},
+            {id_controlador:2, numero_serial:"0002"},
+            {id_controlador:3, numero_serial:"0003"}
+        ];
+    }
 
-/**
- * MOCK DE ALERTAS (Abertos + Concluídos)
- * simulando o JSON que você receberia do bucket
- */
-const mock = [
-  {
-    ID: "a1",
-    Key: "AL-001",
-    Status: "Aberto",
-    Summary: "CPU acima de 90%",
-    CriadoEm: new Date(Date.now() - 3 * 3600e3).toISOString(),
-    Descricao: {
-      Componente: "CPU",
-      Criticidade: "CRÍTICO",
-      Maquina: "0001",
-      ValorAtual: "92.50",
-      Setor: "Fabricacao de Componentes"
-    }
-  },
-  {
-    ID: "a2",
-    Key: "AL-002",
-    Status: "Aberto",
-    Summary: "RAM em 80%",
-    CriadoEm: new Date(Date.now() - 2 * 3600e3).toISOString(),
-    Descricao: {
-      Componente: "RAM",
-      Criticidade: "MÉDIO",
-      Maquina: "0002",
-      ValorAtual: "80.00",
-      Setor: "Fabricacao de Componentes"
-    }
-  },
-  {
-    ID: "a3",
-    Key: "AL-003",
-    Status: "Aberto",
-    Summary: "Disco em 75%",
-    CriadoEm: new Date(Date.now() - 1.5 * 3600e3).toISOString(),
-    Descricao: {
-      Componente: "Disco",
-      Criticidade: "MÉDIO",
-      Maquina: "0003",
-      ValorAtual: "75.00",
-      Setor: "Fabricacao de Componentes"
-    }
-  },
-  {
-    ID: "b1",
-    Key: "AL-004",
-    Status: "Concluído",
-    Summary: "CPU crítica normalizada",
-    CriadoEm: new Date(Date.now() - 5 * 3600e3).toISOString(),
-    ConcluidoEm: new Date(Date.now() - 2 * 3600e3).toISOString(),
-    Descricao: {
-      Componente: "CPU",
-      Criticidade: "CRÍTICO",
-      Maquina: "0004",
-      ValorAtual: "95.00",
-      Setor: "Fabricacao de Componentes"
-    }
-  },
-  {
-    ID: "b2",
-    Key: "AL-005",
-    Status: "Concluído",
-    Summary: "RAM voltou ao normal",
-    CriadoEm: new Date(Date.now() - 4 * 3600e3).toISOString(),
-    ConcluidoEm: new Date(Date.now() - 1 * 3600e3).toISOString(),
-    Descricao: {
-      Componente: "RAM",
-      Criticidade: "MÉDIO",
-      Maquina: "0005",
-      ValorAtual: "78.00",
-      Setor: "Fabricacao de Componentes"
-    }
-  }
-];
+    // Aqui você coloca o fetch real dos alertas do S3
+    const dadosAlertasMock = [
+        {ID:"a1", Key:"AL-001", Status:"Aberto", Summary:"CPU acima de 90%", CriadoEm:new Date(Date.now()-3*3600e3).toISOString(), Descricao:{Componente:"CPU", Criticidade:"CRÍTICO", Maquina:"0001", ValorAtual:"92.5", Setor:"Teste"}},
+        {ID:"a2", Key:"AL-002", Status:"Aberto", Summary:"RAM em 80%", CriadoEm:new Date(Date.now()-2*3600e3).toISOString(), Descricao:{Componente:"RAM", Criticidade:"MÉDIO", Maquina:"0002", ValorAtual:"80", Setor:"Teste"}}
+    ];
 
-// carrega mocks para testar
-usarDadosReais(mock);
-
+    usarDadosReais(dadosAlertasMock);
+})();
 </script>
+
 </body>
 </html>
