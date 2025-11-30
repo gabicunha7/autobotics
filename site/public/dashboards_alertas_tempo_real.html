@@ -349,7 +349,7 @@ function atualizarHeatmap(dadosAlertas, janelaHoras=12){
             let melhorAlerta = null;
             dadosAlertas.forEach(alerta=>{
                 if(!alerta.Descricao || alerta.Descricao.Maquina!==serial) return;
-                if(alerta.Descricao.Setor !== setorUsuario) return; // FILTRO PELO SETOR
+                if(alerta.Descricao.Setor !== setorUsuario) return;
                 const inicio = new Date(alerta.CriadoEm || alerta.firstSeen);
                 const fim = alerta.ConcluidoEm?new Date(alerta.ConcluidoEm):null;
                 const ativo = slot.date>=inicio && (!fim || slot.date<=fim);
@@ -370,13 +370,22 @@ function atualizarHeatmap(dadosAlertas, janelaHoras=12){
                 heat: melhorCodigo,
                 critLabel: critLabel,
                 controlador: serial,
-                valorAtual: melhorAlerta?.Descricao?.ValorAtual||null
+                valorAtual: melhorAlerta?.Descricao?.ValorAtual || null,
+                tooltip: `Controlador: ${serial}<br>Hora: ${slot.label}<br>Valor atual: ${melhorAlerta?.Descricao?.ValorAtual||'Sem alerta'}`
             });
         });
     });
 
     heatmapChart.data(dataHeat);
+
+    // Reativa o tooltip
+    heatmapChart.tooltip().useHtml(true).titleFormat(function(){
+        return this.getData('critLabel') || 'Estável';
+    }).format(function(){
+        return this.getData('tooltip');
+    });
 }
+
 
 /* ================= INICIALIZAÇÃO ================= */
 criarGraficoComponentes();
