@@ -137,6 +137,8 @@ function makeAlertKey(item) {
 }
 
 /* ================= KPIs, Feed e Persistência ================= */
+let ultimoLoteAlertas = []; // para o heatmap usar depois que o gráfico estiver pronto
+
 function usarDadosReais(dados) {
 
   let resolvidosHoje = 0;
@@ -225,7 +227,7 @@ function usarDadosReais(dados) {
     feed.appendChild(div);
   });
 
-  // append resolved from batch
+  // append resolved from batch (apenas para aparecer no feed)
   const resolvidosBatch = dados.filter(it => it.Status === 'Concluído')
     .sort((a,b) => new Date(b.ConcluidoEm || b.CriadoEm || 0) - new Date(a.ConcluidoEm || a.CriadoEm || 0));
   resolvidosBatch.forEach(item => {
@@ -235,7 +237,7 @@ function usarDadosReais(dados) {
 
     const div = document.createElement('div');
     div.className = 'feed-item estavel';
-    div.innerHTML = `<div>Resolvido: ${mensagem}</div><div>${hora}</div>`;
+    div.innerHTML = `<div>${mensagem}</div><div>${hora}</div>`;
     feed.appendChild(div);
   });
 
@@ -247,6 +249,10 @@ function usarDadosReais(dados) {
 
   // update chart from ativos
   atualizarGraficoPorComponentePorHora(ativos, 12);
+
+  // guarda o lote para o heatmap e tenta atualizar
+  ultimoLoteAlertas = dados;
+  tentarAtualizarHeatmap();
 }
 
 /* ========== GRÁFICO ========== */
@@ -320,93 +326,232 @@ function atualizarGraficoPorComponentePorHora(lista, janelaHoras = 12) {
   graficoComponentes.update();
 }
 
+/* ========== HEATMAP NOVO ========== */
 
-/* ========== HEATMAP (mantido) ========== */
+let heatmapChart = null;
+
 anychart.onDocumentReady(function () {
-  var rawData = getData();
-  var chart = anychart.heatMap(rawData);
+  heatmapChart = anychart.heatMap([]);
 
-  var colorScale = anychart.scales.ordinalColor();
+  const colorScale = anychart.scales.ordinalColor();
   colorScale.ranges([
-    { less: 800, color: "#4CAF50" },
-    { from: 800, to: 1300, color: "#e6ac00" },
-    { greater: 1300, color: "#E71831" }
+    { from: 0, to: 0, color: "#4CAF50" },  // Estável
+    { from: 1, to: 1, color: "#e6ac00" },  // Médio
+    { from: 2, to: 2, color: "#E71831" }   // Crítico
   ]);
 
-  chart.colorScale(colorScale);
-  chart.labels(false);
-  chart.tooltip().useHtml(true);
+  heatmapChart.colorScale(colorScale);
+  heatmapChart.labels(false);
+  heatmapChart.tooltip().useHtml(true);
 
-  chart.tooltip().titleFormat(function () {
-    var v = this.heat;
-    if (v < 800) return "Criticidade: Estável";
-    if (v <= 1300) return "Criticidade: Médio";
-    return "Criticidade: Crítico";
+  // título do tooltip: Criticidade
+  heatmapChart.tooltip().titleFormat(function () {
+    const crit = this.getData("critLabel") || "Estável";
+    return "Criticidade: " + crit;
   });
 
-  chart.tooltip().format(function () {
-    return "Hora: " + this.x + "<br>Controlador: " + this.y + "<br>Valor: " + this.heat;
+  // corpo do tooltip
+  heatmapChart.tooltip().format(function () {
+    const controlador = this.getData("controlador") || this.y;
+    const hora = this.x;
+    const valor = this.getData("valorAtual");
+    return (
+      "Controlador: " + controlador +
+      "<br>Hora: " + hora +
+      "<br>Valor atual: " + (valor != null ? valor + "%" : "Sem alerta")
+    );
   });
 
-  chart.container("container");
-  chart.draw();
+  heatmapChart.container("container");
+  heatmapChart.draw();
+
+  // se já tiver recebido alertas, tenta atualizar
+  tentarAtualizarHeatmap();
 });
 
-function getData() {
-  return [
-    { x: "10:00", y: "Controlador 0001", heat: 700 },
-    { x: "10:00", y: "Controlador 0002", heat: 713 },
-    { x: "10:00", y: "Controlador 0003", heat: 657 },
-    { x: "10:00", y: "Controlador 0004", heat: 957 },
-    { x: "10:00", y: "Controlador 0005", heat: 1137 },
-    { x: "10:00", y: "Controlador 0006", heat: 956 },
-    { x: "11:00", y: "Controlador 0001", heat: 715 },
-    { x: "11:00", y: "Controlador 0002", heat: 747 },
-    { x: "11:00", y: "Controlador 0003", heat: 738 },
-    { x: "11:00", y: "Controlador 0004", heat: 1056 },
-    { x: "11:00", y: "Controlador 0005", heat: 1426 },
-    { x: "11:00", y: "Controlador 0006", heat: 1631 },
-      { x: "12:00", y: "Controlador 0001", heat: 715 },
-    { x: "12:00", y: "Controlador 0002", heat: 747 },
-    { x: "12:00", y: "Controlador 0003", heat: 738 },
-    { x: "12:00", y: "Controlador 0004", heat: 1056 },
-    { x: "12:00", y: "Controlador 0005", heat: 1426 },
-    { x: "12:00", y: "Controlador 0006", heat: 1631 },
-      { x: "13:00", y: "Controlador 0001", heat: 715 },
-    { x: "13:00", y: "Controlador 0002", heat: 747 },
-    { x: "13:00", y: "Controlador 0003", heat: 738 },
-    { x: "13:00", y: "Controlador 0004", heat: 1056 },
-    { x: "13:00", y: "Controlador 0005", heat: 1426 },
-    { x: "13:00", y: "Controlador 0006", heat: 1631 },
-      { x: "14:00", y: "Controlador 0001", heat: 715 },
-    { x: "14:00", y: "Controlador 0002", heat: 747 },
-    { x: "14:00", y: "Controlador 0003", heat: 738 },
-    { x: "14:00", y: "Controlador 0004", heat: 1056 },
-    { x: "14:00", y: "Controlador 0005", heat: 1426 },
-    { x: "14:00", y: "Controlador 0006", heat: 1631 },
-      { x: "15:00", y: "Controlador 0001", heat: 715 },
-    { x: "15:00", y: "Controlador 0002", heat: 747 },
-    { x: "15:00", y: "Controlador 0003", heat: 738 },
-    { x: "15:00", y: "Controlador 0004", heat: 1056 },
-    { x: "15:00", y: "Controlador 0005", heat: 1426 },
-    { x: "15:00", y: "Controlador 0006", heat: 1631 },
-    
-  ];
+function tentarAtualizarHeatmap() {
+  if (!heatmapChart) return;
+  if (!ultimoLoteAlertas || ultimoLoteAlertas.length === 0) return;
+  atualizarHeatmap(ultimoLoteAlertas, 12);
 }
 
-/* ========== INICIALIZAÇÃO + MOCK ========== */
+/**
+ * Atualiza o heatmap:
+ *  - X: últimas 12 horas
+ *  - Y: controladores do setor (mockControladoresSetor)
+ *  - Cor:
+ *      0 = Estável (sem alerta naquele intervalo)
+ *      1 = Médio   (alerta médio ativo naquela hora)
+ *      2 = Crítico (alerta crítico ativo naquela hora)
+ */
+function atualizarHeatmap(dadosAlertas, janelaHoras = 12) {
+  const agora = new Date();
+  const slots = [];
+
+  // slots de hora
+  for (let i = janelaHoras - 1; i >= 0; i--) {
+    const dt = new Date(agora.getTime() - i * 3600 * 1000);
+    slots.push({
+      label: String(dt.getHours()).padStart(2, '0') + ':00',
+      date: dt
+    });
+  }
+
+  const dataHeat = [];
+
+  mockControladoresSetor.forEach(ctrl => {
+    const serial = ctrl.numero_serial;
+
+    slots.forEach(slot => {
+      let melhorCodigo = 0; // 0 Estável, 1 Médio, 2 Crítico
+      let melhorAlerta = null;
+
+      dadosAlertas.forEach(alerta => {
+        if (!alerta.Descricao || alerta.Descricao.Maquina !== serial) return;
+
+        const inicio = new Date(alerta.CriadoEm || alerta.firstSeen);
+        if (isNaN(inicio.getTime())) return;
+
+        let fim = null;
+        if (alerta.ConcluidoEm) {
+          fim = new Date(alerta.ConcluidoEm);
+          if (isNaN(fim.getTime())) fim = null;
+        }
+
+        const t = slot.date;
+        const ativo =
+          t >= inicio &&
+          (!fim || t <= fim);
+
+        if (!ativo) return;
+
+        const critStr = normalizaSemAcento(alerta.Descricao.Criticidade || '').toUpperCase();
+        let code = 0;
+        if (critStr === 'MEDIO' || critStr === 'MÉDIO') code = 1;
+        else if (critStr === 'CRITICO' || critStr === 'CRÍTICO') code = 2;
+
+        if (code > melhorCodigo) {
+          melhorCodigo = code;
+          melhorAlerta = alerta;
+        }
+      });
+
+      let critLabel = 'Estável';
+      if (melhorCodigo === 1) critLabel = 'Média';
+      else if (melhorCodigo === 2) critLabel = 'Crítica';
+
+      const valorAtual = melhorAlerta?.Descricao?.ValorAtual || null;
+
+      dataHeat.push({
+        x: slot.label,
+        y: "Controlador " + serial,
+        heat: melhorCodigo,
+        critLabel: critLabel,
+        controlador: serial,
+        valorAtual: valorAtual
+      });
+    });
+  });
+
+  heatmapChart.data(dataHeat);
+}
+
+/* ========== INICIALIZAÇÃO + MOCKS DE TESTE ========== */
 criarGraficoComponentes();
 
-// MOCK de teste
-const mock = [
-  { ID: "a1", Status: "Aberto", Descricao: { Componente: "CPU", Criticidade: "CRÍTICO", Maquina:"0001" }, Summary: "CPU 1", CriadoEm: new Date(Date.now() - 3*3600e3).toISOString() },
-  { ID: "a2", Status: "Aberto", Descricao: { Componente: "CPU", Criticidade: "MÉDIO", Maquina:"0002" }, Summary: "CPU 2", CriadoEm: new Date(Date.now() - 2*3600e3).toISOString() },
-  { ID: "a3", Status: "Aberto", Descricao: { Componente: "CPU", Criticidade: "MÉDIO", Maquina:"0003" }, Summary: "CPU 3", CriadoEm: new Date(Date.now() - 2*3600e3).toISOString() },
-  { ID: "b1", Status: "Aberto", Descricao: { Componente: "RAM", Criticidade: "MÉDIO", Maquina:"0004" }, Summary: "RAM 1", CriadoEm: new Date(Date.now() - 2*3600e3).toISOString() },
-  { ID: "d1", Status: "Aberto", Descricao: { Componente: "Disco", Criticidade: "MÉDIO", Maquina:"0005" }, Summary: "DISCO 1", CriadoEm: new Date(Date.now() - 1*3600e3).toISOString() },
-  { ID: "x-res", Status: "Concluído", Descricao: { Componente: "CPU", Criticidade: "CRÍTICO", Maquina:"0006" }, Summary: "RESOLVIDO", CriadoEm: new Date().toISOString(), ConcluidoEm: new Date().toISOString() }
+/**
+ * MOCK DE CONTROLADORES DO SETOR DO FUNCIONÁRIO
+ * (no real você vai substituir isso por um fetch baseado em SETOR_USUARIO)
+ */
+const mockControladoresSetor = [
+  { id_controlador: 1, numero_serial: "0001" },
+  { id_controlador: 2, numero_serial: "0002" },
+  { id_controlador: 3, numero_serial: "0003" },
+  { id_controlador: 4, numero_serial: "0004" },
+  { id_controlador: 5, numero_serial: "0005" },
+  { id_controlador: 6, numero_serial: "0006" }
 ];
 
+/**
+ * MOCK DE ALERTAS (Abertos + Concluídos)
+ * simulando o JSON que você receberia do bucket
+ */
+const mock = [
+  {
+    ID: "a1",
+    Key: "AL-001",
+    Status: "Aberto",
+    Summary: "CPU acima de 90%",
+    CriadoEm: new Date(Date.now() - 3 * 3600e3).toISOString(),
+    Descricao: {
+      Componente: "CPU",
+      Criticidade: "CRÍTICO",
+      Maquina: "0001",
+      ValorAtual: "92.50",
+      Setor: "Fabricacao de Componentes"
+    }
+  },
+  {
+    ID: "a2",
+    Key: "AL-002",
+    Status: "Aberto",
+    Summary: "RAM em 80%",
+    CriadoEm: new Date(Date.now() - 2 * 3600e3).toISOString(),
+    Descricao: {
+      Componente: "RAM",
+      Criticidade: "MÉDIO",
+      Maquina: "0002",
+      ValorAtual: "80.00",
+      Setor: "Fabricacao de Componentes"
+    }
+  },
+  {
+    ID: "a3",
+    Key: "AL-003",
+    Status: "Aberto",
+    Summary: "Disco em 75%",
+    CriadoEm: new Date(Date.now() - 1.5 * 3600e3).toISOString(),
+    Descricao: {
+      Componente: "Disco",
+      Criticidade: "MÉDIO",
+      Maquina: "0003",
+      ValorAtual: "75.00",
+      Setor: "Fabricacao de Componentes"
+    }
+  },
+  {
+    ID: "b1",
+    Key: "AL-004",
+    Status: "Concluído",
+    Summary: "CPU crítica normalizada",
+    CriadoEm: new Date(Date.now() - 5 * 3600e3).toISOString(),
+    ConcluidoEm: new Date(Date.now() - 2 * 3600e3).toISOString(),
+    Descricao: {
+      Componente: "CPU",
+      Criticidade: "CRÍTICO",
+      Maquina: "0004",
+      ValorAtual: "95.00",
+      Setor: "Fabricacao de Componentes"
+    }
+  },
+  {
+    ID: "b2",
+    Key: "AL-005",
+    Status: "Concluído",
+    Summary: "RAM voltou ao normal",
+    CriadoEm: new Date(Date.now() - 4 * 3600e3).toISOString(),
+    ConcluidoEm: new Date(Date.now() - 1 * 3600e3).toISOString(),
+    Descricao: {
+      Componente: "RAM",
+      Criticidade: "MÉDIO",
+      Maquina: "0005",
+      ValorAtual: "78.00",
+      Setor: "Fabricacao de Componentes"
+    }
+  }
+];
+
+// carrega mocks para testar
 usarDadosReais(mock);
 
 </script>

@@ -33,10 +33,27 @@ function editar(id,numero_serial, setor, empresa) {
     return database.executar(sql)
 }
 
+function listarPorSetor(nomeSetor, idEmpresa) {
+    const sql = `
+        SELECT 
+            c.id_controlador,
+            c.numero_serial,
+            c.status,
+            s.nome AS setor
+        FROM controlador c
+        JOIN setor s ON c.fk_setor = s.id_setor
+        WHERE s.nome = '${nomeSetor}'
+        AND c.fk_empresa = ${idEmpresa};
+    `;
+    return database.executar(sql);
+}
+
+
 module.exports = {
     cadastrar,
     buscarControlador,
     buscarSetor,
     excluir,
-    editar
+    editar,
+    listarPorSetor
 }

@@ -23,4 +23,9 @@ router.post("/editar", function (req, res) {
     controladoresController.editar(req, res);
 });
 
+router.post("/listarPorSetor", function(req, res) {
+    controladoresController.listarControladoresPorSetor(req, res);
+});
+
+
 module.exports = router;

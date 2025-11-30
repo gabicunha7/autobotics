@@ -65,10 +65,28 @@ async function editar(req, res) {
     }
 }
 
+async function listarControladoresPorSetor(req, res) {
+    const { setor, empresa } = req.body;
+
+    if (!setor || !empresa) {
+        return res.status(400).send("Setor e empresa são obrigatórios.");
+    }
+
+    try {
+        const resposta = await controladoresModel.listarPorSetor(setor, empresa);
+        res.status(200).json(resposta);
+    } catch (erro) {
+        console.log(erro);
+        res.status(500).send("Erro ao buscar controladores por setor.");
+    }
+}
+
+
 module.exports = {
     cadastrar,
     buscarSetor,
     buscarControlador,
     excluir,
-    editar
+    editar,
+    listarControladoresPorSetor
 }
