@@ -77,11 +77,10 @@
     <div class="div-superior">
       <div class="div-filtro">
         <p>Controlador: </p>
-        <select id="selectControlador">
-          <option>Controlador A</option>
-          <option>Controlador B</option>
+        <select onchange="trocarControlador()" id="selectControlador">
+
         </select>
-        <p style="margin-left: 55%; font-weight: 600;">
+        <p id="capture-time" style="margin-left: 55%; font-weight: 600;">
           12:00 - 13:00
         </p>
       </div>
@@ -104,27 +103,20 @@
           <div class="kpi-mean-container">
             <p><span class="text-bold">Média de uso CPU:</span></p>
             <div class="pie-chart-container">
-              <p>85%</p>
+              <p id="kpi-mean-value-cpu">-/-</p>
               <canvas class="pie-chart" id="cpu-mean-pie"></canvas>
-            </div>
-          </div>
-          <div class="kpi-alert-process">
-            <div class="top-kpi-flat" id="total-alerts">
-              <p>Total de alertas</p>
-              <p>20</p>
-            </div>
-            <div class="top-kpi-flat" id="active-processes">
-              <p>Processos ativos</p>
-              <p>120</p>
             </div>
           </div>
           <div class="kpi-mean-container">
             <p><span class="text-bold">Média de uso RAM</span></p>
             <div class="pie-chart-container">
-                <p class="ram-percent">55%</p>
-                <p class="ram-total">8.5/16GB</p>
+                <p class="ram-percent" id="kpi-mean-value-ram">-/-%</p>
+                <p class="ram-total" id="kpi-mean-value-ram-total">-/-GB</p>
               <canvas class="pie-chart" id="ram-mean-pie"></canvas>
             </div>
+          </div>
+          <div id="kpi-parameters" class="kpi-parameters">
+            <p class="text-bold" style="font-size: 1.6rem;">Parâmetros de alertas críticos</p>
           </div>
         </div>
         <div class="left-main-item chart-info">
@@ -139,17 +131,16 @@
             <div class="kpi-container">
               <p><span class="text-bold">Picos da última hora</span></p>
               <div class="kpi-chart-info">
-                <p>CPU: <span class="text-red">94%</span> - 12:50</p>
-                <p>RAM: <span class="text-green">30%</span> - 13:00</p>
-                <p></p>
+                <p id="kpi-chart-info-value-cpu-timestamp">CPU: <span id="kpi-chart-info-value-cpu" class="text-green">--%</span> - <span id="kpi-info-cpu-time"></span></p>
+                <p id="kpi-chart-info-value-ram-timestamp">RAM: <span id="kpi-chart-info-value-ram" class="text-green">--%</span> - <span id="kpi-info-ram-time"></span></p>
               </div>
             </div>
 
             <div class="kpi-container">
               <p><span class="text-bold">Últimos registros</span></p>
               <div class="kpi-chart-info">
-                <p>CPU: <span class="text-yellow">77%</span> - 13:00</p>
-                <p>RAM: <span class="text-green">30%</span> - 13:00</p>
+                <p id="kpi-chart-info-value-cpu-timestamp-last">CPU: <span id="kpi-chart-info-value-cpu-last" class="text-green">--%</span> - <span id="kpi-info-cpu-time-last"></span></p>
+                <p id="kpi-chart-info-value-ram-timestamp-last">RAM: <span id="kpi-chart-info-value-ram-last" class="text-green">--%</span> - <span id="kpi-info-ram-time-last"></span></p>
               </div>
             </div>
 
@@ -166,8 +157,8 @@
               info
             </span>
           </div>
-          <div class="process-list">
-            <div class="process-list-item process-list-item-critico">
+          <div class="process-list" id="process-list">
+            <!-- <div class="process-list-item process-list-item-critico">
                 <div class="process-item-info">
                   <p>systemDlsx.exe</p>
                   <div class="process-metrics">
@@ -235,7 +226,7 @@
                 <div class="process-item-time">
                   <p>12:50</p>
                 </div>
-            </div>
+            </div> -->
 
           </div>
         </div>
@@ -245,7 +236,6 @@
     </div>
 
   </section>
-
 
   <script src="js/dash_cpu_ram.js"></script>
 </body>

@@ -1,115 +1,484 @@
+async function buscarCpuParametros() {
+  let parametros = await buscarParametros()
 
-// Configuração do gráfico rosca de CPU (KPI)
-const cpu_pie = document.getElementById('cpu-mean-pie')
+  let parametrosCpu = []
 
-const data_cpu_pie = {
-  datasets: [{
-    label: 'Média de CPU da última hora (%)',
-    data: [85, 15],
-    backgroundColor: [
-        'rgb(255, 75, 75)',
-      'rgb(213, 213, 213)'
-    ],
-    hoverOffset: 4
-  }]
-};
-
-new Chart(cpu_pie, {
-    type: 'doughnut',
-    data: data_cpu_pie,
-    options: {
-        cutout: '85%'
+  for (parametro in parametros) {
+    if (parametros[parametro].nome == "CPU") {
+      parametrosCpu.push(parametros[parametro].valor)
     }
-})
+  }
 
-// Configuração do gráfico rosca de RAM (KPI)
-const ram_pie = document.getElementById('ram-mean-pie')
+  return parametrosCpu
+}
 
-const data_ram_pie = {
-  datasets: [{
-    label: 'Média de RAM da última hora (%)',
-    data: [55, 45],
-    backgroundColor: [
-        'rgb(239, 198, 0)',
-      'rgb(213, 213, 213)'
-    ],
-    hoverOffset: 4
-  }]
-};
+function atualizarHorario(horario) {
+  let horarioText = document.getElementById("capture-time")
 
-new Chart(ram_pie, {
-    type: 'doughnut',
-    data: data_ram_pie,
-    options: {
-        cutout: '85%'
+  let horaAtras = horario;
+
+  let hora = Number(horaAtras.substring(0, 2))
+  let minuto = horaAtras.substring(3)
+
+  console.log("hora: ", hora);
+  console.log("minutos: ", minuto);
+  
+  
+
+  hora = hora - 1;
+
+  if (hora < 0) hora = 23;
+
+  horarioText.innerHTML = `${hora}:${minuto} - ${horario}`
+}
+
+async function buscarRamParametros() {
+  let parametros = await buscarParametros()
+
+  let parametrosRam = []
+
+  for (parametro in parametros) {
+    if (parametros[parametro].nome == "RAM") {
+      parametrosRam.push(parametros[parametro].valor)
     }
-})
+  }
 
-// Configuração do gráfico rosca de Capturas (Measures)
-const measures_pie = document.getElementById('pie-measures-chart')
+  return parametrosRam
+}
 
-const data_measures_pie = {
-  datasets: [{
-    label: 'Capturas da última hora',
-    data: [36, 8, 2],
-    backgroundColor: [
-        'rgb(70, 255, 45)',
-      'rgb(239, 198, 0)',
-      'rgb(255, 0, 0)'
-    ],
-    hoverOffset: 4
-  }]
-};
+async function criarGraficos(dadosControlador) {
+  var medias = dadosControlador.media5Minutos
+  var horarios = []
+  var cpu = []
+  var ram = []
 
-new Chart(measures_pie, {
+  let parametrosRam = buscarRamParametros()
+  let parametrosCpu = buscarCpuParametros()
+
+  let top5processos = dadosControlador.topProcessos.processos.topProcessos;
+
+
+  // parametrosCpu ou ram [0] sempre será o maior (criticidade)
+
+  top5processos = top5processos
+    .replace(/'/g, '"')          // troca aspas simples
+    .replace(/None/g, 'null')    // se vier null estilo Python
+    .trim();
+
+  top5processos = JSON.parse(top5processos);
+
+  console.log(top5processos);
+
+  const horariosChave = Object.keys(medias);
+
+  horariosChave.forEach(horario => {
+    const info = medias[horario];
+    console.log(horario, info.cpu, info.ram);
+    horarios.push(horario)
+    cpu.push(info.cpu)
+    ram.push(info.ram)
+  });
+
+  console.log("Listas cpu: " + cpu);
+  console.log("Listas ram: " + ram);
+
+  let listaProcessos = document.getElementById("process-list")
+  listaProcessos.innerHTML = ""
+
+  for (processo in top5processos) {
+    listaProcessos.innerHTML += `
+            <div class="process-list-item process-list-item-padrao">
+                <div class="process-item-info">
+                  <p>${top5processos[processo].name}</p>
+                  <div class="process-metrics">
+                    <p>PiD: ${top5processos[processo].pid}</p>
+                    <p class="text-bold">CPU: ${top5processos[processo].cpu_percent}%</p>
+                    <p class="text-bold">RAM: ${top5processos[processo].memory_rss}%</p>
+                  </div>
+                </div>
+                <div class="process-item-time">
+                  <p>${dadosControlador.topProcessos.processos.timestamp}</p>
+                </div>
+            </div>
+            `
+    console.log(top5processos[processo].pid);
+  }
+
+  // Configuração do gráfico rosca de CPU (KPI)
+  const kpi_cpu_mean = document.getElementById('cpu-mean-pie')
+
+  let meanCpu = dadosControlador.mediaCpuRam.medias.cpu
+  let color = "rgb(70, 255, 45)"
+
+  if (meanCpu >= parametrosCpu[0]) {
+    color = "rgb(255, 75, 75)"
+    document.getElementById('kpi-mean-value-cpu').style.color = color
+  }
+  else if (meanCpu >= parametrosCpu[1]) {
+    color = "rgb(255, 217, 32)"
+    document.getElementById('kpi-mean-value-cpu').style.color = color
+  }
+
+  const data_kpi_cpu_mean = {
+    datasets: [{
+      label: 'Média de CPU da última hora (%)',
+      data: [meanCpu, 100 - meanCpu],
+      backgroundColor: [
+        color,
+        'rgb(213, 213, 213)'
+      ],
+      hoverOffset: 4
+    }]
+  };
+
+  new Chart(kpi_cpu_mean, {
     type: 'doughnut',
-    data: data_measures_pie,
+    data: data_kpi_cpu_mean,
     options: {
-        cutout: '70%'
+      cutout: '85%'
     }
-})
+  })
 
-// Configuração do gráfico de linha de CPU
-const cpu_line = document.getElementById('cpu-line-chart');
+  // Configuração do gráfico rosca de RAM (KPI)
+  const kpi_ram_mean = document.getElementById('ram-mean-pie')
 
-const labels_cpu_line = ['12:00', '12:05', '12:10', '12:15', '12:20', '12:25', '12:30', '12:35', '12:40', '12:45', '12:50', '12:55', '13:00'];
-const data_cpu_line = {
-  labels: labels_cpu_line,
-  datasets: [{
-    label: 'Média CPU (%)',
-    data: [22, 24, 28, 21, 33, 30, 37, 35, 33, 75, 89, 93, 95],
-    borderColor: 'rgb(75, 192, 192)',
-    tension: 0.1
-  },
-  { 
-    label: 'Média RAM (%)',
-    data: [57, 50, 55, 59, 62, 61, 63, 55, 70, 71, 65, 78, 75],
-    borderColor: 'rgb(255, 75, 75)',
-    tension: 0.1
-  }]
-};
+  let meanRam = dadosControlador.mediaCpuRam.medias.ram
+  color = "rgb(70, 255, 45)"
 
-new Chart(cpu_line, {
+  if (meanRam > parametrosRam[0]) {
+    color = "rgb(255, 75, 75)"
+    document.getElementById('kpi-mean-value-ram').style.color = color
+    document.getElementById('kpi-mean-value-ram-total').style.color = color
+  }
+  else if (meanRam > parametrosRam[1]) {
+    color = "rgb(255, 217, 32)"
+    document.getElementById('kpi-mean-value-ram').style.color = color
+    document.getElementById('kpi-mean-value-ram-total').style.color = color
+  }
+
+  const data_kpi_ram_mean = {
+    datasets: [{
+      label: 'Média de RAM da última hora (%)',
+      data: [dadosControlador.mediaCpuRam.medias.ram, 100 - dadosControlador.mediaCpuRam.medias.ram],
+      backgroundColor: [
+        color,
+        'rgb(213, 213, 213)'
+      ],
+      hoverOffset: 4
+    }]
+  };
+
+  new Chart(kpi_ram_mean, {
+    type: 'doughnut',
+    data: data_kpi_ram_mean,
+    options: {
+      cutout: '85%'
+    }
+  })
+
+  // Configuração do gráfico de linha de CPU
+  const cpu_line = document.getElementById('cpu-line-chart');
+
+  const labels_cpu_line = horarios.reverse();
+  const data_cpu_line = {
+    labels: labels_cpu_line,
+    datasets: [{
+      label: 'Média CPU (%)',
+      data: cpu.reverse(),
+      borderColor: 'rgb(75, 192, 192)',
+      tension: 0.1
+    },
+    {
+      label: 'Média RAM (%)',
+      data: ram.reverse(),
+      borderColor: 'rgb(255, 75, 75)',
+      tension: 0.1
+    }]
+  };
+
+  new Chart(cpu_line, {
     type: 'line',
-    data: data_cpu_line
-})
+    data: data_cpu_line,
+    options: {
+      plugins: {
+        legend: {
+          labels: {
+            font: {
+              size: 20
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            font: {
+              size: 18
+            }
+          }
+        },
+        y: {
+          ticks: {
+            font: {
+              size: 18
+            }
+          }
+        }
+      }
+    }
+  })
+}
 
-// Configuração do gráfico de linha de RAM
-const ram_line = document.getElementById('ram-line-chart');
+async function criarKpis(dadosControlador) {
+  let parametrosCpu = buscarCpuParametros()
+  let parametrosRam = buscarRamParametros()
 
-const labels_ram_line = ['12:00', '12:05', '12:10', '12:15', '12:20', '12:25', '12:30', '12:35', '12:40', '12:45', '12:50', '12:55', '13:00'];
-const data_ram_line = {
-  labels: labels_ram_line,
-  datasets: [{
-    label: 'Média RAM (%)',
-    data: [22, 24, 28, 21, 33, 30, 37, 35, 33, 75, 89, 93, 95],
-    fill: true,
-    borderColor: 'rgb(75, 192, 192)',
-    tension: 0.1
-  }]
-};
+  // KPI de média de CPU
+  var kpi_mean_cpu = document.getElementById("kpi-mean-value-cpu")
+  kpi_mean_cpu.innerHTML = dadosControlador.mediaCpuRam.medias.cpu + "%"
 
-new Chart(ram_line, {
-    type: 'line',
-    data: data_ram_line
-})
+  // KPI de média de RAM
+  var kpi_mean_ram = document.getElementById("kpi-mean-value-ram")
+  kpi_mean_ram.innerHTML = dadosControlador.mediaCpuRam.medias.ram + "%"
+
+  var kpi_mean_ram_total = document.getElementById("kpi-mean-value-ram-total")
+  kpi_mean_ram_total.innerHTML = dadosControlador.mediaCpuRam.metricas.ramUsada + "/" + dadosControlador.mediaCpuRam.metricas.ramTotal + "GB"
+
+  // KPIS de pico
+  var kpi_chart_cpu_time = document.getElementById("kpi-info-cpu-time")
+  kpi_chart_cpu_time.innerHTML = dadosControlador.picoCpuRam.cpu.timestamp
+
+  var kpi_chart_cpu = document.getElementById("kpi-chart-info-value-cpu")
+  if (dadosControlador.picoCpuRam.cpu.valor > parametrosCpu[0]) {
+    kpi_chart_cpu.classList.remove("text-green")
+    kpi_chart_cpu.classList.add("text-red")
+  }
+  else if (dadosControlador.picoCpuRam.cpu.valor > parametrosCpu[1]) {
+    kpi_chart_cpu.classList.remove("text-green")
+    kpi_chart_cpu.classList.add("text-yellow")
+  }
+  kpi_chart_cpu.innerHTML =
+    dadosControlador.picoCpuRam.cpu.valor;
+
+
+  var kpi_chart_ram = document.getElementById("kpi-chart-info-value-ram")
+  if (dadosControlador.picoCpuRam.ram.valor > parametrosRam[0]) {
+    kpi_chart_ram.classList.remove("text-green")
+    kpi_chart_ram.classList.add("text-red")
+  }
+  else if (dadosControlador.picoCpuRam.ram.valor > parametrosRam[1]) {
+    kpi_chart_ram.classList.remove("text-green")
+    kpi_chart_ram.classList.add("text-yellow")
+  }
+  kpi_chart_ram.innerHTML = dadosControlador.picoCpuRam.ram.valor
+
+  var kpi_chart_ram_time = document.getElementById("kpi-info-ram-time")
+  kpi_chart_ram_time.innerHTML = dadosControlador.picoCpuRam.ram.timestamp
+
+  // KPIS ultimos dados
+
+  var kpi_chart_cpu_last_time = document.getElementById("kpi-info-cpu-time-last")
+  kpi_chart_cpu_last_time.innerHTML = dadosControlador.ultimasCapturas.cpu.timestamp
+
+  var kpi_chart_cpu_last = document.getElementById("kpi-chart-info-value-cpu-last")
+
+  if (dadosControlador.ultimasCapturas.cpu.valor > parametrosCpu[0]) {
+    kpi_chart_cpu_last.classList.remove("text-green")
+    kpi_chart_cpu_last.classList.add("text-red")
+  }
+  else if (dadosControlador.ultimasCapturas.cpu.valor > parametrosCpu[1]) {
+    kpi_chart_cpu_last.classList.remove("text-green")
+    kpi_chart_cpu_last.classList.add("text-yellow")
+  }
+  kpi_chart_cpu_last.innerHTML = dadosControlador.ultimasCapturas.cpu.valor
+
+  var kpi_chart_ram_time_last = document.getElementById("kpi-info-ram-time-last")
+  kpi_chart_ram_time_last.innerHTML = dadosControlador.ultimasCapturas.ram.timestamp
+
+  var kpi_chart_ram_last = document.getElementById("kpi-chart-info-value-ram-last")
+  kpi_chart_ram_last.innerHTML = dadosControlador.ultimasCapturas.cpu.valor
+
+  if (dadosControlador.ultimasCapturas.ram.valor > parametrosRam[0]) {
+    kpi_chart_ram_last.classList.remove("text-green")
+    kpi_chart_ram_last.classList.add("text-red")
+  }
+  else if (dadosControlador.ultimasCapturas.ram.valor > parametrosRam[1]) {
+    kpi_chart_ram_last.classList.remove("text-green")
+    kpi_chart_ram_last.classList.add("text-yellow")
+  }
+}
+
+async function popularDashboard(controlador) {
+  let dados = await lerJsonS3();
+  let nomeControlador = controlador
+  document.getElementById("selectControlador").value = controlador
+  console.log("NOME CONTROLADOR: ", nomeControlador);
+  console.log(dados);
+  
+  let dadosControlador = dados[nomeControlador]
+  let horario = dados[nomeControlador].ultimasCapturas.ram.timestamp
+
+  console.log(dadosControlador);
+
+
+  criarKpis(dadosControlador)
+  criarGraficos(dadosControlador)
+  atualizarHorario(horario)
+}
+
+function buscarParametros() {
+  return fetch("/cpuRam/buscarParametros", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      empresa: sessionStorage.getItem("EMPRESA_USUARIO"),
+      setor: sessionStorage.getItem("SETOR_USUARIO")
+    })
+  })
+    .then(resposta => {
+      if (!resposta.ok) {
+        throw "Erro ao buscar parâmetros do setor.";
+      }
+      else {
+        return resposta.json();
+      }
+    })
+    .catch(erro => {
+      console.error(erro);
+    });
+}
+
+async function exibirParametros() {
+  let kpi_parametros = document.getElementById("kpi-parameters")
+  let parametros = await buscarParametros()
+  console.log(`Parametros:`, parametros);
+  for (parametro in parametros) {
+    if (parametros[parametro].nome == "CPU" && parametros[parametro].criticidade == 2) {
+      console.log("Os parametros de ", parametros[parametro].nome, " são ", parametros[parametro].valor, " criticidade ", parametros[parametro].criticidade);
+      kpi_parametros.innerHTML += `<p class="text-bold">CPU - ${parametros[parametro].valor}%</p>`
+    }
+    if (parametros[parametro].nome == "RAM" && parametros[parametro].criticidade == 2) {
+      console.log("Os parametros de ", parametros[parametro].nome, " são ", parametros[parametro].valor, " criticidade ", parametros[parametro].criticidade);
+      kpi_parametros.innerHTML += `<p class="text-bold">RAM - ${parametros[parametro].valor}%</p>`
+    }
+  }
+
+  let nomeSetor = await buscarNomeSetor(sessionStorage.getItem("SETOR_USUARIO"))
+  kpi_parametros.innerHTML += `<p>Setor: ${nomeSetor[0].nome}</p>`
+}
+
+function buscarNomeSetor(setor) {
+  return fetch("/cpuRam/buscarNomeSetor", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      setor: setor
+    })
+  })
+    .then(resposta => {
+      if (!resposta.ok) {
+        throw "Erro ao buscar parâmetros do setor.";
+      }
+      else {
+        return resposta.json();
+      }
+    })
+    .then(dados => {
+      console.log(dados);
+
+      return dados
+    })
+    .catch(erro => {
+      console.error(erro);
+      return null
+    });
+}
+
+function buscarControladores() {
+  return fetch("/cpuRam/buscarControladores", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      setor: sessionStorage.getItem("SETOR_USUARIO"),
+      empresa: sessionStorage.getItem("EMPRESA_USUARIO")
+    })
+  })
+    .then(resposta => {
+      if (!resposta.ok) {
+        throw "Erro ao buscar parâmetros do setor.";
+      }
+      else {
+        return resposta.json();
+      }
+    })
+    .then(dados => {
+      console.log(dados);
+
+      return dados
+    })
+    .catch(erro => {
+      console.error(erro);
+      return null
+    });
+}
+
+async function listarControladores() {
+  let controladores = await buscarControladores()
+  let select = document.getElementById("selectControlador")
+  
+  for (controlador in controladores) {
+    select.innerHTML += `<option value="${controladores[controlador].numero_serial}">${controladores[controlador].numero_serial}</option>`
+  }
+}
+
+function trocarControlador() {
+  let select = document.getElementById("selectControlador")
+  
+  popularDashboard(select.value)
+}
+// Amazon S3
+
+async function lerJsonS3() {
+  try {
+    const resposta = await fetch('/s3RouteCpuRam/dados/ultimo');
+    const texto = await resposta.text();
+
+    if (!resposta.ok) {
+      console.error('Erro na requisição /s3RouteHistoricoAlerta/dados/ultimo', resposta.status, texto);
+      const msgEl = document.getElementById('erroBuscaS3');
+      if (msgEl) msgEl.textContent = 'Erro do servidor ao buscar dados: ' + (texto || resposta.status);
+      return null;
+    }
+
+    let data;
+    try {
+      data = JSON.parse(texto);
+    } catch (e) {
+      console.warn('Resposta não é JSON, usando texto:', texto);
+      data = texto;
+    }
+
+    console.log('ultimo JSON do bucket (histórico de alertas):', data);
+
+    sessionStorage.JSON_ALERTA = JSON.stringify(data);
+
+
+    return data;
+
+  } catch (err) {
+    console.error('Erro ao buscar último arquivo do S3:', err);
+    const msgEl = document.getElementById('erroBuscaS3');
+    if (msgEl) msgEl.textContent = 'Falha ao buscar dados do S3: ' + (err.message || err);
+    return null;
+  }
+}
+listarControladores()
+trocarControlador()
+popularDashboard(sessionStorage.getItem("CONTROLADOR"))
+exibirParametros()

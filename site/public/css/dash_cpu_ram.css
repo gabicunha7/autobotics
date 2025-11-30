@@ -96,8 +96,8 @@ body {
 .chart-container {
     display: flex;
     flex-direction: column;
-    width: 60%;
-    height: 100%;
+    width: 70%;
+    height: 102%;
 
     background-color: white;
     box-shadow: 1px 1.5px 15px 0.1px rgb(177, 177, 177);
@@ -111,8 +111,8 @@ body {
 }
 
 .kpis-chart-container {
-    width: 38.5%;
-    height: 100%;
+    width: 28.5%;
+    height: 101.5%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -144,7 +144,7 @@ body {
 }
 
 .line-chart {
-    width: 90% !important;
+    width: 85% !important;
     display: flex;
     align-self: center;
 }
@@ -189,13 +189,21 @@ body {
 }
 
 
-.kpi-alert-process {
-    width: 39%;
+.kpi-parameters {
+    width: 38.5%;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     gap: 10%;
+
+    background-color: white;
+    box-shadow: 1px 1.5px 15px 0.1px rgb(177, 177, 177);
+}
+
+.kpi-parameters {
+    font-size: 1.4rem;
 }
 
 .top-kpi-flat {
@@ -221,7 +229,7 @@ body {
     background-color: var(--ligth-yellow);
 }
 
-#active-processes {
+#active-process {
     background-color: var(--ligth-green);
 }
 
@@ -250,19 +258,16 @@ body {
     top: 52%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: var(--ligth-red);
     font-weight: 700;
+    color: var(--ligth-green);
 }
 
 .pie-chart-container .ram-percent{
     top: 40% !important;
-    color: var(--dark-yellow);
 }
 
 .pie-chart-container .ram-total{
     top: 60% !important;
-    color: var(--dark-yellow);
-
     font-size: 1.2rem;
 }
 
@@ -287,7 +292,7 @@ body {
     align-items: center;
     background-color: white;
     border-radius: 15px;
-    height: 72.5vh;
+    height: 73vh;
     box-shadow: 1px 1.5px 15px 0.1px rgb(177, 177, 177);
 }
 
@@ -338,6 +343,12 @@ body {
     background-color: var(--transparent-green);
     border-left: 8px solid var(--ligth-green) !important;
     border: 1px solid rgb(140, 250, 143);
+}
+
+.process-list-item-padrao {
+    background-color: rgb(241, 241, 241);
+    border-left: 8px solid rgb(126, 126, 126) !important;
+    border: 1px solid rgb(126, 126, 126);
 }
 
 .process-item-info {

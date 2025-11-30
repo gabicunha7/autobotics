@@ -19,6 +19,7 @@ var indexRouter = require("./src/routes/index");
 var usuarioRouter = require("./src/routes/usuarios");
 var empresasRouter = require("./src/routes/empresas");
 var emailRouter = require("./src/routes/email");
+var setores = require("./src/routes/setores")
 
 // CRUD FUNCIONARIO
 
@@ -33,10 +34,12 @@ var roboticaRouter = require("./src/routes/robotica")
 var discoRouter = require("./src/routes/disco")
 var manutencaoRouter = require("./src/routes/manutencao")
 var historicoAlertasRouter = require("./src/routes/historicoAlerta")
+var cpuRam = require("./src/routes/cpuRam")
 var s3Router = require("./src/routes/s3Route")
 var s3RouteHistoricoAlerta = require("./src/routes/s3RouteHistoricoAlerta")
 var s3RouteManutencao = require("./src/routes/s3RouteManutencao")
 var s3RouteAlertasTempoReal = require("./src/routes/s3RouteAlertasTempoReal")
+var s3RouteCpuRam = require("./src/routes/s3RouteCpuRam")
 
 
 app.use(express.json());
@@ -57,11 +60,14 @@ app.use("/api", emailRouter);
 app.use("/disco", discoRouter);
 app.use("/manutencao", manutencaoRouter)
 app.use("/historicoAlerta", historicoAlertasRouter);
+app.use("/cpuRam", cpuRam)
+app.use("/setores", setores)
 app.use("/s3Route", s3Router);
 app.use("/s3RouteHistoricoAlerta", s3RouteHistoricoAlerta);
 app.use("/s3RouteManutencao", s3RouteManutencao)
 app.use("/s3RouteAlertasTempoReal", s3RouteAlertasTempoReal)
 
+app.use("/s3RouteCpuRam", s3RouteCpuRam);
 
 
 

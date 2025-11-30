@@ -16,9 +16,11 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.1.0"></script>
 
     <script src="js/rotaDash.js"></script>
+    <script src="js/sessao.js"></script>
+
 </head>
 
-<body onload="buscarSetor(), carregarUltimoJson()">
+<body onload="carregarUltimoJson()">
     <aside>
 
         <section>
@@ -142,12 +144,12 @@
                             </div>
                             <div class="kpis-controlador">
                                 <div class="kpi_dashboard_controlador" id="config-disco">
-                                    <p class="config-disco"style="font-size: x-large;">Total de espaço: 256GB</p>
-                                    <p class="config-disco"style="font-size: x-large;">Uso do disco: 80%</p>
+                                    <p id="squad" style="font-size: x-large;"></p>
+                                    <p class="config-disco"style="font-size: x-large;">Do uso de disco é explicado pelo passar do tempo</p>
                                 </div>
                                 <div class="kpi_dashboard_controlador" id="previsao-disco">
                                     <p class="previsao-disco"style="font-size: x-large;" id="previsao-critico"></p>
-                                    <h3 style="font-size: x-large;">Data de previsão para Crítico</h3>
+                                    <h3 style="font-size: x-large;" class="data-previsao-critico">Data de previsão para <p style="font-size: x-large;color: #ff3f2e;">Crítico</p></h3>
                                 </div>
                             </div>
                         </div>
@@ -167,10 +169,17 @@
         </div>
     </section>
 
+    
+        <div id="div_aguardar" class="loading-div">
+            <img src="assets\logo\LOGO_CURTA.png" alt="Icone logo aguardar">
+            <div class="borda_aguardar"></div>
+        </div>
+
 </body>
 
 <div id="overlay"></div>
 <script src="js/historico_disco.js"></script>
+
 
 
 <script>
