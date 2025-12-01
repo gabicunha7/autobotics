@@ -7,7 +7,7 @@ var alertasMesAnterior = 0;
 var dadosS3 = {};
 
 function buscarSetor() {
-    fetch("/historicoAlerta/buscarSetoresComAlertasTotal", {
+    return fetch("/historicoAlerta/buscarSetoresComAlertasTotal", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -32,6 +32,7 @@ function buscarSetor() {
 }
 
 function listarSetores(dados) {
+    
     var tabela = document.getElementById("tabelaSetores");
 
     console.log("Dados dos setores com alertas:", dados);
@@ -347,5 +348,15 @@ function exibirComponenteMaisAlertas(dados){
 }
 
 
-buscarSetor();
-lerJsonS3();
+
+async function loading() {
+    try {
+        if (typeof aguardar === 'function') aguardar();
+        await lerJsonS3();
+        await buscarSetor();
+    } finally {
+        if (typeof acabouAguardar === 'function') acabouAguardar();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', loading());

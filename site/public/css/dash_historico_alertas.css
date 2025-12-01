@@ -358,4 +358,36 @@ body {
 
 
 
+#div_aguardar {
+    display: none;
+    position: fixed;
+    top: 0px;
+    left: 0;
+    height: 100%;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.379);
+    justify-content: center;
+    align-items: center;
+}
 
+#div_aguardar img {
+    width: 6rem;
+    height: fit-content;
+    position: relative;
+}
+
+#div_aguardar .borda_aguardar {
+    position: absolute;
+    width: 7rem;
+    height: 7rem;
+    border-radius: 50%;
+    border: 0.2rem solid #E78433;
+    border-top-color: #fff;
+    animation: linear infinite 1s aguardar;
+}
+
+@keyframes aguardar {
+    100% {
+        transform: rotate(360deg);
+    }
+}
