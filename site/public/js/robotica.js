@@ -4,8 +4,8 @@ window.onload = function() {
     chartDISCO = criarGrafico("grafico_disco", "Disco", 0, "red", "disco");
 
     // Recuperar controlador e setor da sessão
-    var idControlador = sessionStorage.ID_CONTROLADOR || 1;
-    var idSetor = sessionStorage.ID_SETOR || 1;
+    var idControlador = sessionStorage.CONTROLADOR;
+    var idSetor = sessionStorage.SETOR_USUARIO;
 
     console.log('Dashboard carregada com ID_CONTROLADOR:', idControlador, 'ID_SETOR:', idSetor);
 
@@ -417,9 +417,9 @@ async function carregarControladoresSetor(idSetor, idControladorAtual) {
       select.innerHTML = ''; // limpar opções antigas
       controladores.forEach(ctrl => {
         const option = document.createElement('option');
-        option.value = ctrl.id_controlador;
+        option.value = ctrl.numero_serial;
         option.textContent = ctrl.numero_serial || `Controlador ${ctrl.id_controlador}`;
-        if (ctrl.id_controlador == idControladorAtual) {
+        if (ctrl.numero_serial == idControladorAtual) {
           option.selected = true;
         }
         select.appendChild(option);
@@ -435,7 +435,7 @@ function mudarControlador(novoId) {
   if (!novoId) return;
   
   console.log('Mudando para controlador:', novoId);
-  sessionStorage.ID_CONTROLADOR = novoId;
+  sessionStorage.setItem('CONTROLADOR', novoId);
   
   // Recarregar dados do novo controlador
   carregarTelemetria(novoId);
