@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -15,406 +16,436 @@
   <script src="https://cdn.anychart.com/releases/8.11.0/js/anychart-core.min.js"></script>
   <script src="https://cdn.anychart.com/releases/8.11.0/js/anychart-heatmap.min.js"></script>
 </head>
+
 <body>
 
-<aside>
-  <section>
-    <section class="menu-container">
-      <img class="img-logo-curta" src="assets/logo/LOGO_CURTA.png" alt="">
-      <h1>MENU</h1>
+  <aside>
+    <section>
+      <section class="menu-container">
+        <img class="img-logo-curta" src="assets/logo/LOGO_CURTA.png" alt="">
+        <h1>MENU</h1>
 
-      <div class="paginas-container">
-        <div class="menu-dropdown-container">
-          <button class="a-pagina" onclick="menu(event)" id="selecionado" tag="agora">
-            <img class="icon-pagina" src="assets/icones/dash_icon.png" alt="">
-            Dashboards
-            <img class="icon-pagina" src="assets/icones/arrow_down.png" alt="">
-          </button>
-          <div class="menu-dropdown-items" id="menuDropdown"></div>
+        <div class="paginas-container">
+          <div class="menu-dropdown-container">
+            <button class="a-pagina" onclick="menu(event)" id="selecionado" tag="agora">
+              <img class="icon-pagina" src="assets/icones/dash_icon.png" alt="">
+              Dashboards
+              <img class="icon-pagina" src="assets/icones/arrow_down.png" alt="">
+            </button>
+            <div class="menu-dropdown-items" id="menuDropdown"></div>
+          </div>
+
+          <a class="a-pagina" href="alerta.html">Alertas</a>
+          <a class="a-pagina" href="parametros.html">Parâmetros</a>
+          <a class="a-pagina" href="setor.html">Setores</a>
+          <a class="a-pagina" href="controladores.html">Controladores</a>
+          <a class="a-pagina" href="funcionario.html">Funcionários</a>
         </div>
+      </section>
 
-        <a class="a-pagina" href="alerta.html">Alertas</a>
-        <a class="a-pagina" href="parametros.html">Parâmetros</a>
-        <a class="a-pagina" href="setor.html">Setores</a>
-        <a class="a-pagina" href="controladores.html">Controladores</a>
-        <a class="a-pagina" href="funcionario.html">Funcionários</a>
-      </div>
+      <a href="index.html">
+        <button id="btn-sair" onclick="limparSessao()">Sair</button>
+      </a>
     </section>
+  </aside>
 
-    <a href="index.html">
-      <button id="btn-sair" onclick="limparSessao()">Sair</button>
-    </a>
-  </section>
-</aside>
+  <section class="container-content">
 
-<section class="container-content">
-
-  <div class="div-superior">
-    <div class="div-filtro">
-      <p>Controlador:</p>
-      <select>
-        <option>Todos</option>
-        <option>Controlador A</option>
-        <option>Controlador B</option>
-      </select>
-    </div>
-
-    <div class="div-usuario">
-      <div class="div-img-usuario"><img src="assets/icones/foto_usuario.png" alt=""></div>
-      <div>
-        <h6 id="nome-usuario">Usuário</h6>
-        <p id="email-usuario">usuario@email.com</p>
+    <div class="div-superior">
+      <div class="div-filtro">
+        <p>Controlador:</p>
+        <select>
+          <option>Todos</option>
+        </select>
       </div>
-    </div>
-  </div>
 
-  <h1>Dashboard de Alertas em Tempo Real - Todos os Controladores</h1>
-
-  <div class="div-conteudo">
-    <div class="dashboard-wrapper">
-
-      <div class="card area-kpi1">
-        <h4>Alertas Ativos no Setor</h4>
-        <div class="kpi_dashboard">
-          <div class="kpi-line"><span class="kpi-label">Total:</span> <span id="kpi_total">0</span></div>
-          <div class="kpi-line"><span class="kpi-label">Médios:</span> <span id="kpi_medio">0</span></div>
-          <div class="kpi-line"><span class="kpi-label">Críticos:</span> <span id="kpi_critico">0</span></div>
+      <div class="div-usuario">
+        <div class="div-img-usuario"><img src="assets/icones/foto_usuario.png" alt=""></div>
+        <div>
+          <h6 id="nome-usuario">Usuário</h6>
+          <p id="email-usuario">usuario@email.com</p>
         </div>
       </div>
-
-      <div class="card area-kpi2">
-        <h4>Alertas Resolvidos (hoje)</h4>
-        <div class="kpi_dashboard"><p id="kpi_resolvidos">0</p></div>
-      </div>
-
-      <div class="card area-feed">
-        <h2>Feed de Alertas</h2>
-        <div class="feed" id="feed_area"></div>
-      </div>
-
-      <div class="card area-chart">
-        <h2>Alertas por Componente</h2>
-        <canvas id="grafico_componentes" class="canvas-full"></canvas>
-      </div>
-
-      <div class="card area-heatmap">
-        <h2>Estabilidade dos Controladores</h2>
-        <div id="container" style="height:100%; width:100%; min-height:260px;"></div>
-      </div>
-
     </div>
-  </div>
 
-</section>
+    <h1 id="titulo-dashboard">Dashboard de Alertas em Tempo Real - Todos os Controladores</h1>
 
-<script>
-document.getElementById('nome-usuario').innerText = sessionStorage.NOME_USUARIO || 'Usuário';
-document.getElementById('email-usuario').innerText = sessionStorage.EMAIL_USUARIO || 'usuario@email.com';
+    <div class="div-conteudo">
+      <div class="dashboard-wrapper">
 
-function normalizaSemAcento(s) {
-    return (s || "").toString().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-}
+        <div class="card area-kpi1">
+          <h4>Alertas Ativos</h4>
+          <div class="kpi_dashboard">
+            <div class="kpi-total-line" id="kpi_total_line">
+              Total: <span id="kpi_total">0</span>
+            </div>
+            <div class="kpi-line">Médio: <span id="kpi_medio">0</span></div>
+            <div class="kpi-line">Crítico: <span id="kpi_critico">0</span></div>
+          </div>
+        </div>
 
-/* ================= VARIÁVEIS ================= */
-let activeAlerts = new Map();
-let ultimoLoteAlertas = [];
-let controladoresSetor = [];
-let heatmapChart = null;
-let graficoComponentes = null;
-let controladorFiltroSelecionado = "Todos";
+        <div class="card area-kpi2">
+          <h4>Alertas Resolvidos (hoje)</h4>
+          <div class="kpi_dashboard">
+            <p id="kpi_resolvidos">0</p>
+          </div>
+        </div>
 
-/* ================= BUSCA CONTROLADORES ================= */
-async function buscarControladores() {
-    try {
+        <div class="card area-feed">
+          <h2>Feed de Alertas</h2>
+          <div class="feed" id="feed_area"></div>
+        </div>
+
+        <div class="card area-chart">
+          <h2>Alertas por Componente</h2>
+          <canvas id="grafico_componentes" class="canvas-full"></canvas>
+        </div>
+
+        <div class="card area-heatmap">
+          <h2>Estabilidade dos Controladores</h2>
+          <div id="container" style="height:100%; width:100%; min-height:260px;"></div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <script>
+    document.getElementById('nome-usuario').innerText = sessionStorage.NOME_USUARIO || 'Usuário';
+    document.getElementById('email-usuario').innerText = sessionStorage.EMAIL_USUARIO || 'usuario@email.com';
+
+    function normalizaSemAcento(s) {
+      return (s || "").toString().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    /* ================= VARIÁVEIS ================= */
+    let activeAlerts = new Map();
+    let ultimoLoteAlertas = [];
+    let controladoresSetor = [];
+    let heatmapChart = null;
+    let graficoComponentes = null;
+    let controladorFiltroSelecionado = "Todos";
+
+    /* ================= BUSCA CONTROLADORES ================= */
+    async function buscarControladores() {
+      try {
         const resposta = await fetch("/setores/buscarControladores", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                setor: sessionStorage.getItem("SETOR_USUARIO"),
-                empresa: sessionStorage.getItem("EMPRESA_USUARIO")
-            })
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            setor: sessionStorage.getItem("SETOR_USUARIO"),
+            empresa: sessionStorage.getItem("EMPRESA_USUARIO")
+          })
         });
         if (!resposta.ok) throw "Erro ao buscar controladores do setor.";
         const dados = await resposta.json();
         return dados;
-    } catch (erro) {
+      } catch (erro) {
         console.error(erro);
         return [];
+      }
     }
-}
 
-/* ================= CRIAÇÃO GRÁFICO COMPONENTES ================= */
-function criarGraficoComponentes() {
-    const ctx = document.getElementById('grafico_componentes').getContext('2d');
-    graficoComponentes = new Chart(ctx, {
+    /* ================= CRIAÇÃO GRÁFICO COMPONENTES ================= */
+    function criarGraficoComponentes() {
+      const ctx = document.getElementById('grafico_componentes').getContext('2d');
+      graficoComponentes = new Chart(ctx, {
         type: 'line',
-        data: { labels: [], datasets: [
-            { label:'CPU', data:[], borderColor:'#E71831', backgroundColor:'transparent', tension:0.2, fill:false, pointRadius:3 },
-            { label:'RAM', data:[], borderColor:'#E6AC00', backgroundColor:'transparent', tension:0.2, fill:false, pointRadius:3 },
-            { label:'Disco', data:[], borderColor:'#4CAF50', backgroundColor:'transparent', tension:0.2, fill:false, pointRadius:3 }
-        ]},
-        options: { responsive:true, plugins:{legend:{position:'top'}}, scales:{ x:{display:true,title:{display:true,text:'Hora'}}, y:{beginAtZero:true,ticks:{stepSize:1}} } }
-    });
-}
+        data: {
+          labels: [], datasets: [
+            { label: 'CPU', data: [], borderColor: '#E71831', backgroundColor: 'transparent', tension: 0.2, fill: false, pointRadius: 3 },
+            { label: 'RAM', data: [], borderColor: '#E6AC00', backgroundColor: 'transparent', tension: 0.2, fill: false, pointRadius: 3 },
+            { label: 'Disco', data: [], borderColor: '#4CAF50', backgroundColor: 'transparent', tension: 0.2, fill: false, pointRadius: 3 }
+          ]
+        },
+        options: { responsive: true, plugins: { legend: { position: 'top' } }, scales: { x: { display: true, title: { display: true, text: 'Hora' } }, y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+      });
+    }
 
-/* ================= FUNÇÕES AUXILIARES ================= */
-function formatHoraFrom(item) {
-    const dtString = item.ConcluidoEm || item.CriadoEm || item.firstSeen;
-    if (!dtString) return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-    const dt = new Date(dtString);
-    return isNaN(dt.getTime()) ? new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : dt.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-}
+    /* ================= AUXILIARES ================= */
+    function formatHoraFrom(item) {
+      const dtString = item.ConcluidoEm || item.CriadoEm || item.firstSeen;
+      if (!dtString) return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const dt = new Date(dtString);
+      return isNaN(dt.getTime()) ? new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
 
-function makeAlertKey(item) {
-    if (item.ID) return String(item.ID);
-    if (item.Key) return String(item.Key);
-    const maquina = item.Descricao?.Maquina || '';
-    const summary = item.Summary || '';
-    const criado = item.CriadoEm ? String(item.CriadoEm) : (item.firstSeen || '');
-    return `${maquina}||${summary}||${criado}`;
-}
+    function makeAlertKey(item) {
+      if (item.ID) return String(item.ID);
+      if (item.Key) return String(item.Key);
+      const maquina = item.Descricao?.Maquina || '';
+      const summary = item.Summary || '';
+      const criado = item.CriadoEm ? String(item.CriadoEm) : (item.firstSeen || '');
+      return `${maquina}||${summary}||${criado}`;
+    }
 
-/* ================= POPULA SELECT DE CONTROLADORES ================= */
-function popularSelectControladores() {
-    const select = document.querySelector('.div-filtro select');
-    select.innerHTML = '';
-    const optionTodos = document.createElement('option');
-    optionTodos.value = "Todos";
-    optionTodos.text = "Todos";
-    select.appendChild(optionTodos);
+    /* ================= FUNÇÃO PARA ATUALIZAR TÍTULO ================= */
+    function atualizarTituloDashboard() {
+      const titulo = document.getElementById('titulo-dashboard');
+      if (controladorFiltroSelecionado === "Todos") {
+        titulo.innerText = "Dashboard de Alertas em Tempo Real - Todos os Controladores";
+      } else {
+        titulo.innerText = `Dashboard de Alertas em Tempo Real - Controlador ${controladorFiltroSelecionado}`;
+      }
+    }
 
-    controladoresSetor.forEach(ctrl=>{
+    /* ================= POPULA SELECT DE CONTROLADORES ================= */
+    function popularSelectControladores() {
+      const select = document.querySelector('.div-filtro select');
+      select.innerHTML = '';
+      const optionTodos = document.createElement('option');
+      optionTodos.value = "Todos";
+      optionTodos.text = "Todos";
+      select.appendChild(optionTodos);
+
+      controladoresSetor.forEach(ctrl => {
         const option = document.createElement('option');
         option.value = ctrl.numero_serial;
         option.text = "Controlador " + ctrl.numero_serial;
         select.appendChild(option);
-    });
+      });
 
-    select.value = "Todos";
-    select.addEventListener('change', (e)=>{
+      select.value = "Todos";
+      atualizarTituloDashboard();
+
+      select.addEventListener('change', (e) => {
         controladorFiltroSelecionado = e.target.value;
+        atualizarTituloDashboard(); // Atualiza o título dinamicamente
         usarDadosReais(ultimoLoteAlertas);
-    });
-}
+      });
+    }
 
-/* ================= PROCESSA ALERTAS ================= */
-function usarDadosReais(dados) {
-    const setorUsuario = sessionStorage.getItem("SETOR_USUARIO");
-    let resolvidosHoje = 0;
+    /* ================= ATUALIZA KPI ================= */
+    function atualizarKPI(ativos) {
+      const total = ativos.length;
+      const medio = ativos.filter(a => ["MEDIO","MÉDIO"].includes(normalizaSemAcento(a.Descricao?.Criticidade||'').toUpperCase())).length;
+      const critico = ativos.filter(a => ["CRITICO","CRÍTICO"].includes(normalizaSemAcento(a.Descricao?.Criticidade||'').toUpperCase())).length;
 
-    // Atualiza mapa de alertas ativos
-    dados.forEach(item => {
+      document.getElementById("kpi_total").innerText = total;
+      document.getElementById("kpi_medio").innerText = medio;
+      document.getElementById("kpi_critico").innerText = critico;
+
+      const kpiTotalLine = document.getElementById("kpi_total_line");
+
+      if (controladorFiltroSelecionado === "Todos") {
+          if (total <= 7) kpiTotalLine.style.backgroundColor = "#4CAF50"; // verde
+          else if (total <= 15) kpiTotalLine.style.backgroundColor = "#f4b400"; // amarelo
+          else kpiTotalLine.style.backgroundColor = "#E71831"; // vermelho
+      } else {
+          if (total === 0) kpiTotalLine.style.backgroundColor = "#4CAF50"; // verde
+          else if (total === 1) kpiTotalLine.style.backgroundColor = "#f4b400"; // amarelo
+          else kpiTotalLine.style.backgroundColor = "#E71831"; // vermelho
+      }
+    }
+
+    /* ================= PROCESSA ALERTAS ================= */
+    function usarDadosReais(dados) {
+      const setorUsuario = sessionStorage.getItem("SETOR_USUARIO");
+      let resolvidosHoje = [];
+
+      // Atualiza activeAlerts e separa resolvidos
+      dados.forEach(item => {
         const payloadKey = makeAlertKey(item);
         const existing = activeAlerts.get(payloadKey) || {};
         const criadoEm = item.CriadoEm || existing.CriadoEm || new Date().toISOString();
 
         if (item.Status === 'Aberto') {
-            activeAlerts.set(payloadKey, {
-                ID: item.ID,
-                Key: item.Key,
-                Status: 'Aberto',
-                Descricao: item.Descricao || existing.Descricao || {},
-                CriadoEm: criadoEm,
-                Summary: item.Summary || existing.Summary || '',
-                firstSeen: existing.firstSeen || new Date().toISOString()
-            });
+          activeAlerts.set(payloadKey, {
+            ID: item.ID,
+            Key: item.Key,
+            Status: 'Aberto',
+            Descricao: item.Descricao || existing.Descricao || {},
+            CriadoEm: criadoEm,
+            Summary: item.Summary || existing.Summary || '',
+            firstSeen: existing.firstSeen || new Date().toISOString()
+          });
         } else if (item.Status === 'Concluído') {
-            const id = item.ID ? String(item.ID) : null;
-            const key = item.Key ? String(item.Key) : null;
-            let removed = false;
-            if (id) for (const [k,v] of activeAlerts.entries()) { if (String(v.ID)===id){activeAlerts.delete(k); removed=true; break;} }
-            if (!removed && key) for (const [k,v] of activeAlerts.entries()) { if (String(v.Key)===key){activeAlerts.delete(k); removed=true; break;} }
-            if (!removed && activeAlerts.has(payloadKey)) activeAlerts.delete(payloadKey);
-            resolvidosHoje++;
+          resolvidosHoje.push({
+            ID: item.ID,
+            Key: item.Key,
+            Status: 'Concluído',
+            Descricao: item.Descricao || existing.Descricao || {},
+            CriadoEm: criadoEm,
+            Summary: item.Summary || existing.Summary || '',
+            firstSeen: existing.firstSeen || new Date().toISOString()
+          });
+          activeAlerts.delete(payloadKey);
         }
-    });
+      });
 
-    // Filtra apenas alertas do setor do usuário
-    let ativos = Array.from(activeAlerts.values())
-        .filter(a => a.Descricao?.Setor === setorUsuario);
-
-    // Aplica filtro do select, se não for "Todos"
-    if(controladorFiltroSelecionado !== "Todos") {
+      let ativos = Array.from(activeAlerts.values()).filter(a => a.Descricao?.Setor === setorUsuario);
+      if (controladorFiltroSelecionado !== "Todos") {
         ativos = ativos.filter(a => a.Descricao?.Maquina === controladorFiltroSelecionado);
-    }
+        resolvidosHoje = resolvidosHoje.filter(a => a.Descricao?.Maquina === controladorFiltroSelecionado);
+      }
 
-    // KPIs
-    const totals = ativos.reduce((acc,item)=>{
-        const criticidade = normalizaSemAcento(item.Descricao?.Criticidade||'').toUpperCase();
-        if (criticidade==='CRITICO') acc.critico++;
-        else if (criticidade==='MEDIO'||criticidade==='MÉDIO') acc.medio++;
-        acc.total++;
-        return acc;
-    }, {total:0,medio:0,critico:0});
+      atualizarKPI(ativos);
 
-    document.getElementById('kpi_total').innerText = totals.total;
-    document.getElementById('kpi_medio').innerText = totals.medio;
-    document.getElementById('kpi_critico').innerText = totals.critico;
-    document.getElementById('kpi_resolvidos').innerText = resolvidosHoje;
+      const feed = document.getElementById('feed_area');
+      feed.innerHTML = '';
 
-    // Feed
-    const feed = document.getElementById('feed_area');
-    feed.innerHTML = '';
-    ativos.forEach(item=>{
+      // Alertas ativos
+      ativos.forEach(item => {
         const hora = formatHoraFrom(item);
-        const mensagem = `${item.Summary||'Alerta'} - ${item.Descricao?.Maquina||'N/A'}`;
-        const criticidade = normalizaSemAcento(item.Descricao?.Criticidade||'').toUpperCase();
+        const mensagem = `${item.Summary || 'Alerta'} - ${item.Descricao?.Maquina || 'N/A'}`;
+        const criticidade = normalizaSemAcento(item.Descricao?.Criticidade || '').toUpperCase();
         const div = document.createElement('div');
-        div.className = criticidade==='CRITICO'?'feed-item critico':criticidade==='MEDIO'?'feed-item medio':'feed-item estavel';
+        div.className = criticidade === 'CRITICO' ? 'feed-item critico' :
+                        criticidade === 'MEDIO' ? 'feed-item medio' : 'feed-item estavel';
         div.innerHTML = `<div>${mensagem}</div><div>${hora}</div>`;
         feed.appendChild(div);
-    });
+      });
 
-    atualizarGraficoPorComponentePorHora(ativos,12);
+      // Alertas resolvidos
+      resolvidosHoje.forEach(item => {
+        const hora = formatHoraFrom(item);
+        const mensagem = `Resolvido - ${item.Summary || 'Alerta'} - ${item.Descricao?.Maquina || 'N/A'}`;
+        const div = document.createElement('div');
+        div.className = 'feed-item resolvido'; // Classe verde
+        div.innerHTML = `<div>${mensagem}</div><div>${hora}</div>`;
+        feed.appendChild(div);
+      });
 
-    ultimoLoteAlertas = dados; // Mantemos todos os dados para heatmap
-    tentarAtualizarHeatmap();
-}
+      document.getElementById('kpi_resolvidos').innerText = resolvidosHoje.length;
 
-/* ================= GRÁFICO POR COMPONENTE ================= */
-function atualizarGraficoPorComponentePorHora(lista, janelaHoras=12){
-    const now = new Date();
-    const labels = [];
-    for(let i=janelaHoras-1;i>=0;i--){
-        const dt = new Date(now.getTime() - i*3600*1000);
-        labels.push({label:String(dt.getHours()).padStart(2,'0')+':00', hora: dt});
+      atualizarGraficoPorComponentePorHora(ativos, 12);
+      ultimoLoteAlertas = dados;
+      tentarAtualizarHeatmap();
     }
-    const cpu = Array(labels.length).fill(0);
-    const ram = Array(labels.length).fill(0);
-    const disco = Array(labels.length).fill(0);
-    const normaliza = s=>normalizaSemAcento((s||'')).toUpperCase();
 
-    lista.forEach(alerta=>{
+    /* ================= GRÁFICO POR COMPONENTE ================= */
+    function atualizarGraficoPorComponentePorHora(lista, janelaHoras = 12) {
+      const now = new Date();
+      const labels = [];
+      for (let i = janelaHoras - 1; i >= 0; i--) {
+        const dt = new Date(now.getTime() - i * 3600 * 1000);
+        labels.push({ label: String(dt.getHours()).padStart(2, '0') + ':00', hora: dt });
+      }
+      const cpu = Array(labels.length).fill(0);
+      const ram = Array(labels.length).fill(0);
+      const disco = Array(labels.length).fill(0);
+      const normaliza = s => normalizaSemAcento((s || '')).toUpperCase();
+
+      lista.forEach(alerta => {
         const inicio = new Date(alerta.CriadoEm || alerta.firstSeen);
-        if(isNaN(inicio.getTime())) return;
-        const fim = alerta.ConcluidoEm?new Date(alerta.ConcluidoEm):null;
+        if (isNaN(inicio.getTime())) return;
+        const fim = alerta.ConcluidoEm ? new Date(alerta.ConcluidoEm) : null;
 
-        labels.forEach((slot,idx)=>{
-            const horaSlot = slot.hora;
-            const ativo = horaSlot>=inicio && (!fim || horaSlot<=fim);
-            if(!ativo) return;
-            const comp = normaliza(alerta.Descricao?.Componente||'');
-            if(comp.includes('CPU')) cpu[idx]++;
-            else if(comp.includes('RAM')) ram[idx]++;
-            else if(comp.includes('DISCO')||comp.includes('DISK')) disco[idx]++;
+        labels.forEach((slot, idx) => {
+          const horaSlot = slot.hora;
+          const ativo = horaSlot >= inicio && (!fim || horaSlot <= fim);
+          if (!ativo) return;
+          const comp = normaliza(alerta.Descricao?.Componente || '');
+          if (comp.includes('CPU')) cpu[idx]++;
+          else if (comp.includes('RAM')) ram[idx]++;
+          else if (comp.includes('DISCO') || comp.includes('DISK')) disco[idx]++;
         });
-    });
+      });
 
-    graficoComponentes.data.labels = labels.map(l=>l.label);
-    graficoComponentes.data.datasets[0].data = cpu;
-    graficoComponentes.data.datasets[1].data = ram;
-    graficoComponentes.data.datasets[2].data = disco;
-    graficoComponentes.update();
-}
-
-/* ================= HEATMAP ================= */
-anychart.onDocumentReady(function(){
-    heatmapChart = anychart.heatMap([]);
-    const colorScale = anychart.scales.ordinalColor();
-    colorScale.ranges([{from:0,to:0,color:"#4CAF50"},{from:1,to:1,color:"#e6ac00"},{from:2,to:2,color:"#E71831"}]);
-    heatmapChart.colorScale(colorScale);
-    heatmapChart.labels(false);
-    heatmapChart.tooltip().useHtml(true);
-    heatmapChart.tooltip().titleFormat(()=>`Criticidade: ${this.getData("critLabel")||"Estável"}`);
-    heatmapChart.tooltip().format(function(){
-        const controlador = this.getData("controlador")||this.y;
-        const hora = this.x;
-        const valor = this.getData("valorAtual");
-        return `Controlador: ${controlador}<br>Hora: ${hora}<br>Valor atual: ${valor!=null?valor+'%':'Sem alerta'}`;
-    });
-    heatmapChart.container("container");
-    heatmapChart.draw();
-});
-
-/* ================= ATUALIZA HEATMAP ================= */
-function tentarAtualizarHeatmap(){
-    if(!heatmapChart || !ultimoLoteAlertas || !controladoresSetor.length) return;
-    atualizarHeatmap(ultimoLoteAlertas,12);
-}
-
-function atualizarHeatmap(dadosAlertas, janelaHoras=12){
-    const setorUsuario = sessionStorage.getItem("SETOR_USUARIO");
-    const agora = new Date();
-    const slots = [];
-    for(let i=janelaHoras-1;i>=0;i--){
-        const dt = new Date(agora.getTime() - i*3600*1000);
-        slots.push({label:String(dt.getHours()).padStart(2,'0')+':00', date: dt});
+      graficoComponentes.data.labels = labels.map(l => l.label);
+      graficoComponentes.data.datasets[0].data = cpu;
+      graficoComponentes.data.datasets[1].data = ram;
+      graficoComponentes.data.datasets[2].data = disco;
+      graficoComponentes.update();
     }
 
-    const dataHeat = [];
-    controladoresSetor.forEach(ctrl=>{
+    /* ================= HEATMAP ================= */
+    anychart.onDocumentReady(function () {
+      heatmapChart = anychart.heatMap([]);
+      const colorScale = anychart.scales.ordinalColor();
+      colorScale.ranges([{ from: 0, to: 0, color: "#4CAF50" }, { from: 1, to: 1, color: "#e6ac00" }, { from: 2, to: 2, color: "#E71831" }]);
+      heatmapChart.colorScale(colorScale);
+      heatmapChart.labels(false);
+      heatmapChart.tooltip().useHtml(true);
+      heatmapChart.container("container");
+      heatmapChart.draw();
+    });
+
+    function tentarAtualizarHeatmap() {
+      if (!heatmapChart || !ultimoLoteAlertas || !controladoresSetor.length) return;
+      atualizarHeatmap(ultimoLoteAlertas, 12);
+    }
+
+    function atualizarHeatmap(dadosAlertas, janelaHoras = 12) {
+      const setorUsuario = sessionStorage.getItem("SETOR_USUARIO");
+      const agora = new Date();
+      const slots = [];
+      for (let i = janelaHoras - 1; i >= 0; i--) {
+        const dt = new Date(agora.getTime() - i * 3600 * 1000);
+        slots.push({ label: String(dt.getHours()).padStart(2, '0') + ':00', date: dt });
+      }
+
+      const dataHeat = [];
+      controladoresSetor.forEach(ctrl => {
         const serial = ctrl.numero_serial;
-        slots.forEach(slot=>{
-            let melhorCodigo = 0;
-            let melhorAlerta = null;
-            dadosAlertas.forEach(alerta=>{
-                if(!alerta.Descricao || alerta.Descricao.Maquina!==serial) return;
-                if(alerta.Descricao.Setor !== setorUsuario) return;
-                const inicio = new Date(alerta.CriadoEm || alerta.firstSeen);
-                const fim = alerta.ConcluidoEm?new Date(alerta.ConcluidoEm):null;
-                const ativo = slot.date>=inicio && (!fim || slot.date<=fim);
-                if(!ativo) return;
-                const critStr = normalizaSemAcento(alerta.Descricao.Criticidade||'').toUpperCase();
-                let code=0;
-                if(critStr==='MEDIO'||critStr==='MÉDIO') code=1;
-                else if(critStr==='CRITICO'||critStr==='CRÍTICO') code=2;
-                if(code>melhorCodigo){melhorCodigo=code; melhorAlerta=alerta;}
-            });
-            let critLabel='Estável';
-            if(melhorCodigo===1) critLabel='Média';
-            else if(melhorCodigo===2) critLabel='Crítica';
+        slots.forEach(slot => {
+          let melhorCodigo = 0;
+          let melhorAlerta = null;
+          dadosAlertas.forEach(alerta => {
+            if (!alerta.Descricao || alerta.Descricao.Maquina !== serial) return;
+            if (alerta.Descricao.Setor !== setorUsuario) return;
+            const inicio = new Date(alerta.CriadoEm || alerta.firstSeen);
+            const fim = alerta.ConcluidoEm ? new Date(alerta.ConcluidoEm) : null;
+            const ativo = slot.date >= inicio && (!fim || slot.date <= fim);
+            if (!ativo) return;
+            const critStr = normalizaSemAcento(alerta.Descricao.Criticidade || '').toUpperCase();
+            let code = 0;
+            if (critStr === 'MEDIO' || critStr === 'MÉDIO') code = 1;
+            else if (critStr === 'CRITICO' || critStr === 'CRÍTICO') code = 2;
+            if (code > melhorCodigo) { melhorCodigo = code; melhorAlerta = alerta; }
+          });
+          let critLabel = 'Estável';
+          if (melhorCodigo === 1) critLabel = 'Média';
+          else if (melhorCodigo === 2) critLabel = 'Crítica';
 
-            dataHeat.push({
-                x: slot.label,
-                y: "Controlador "+serial,
-                heat: melhorCodigo,
-                critLabel: critLabel,
-                controlador: serial,
-                valorAtual: melhorAlerta?.Descricao?.ValorAtual || null,
-                tooltip: `Controlador: ${serial}<br>Hora: ${slot.label}<br>Valor atual: ${melhorAlerta?.Descricao?.ValorAtual||'Sem alerta'}`
-            });
+          dataHeat.push({
+            x: slot.label,
+            y: "Controlador " + serial,
+            heat: melhorCodigo,
+            critLabel: critLabel,
+            controlador: serial,
+            valorAtual: melhorAlerta?.Descricao?.ValorAtual || null,
+            tooltip: `Controlador: ${serial}<br>Hora: ${slot.label}<br>Valor atual: ${melhorAlerta?.Descricao?.ValorAtual || 'Sem alerta'}`
+          });
         });
-    });
+      });
 
-    heatmapChart.data(dataHeat);
+      heatmapChart.data(dataHeat);
 
-    // Reativa o tooltip
-    heatmapChart.tooltip().useHtml(true).titleFormat(function(){
+      heatmapChart.tooltip().useHtml(true).titleFormat(function () {
         return this.getData('critLabel') || 'Estável';
-    }).format(function(){
+      }).format(function () {
         return this.getData('tooltip');
-    });
-}
+      });
+    }
 
+    /* ================= INICIALIZAÇÃO ================= */
+    criarGraficoComponentes();
 
-/* ================= INICIALIZAÇÃO ================= */
-criarGraficoComponentes();
-
-(async function inicializarDashboard(){
-    controladoresSetor = await buscarControladores();
-    if(!controladoresSetor.length){
+    (async function inicializarDashboard() {
+      controladoresSetor = await buscarControladores();
+      if (!controladoresSetor.length) {
         console.warn("Nenhum controlador retornado do setor, usando mock.");
         controladoresSetor = [
-            {id_controlador:1, numero_serial:"0001"},
-            {id_controlador:2, numero_serial:"0002"},
-            {id_controlador:3, numero_serial:"0003"}
+          { id_controlador: 1, numero_serial: "0001" },
+          { id_controlador: 2, numero_serial: "0002" },
+          { id_controlador: 3, numero_serial: "0003" }
         ];
-    }
+      }
 
-    popularSelectControladores();
+      popularSelectControladores();
 
-    // Fetch real dos alertas do S3
-    const dadosAlertasMock = [
-        {ID:"a1", Key:"AL-001", Status:"Aberto", Summary:"CPU acima de 90%", CriadoEm:new Date(Date.now()-3*3600e3).toISOString(), Descricao:{Componente:"CPU", Criticidade:"CRÍTICO", Maquina:"0001", ValorAtual:"92.5", Setor: sessionStorage.getItem("SETOR_USUARIO") }},
-        {ID:"a2", Key:"AL-002", Status:"Aberto", Summary:"RAM em 80%", CriadoEm:new Date(Date.now()-2*3600e3).toISOString(), Descricao:{Componente:"RAM", Criticidade:"MÉDIO", Maquina:"0002", ValorAtual:"80", Setor: sessionStorage.getItem("SETOR_USUARIO") }}
-    ];
+      // Mock de alertas
+      const dadosAlertasMock = [
+        { ID: "a1", Key: "AL-001", Status: "Aberto", Summary: "CPU acima de 90%", CriadoEm: new Date(Date.now() - 3 * 3600e3).toISOString(), Descricao: { Componente: "CPU", Criticidade: "CRÍTICO", Maquina: "0001", ValorAtual: "92.5", Setor: sessionStorage.getItem("SETOR_USUARIO") } },
+        { ID: "a2", Key: "AL-002", Status: "Concluído", Summary: "RAM em 80%", CriadoEm: new Date(Date.now() - 2 * 3600e3).toISOString(), Descricao: { Componente: "RAM", Criticidade: "MÉDIO", Maquina: "0001", ValorAtual: "80", Setor: sessionStorage.getItem("SETOR_USUARIO") } }
+      ];
 
-    usarDadosReais(dadosAlertasMock);
-})();
-</script>
-
-
-
+      usarDadosReais(dadosAlertasMock);
+    })();
+  </script>
 
 </body>
+
 </html>
