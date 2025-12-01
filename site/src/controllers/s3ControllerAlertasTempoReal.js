@@ -19,6 +19,7 @@ async function lerUltimoArquivo(req, res) {
         ContinuationToken
       }).promise();
 
+
       const objetosValidos = (response.Contents || []).filter(obj => !obj.Key.endsWith('/'));
       arquivos = arquivos.concat(objetosValidos);
 

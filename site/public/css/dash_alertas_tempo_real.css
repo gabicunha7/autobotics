@@ -100,6 +100,21 @@ body {
   gap: 6px;
 }
 
+.area-kpi1 .kpi_dashboard .kpi-total-line {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: #000;
+  width: 180px;
+  transition: background-color 0.3s;
+  background-color: #4CAF50;
+}
+
 .area-kpi1 .kpi_dashboard .kpi-line {
   display: block;
   width: 100%;
@@ -110,32 +125,98 @@ body {
   color: #000; 
 }
 
-/* Total com retângulo envolvendo texto + número */
-.area-kpi1 .kpi_dashboard .kpi-total-line {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  padding: 14px 20px; /* retângulo maior */
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 1.8rem;
-  color: #000;
-  width: 180px;  /* opcional: ajustar tamanho */
-  transition: background-color 0.3s;
-  background-color: #4CAF50; /* verde inicial */
-}
-
-
-
-
 .area-kpi1 .kpi_dashboard .kpi-line span#kpi_medio { color: #f4b400; }  /* amarelo */
 .area-kpi1 .kpi_dashboard .kpi-line span#kpi_critico { color: #E71831; } /* vermelho */
 
 
-
 /* ================== SEGUNDA KPI ================== */
-.area-kpi2 .kpi_dashboard { background: #4CAF50; width: 100%; }
+.area-kpi2 .kpi_dashboard {
+  background: none; /* removendo fundo do container */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  height: 130px;
+}
+
+/* Retângulo do número principal */
+.area-kpi2 .kpi_dashboard #kpi_resolvidos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: #000; /* número em preto */
+  width: 180px;
+  background-color: #4CAF50;
+  transition: background-color 0.3s;
+}
+
+/* Linhas de "Médio:" e "Crítico:" com cores corretas */
+.area-kpi2 .kpi_dashboard .kpi-line {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #000; /* números pretos */
+}
+
+.area-kpi2 .kpi_dashboard .kpi-line span#kpi_medio { color: #f4b400; }  /* "Médio:" amarelo */
+.area-kpi2 .kpi_dashboard .kpi-line span#kpi_critico { color: #E71831; } /* "Crítico:" vermelho */
+
+.kpi-tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+.kpi-tooltip-label {
+  font-size: 0.8rem;      /* menor que o título */
+  color: #666;
+  cursor: pointer;
+  display: inline-block;
+  margin-bottom: 4px;
+}
+
+.kpi-tooltip {
+  visibility: hidden;
+  width: 250px;
+  background-color: #fff;
+  color: #000;
+  text-align: left;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  position: absolute;
+  top: 20px; /* posição abaixo do "Legenda" */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  font-size: 0.85rem; /* texto levemente menor */
+}
+
+.kpi-tooltip-container:hover .kpi-tooltip {
+  visibility: visible;
+}
+
+.kpi-tooltip span {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  border-radius: 4px;
+}
+
+.tooltip-green { background-color: #4CAF50; }
+.tooltip-yellow { background-color: #f4b400; }
+.tooltip-red { background-color: #E71831; }
+
+
+
 
 /* ================== FEED ================== */
 .feed {

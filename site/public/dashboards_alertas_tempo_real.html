@@ -74,6 +74,15 @@
       <div class="dashboard-wrapper">
 
         <div class="card area-kpi1">
+<div class="kpi-tooltip-container">
+  <span class="kpi-tooltip-label">Legenda &#9432;</span>
+  <div class="kpi-tooltip">
+    <p><span class="tooltip-green"></span> Verde: Quantidade esperada de alertas</p>
+    <p><span class="tooltip-yellow"></span> Amarelo: Quantidade anormal de alertas</p>
+    <p><span class="tooltip-red"></span> Vermelho: Quantidade muito elevada de alertas</p>
+  </div>
+</div>
+
           <h4>Alertas Ativos</h4>
           <div class="kpi_dashboard">
             <div class="kpi-total-line" id="kpi_total_line">
@@ -119,7 +128,6 @@
       return (s || "").toString().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
 
-    /* ================= VARIÁVEIS ================= */
     let activeAlerts = new Map();
     let ultimoLoteAlertas = [];
     let controladoresSetor = [];
@@ -127,7 +135,6 @@
     let graficoComponentes = null;
     let controladorFiltroSelecionado = "Todos";
 
-    /* ================= BUSCA CONTROLADORES ================= */
     async function buscarControladores() {
       try {
         const resposta = await fetch("/setores/buscarControladores", {
@@ -147,23 +154,21 @@
       }
     }
 
-    /* ================= CRIAÇÃO GRÁFICO COMPONENTES ================= */
     function criarGraficoComponentes() {
       const ctx = document.getElementById('grafico_componentes').getContext('2d');
       graficoComponentes = new Chart(ctx, {
         type: 'line',
         data: {
           labels: [], datasets: [
-            { label: 'CPU', data: [], borderColor: '#E71831', backgroundColor: 'transparent', tension: 0.2, fill: false, pointRadius: 3 },
-            { label: 'RAM', data: [], borderColor: '#E6AC00', backgroundColor: 'transparent', tension: 0.2, fill: false, pointRadius: 3 },
-            { label: 'Disco', data: [], borderColor: '#4CAF50', backgroundColor: 'transparent', tension: 0.2, fill: false, pointRadius: 3 }
+            { label: 'CPU', data: [], borderColor: 'grey', backgroundColor: 'transparent', tension: 0.2, fill: false, pointRadius: 3 },
+            { label: 'RAM', data: [], borderColor: '#890B59', backgroundColor: 'transparent', tension: 0.2, fill: false, pointRadius: 3 },
+            { label: 'Disco', data: [], borderColor: '#0000FF', backgroundColor: 'transparent', tension: 0.2, fill: false, pointRadius: 3 }
           ]
         },
         options: { responsive: true, plugins: { legend: { position: 'top' } }, scales: { x: { display: true, title: { display: true, text: 'Hora' } }, y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
       });
     }
 
-    /* ================= AUXILIARES ================= */
     function formatHoraFrom(item) {
       const dtString = item.ConcluidoEm || item.CriadoEm || item.firstSeen;
       if (!dtString) return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -180,7 +185,6 @@
       return `${maquina}||${summary}||${criado}`;
     }
 
-    /* ================= FUNÇÃO PARA ATUALIZAR TÍTULO ================= */
     function atualizarTituloDashboard() {
       const titulo = document.getElementById('titulo-dashboard');
       if (controladorFiltroSelecionado === "Todos") {
@@ -190,7 +194,6 @@
       }
     }
 
-    /* ================= POPULA SELECT DE CONTROLADORES ================= */
     function popularSelectControladores() {
       const select = document.querySelector('.div-filtro select');
       select.innerHTML = '';
@@ -211,12 +214,11 @@
 
       select.addEventListener('change', (e) => {
         controladorFiltroSelecionado = e.target.value;
-        atualizarTituloDashboard(); // Atualiza o título dinamicamente
+        atualizarTituloDashboard();
         usarDadosReais(ultimoLoteAlertas);
       });
     }
 
-    /* ================= ATUALIZA KPI ================= */
     function atualizarKPI(ativos) {
       const total = ativos.length;
       const medio = ativos.filter(a => ["MEDIO","MÉDIO"].includes(normalizaSemAcento(a.Descricao?.Criticidade||'').toUpperCase())).length;
@@ -229,22 +231,20 @@
       const kpiTotalLine = document.getElementById("kpi_total_line");
 
       if (controladorFiltroSelecionado === "Todos") {
-          if (total <= 7) kpiTotalLine.style.backgroundColor = "#4CAF50"; // verde
-          else if (total <= 15) kpiTotalLine.style.backgroundColor = "#f4b400"; // amarelo
-          else kpiTotalLine.style.backgroundColor = "#E71831"; // vermelho
+          if (total <= 7) kpiTotalLine.style.backgroundColor = "#4CAF50";
+          else if (total <= 15) kpiTotalLine.style.backgroundColor = "#f4b400";
+          else kpiTotalLine.style.backgroundColor = "#E71831";
       } else {
-          if (total === 0) kpiTotalLine.style.backgroundColor = "#4CAF50"; // verde
-          else if (total === 1) kpiTotalLine.style.backgroundColor = "#f4b400"; // amarelo
-          else kpiTotalLine.style.backgroundColor = "#E71831"; // vermelho
+          if (total === 0) kpiTotalLine.style.backgroundColor = "#4CAF50";
+          else if (total === 1) kpiTotalLine.style.backgroundColor = "#f4b400";
+          else kpiTotalLine.style.backgroundColor = "#E71831";
       }
     }
 
-    /* ================= PROCESSA ALERTAS ================= */
     function usarDadosReais(dados) {
       const setorUsuario = sessionStorage.getItem("SETOR_USUARIO");
       let resolvidosHoje = [];
 
-      // Atualiza activeAlerts e separa resolvidos
       dados.forEach(item => {
         const payloadKey = makeAlertKey(item);
         const existing = activeAlerts.get(payloadKey) || {};
@@ -285,7 +285,6 @@
       const feed = document.getElementById('feed_area');
       feed.innerHTML = '';
 
-      // Alertas ativos
       ativos.forEach(item => {
         const hora = formatHoraFrom(item);
         const mensagem = `${item.Summary || 'Alerta'} - ${item.Descricao?.Maquina || 'N/A'}`;
@@ -297,12 +296,11 @@
         feed.appendChild(div);
       });
 
-      // Alertas resolvidos
       resolvidosHoje.forEach(item => {
         const hora = formatHoraFrom(item);
         const mensagem = `Resolvido - ${item.Summary || 'Alerta'} - ${item.Descricao?.Maquina || 'N/A'}`;
         const div = document.createElement('div');
-        div.className = 'feed-item resolvido'; // Classe verde
+        div.className = 'feed-item resolvido';
         div.innerHTML = `<div>${mensagem}</div><div>${hora}</div>`;
         feed.appendChild(div);
       });
@@ -314,7 +312,6 @@
       tentarAtualizarHeatmap();
     }
 
-    /* ================= GRÁFICO POR COMPONENTE ================= */
     function atualizarGraficoPorComponentePorHora(lista, janelaHoras = 12) {
       const now = new Date();
       const labels = [];
@@ -350,7 +347,6 @@
       graficoComponentes.update();
     }
 
-    /* ================= HEATMAP ================= */
     anychart.onDocumentReady(function () {
       heatmapChart = anychart.heatMap([]);
       const colorScale = anychart.scales.ordinalColor();
@@ -420,7 +416,6 @@
       });
     }
 
-    /* ================= INICIALIZAÇÃO ================= */
     criarGraficoComponentes();
 
     (async function inicializarDashboard() {
@@ -436,13 +431,28 @@
 
       popularSelectControladores();
 
-      // Mock de alertas
-      const dadosAlertasMock = [
-        { ID: "a1", Key: "AL-001", Status: "Aberto", Summary: "CPU acima de 90%", CriadoEm: new Date(Date.now() - 3 * 3600e3).toISOString(), Descricao: { Componente: "CPU", Criticidade: "CRÍTICO", Maquina: "0001", ValorAtual: "92.5", Setor: sessionStorage.getItem("SETOR_USUARIO") } },
-        { ID: "a2", Key: "AL-002", Status: "Concluído", Summary: "RAM em 80%", CriadoEm: new Date(Date.now() - 2 * 3600e3).toISOString(), Descricao: { Componente: "RAM", Criticidade: "MÉDIO", Maquina: "0001", ValorAtual: "80", Setor: sessionStorage.getItem("SETOR_USUARIO") } }
-      ];
+      async function carregarAlertas() {
+        try {
+          const resposta = await fetch('/s3RouteAlertasTempoReal/dados/ultimo');
+          if (!resposta.ok) throw new Error("Erro ao buscar alertas do S3");
+          let dados = await resposta.json();
+          // Garantir que seja um array
+          if (!Array.isArray(dados)) {
+            if (dados.alertas && Array.isArray(dados.alertas)) {
+              dados = dados.alertas;
+            } else {
+              dados = [];
+            }
+          }
+          usarDadosReais(dados);
+        } catch (erro) {
+          console.error("Erro ao carregar alertas:", erro);
+        }
+      }
 
-      usarDadosReais(dadosAlertasMock);
+      carregarAlertas();
+      setInterval(carregarAlertas, 30 * 1000);
+
     })();
   </script>
 
