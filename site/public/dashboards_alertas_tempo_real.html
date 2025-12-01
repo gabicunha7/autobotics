@@ -121,6 +121,42 @@
   </section>
 
   <script>
+    
+async function lerJsonS3() {
+  try {
+    const resposta = await fetch('/s3RouteAlertasTempoReal/dados/ultimo');
+    const texto = await resposta.text();
+
+    if (!resposta.ok) {
+      console.error('Erro na requisição /s3RouteHistoricoAlerta/dados/ultimo', resposta.status, texto);
+      const msgEl = document.getElementById('erroBuscaS3');
+      if (msgEl) msgEl.textContent = 'Erro do servidor ao buscar dados: ' + (texto || resposta.status);
+      return null;
+    }
+
+    let data;
+    try {
+      data = JSON.parse(texto);
+    } catch (e) {
+      console.warn('Resposta não é JSON, usando texto:', texto);
+      data = texto;
+    }
+
+    console.log('ultimo JSON do bucket (histórico de alertas):', data);
+
+    sessionStorage.JSON_ALERTA = JSON.stringify(data);
+
+
+    return data;
+
+  } catch (err) {
+    console.error('Erro ao buscar último arquivo do S3:', err);
+    const msgEl = document.getElementById('erroBuscaS3');
+    if (msgEl) msgEl.textContent = 'Falha ao buscar dados do S3: ' + (err.message || err);
+    return null;
+  }
+}
+    lerJsonS3()
     document.getElementById('nome-usuario').innerText = sessionStorage.NOME_USUARIO || 'Usuário';
     document.getElementById('email-usuario').innerText = sessionStorage.EMAIL_USUARIO || 'usuario@email.com';
 
@@ -434,6 +470,7 @@
       async function carregarAlertas() {
         try {
           const resposta = await fetch('/s3RouteAlertasTempoReal/dados/ultimo');
+          console.log("Resposta fetch alertas S3:", resposta);
           if (!resposta.ok) throw new Error("Erro ao buscar alertas do S3");
           let dados = await resposta.json();
           // Garantir que seja um array
