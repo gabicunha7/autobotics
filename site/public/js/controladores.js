@@ -29,7 +29,6 @@ function buscarControladores() {
 }
 
 async function listarControladores() {
-        sessionStorage.setItem("TELA", "dashboard_cpu_ram.html")
         let controladores = await buscarControladores()
         let setores_container = document.getElementById("setor-container")
         for (controlador in controladores) {
@@ -46,7 +45,6 @@ async function listarControladores() {
 }
 
 function selecionarControlador(controlador) {
-        alert(controlador)
     sessionStorage.setItem("CONTROLADOR", `${controlador}`)
     window.location.href = sessionStorage.getItem("TELA")
 }

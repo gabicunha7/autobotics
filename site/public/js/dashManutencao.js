@@ -91,6 +91,7 @@ function listarSetores(dados) {
             }
         }
     });
+    mudarValorSelectSetor()
     listarAlertasNoSetor()
     buscarSerial()
     exibirGraficoControladoresAlertas()
@@ -98,6 +99,7 @@ function listarSetores(dados) {
     componenteComMaisAlertas()
     topControladores()
     exibirPicoMediaComponente()
+    listarComponenteAlertas()
 }
 
 
@@ -137,7 +139,6 @@ function buscarNomeSetor() {
     select_setor = document.getElementById("slc_setor");
     select_index = select_setor.selectedIndex;
     varSetor = select_setor.options[select_index].value;
-
 
 
     fetch("/manutencao/buscarNomeSetor", {
@@ -205,9 +206,11 @@ function listarNumSeriais(dados) {
     buscarNomeControlador();
     exibirGraficoControladoresAlertas();
     qtdAlertasPorNivelNaSemana()
+    mudarValorSelectControlador()
 }
 
 function mudarNomeSetor(dado) {
+    mudarValorSelectSetor()
     nomeSetor = document.getElementById("nome-setor");
     console.log(dado)
     nomeSetor.innerHTML = dado[0].nome
@@ -496,5 +499,28 @@ function exibirPicoMediaComponente() {
     criarGraficoPicoMediaComponente(media, pico, dias)
 }
 
+//Mudando o Setor e Controlador 
 
+function mudarValorSelectSetor(){
+    select_setor = document.getElementById("slc_setor");
 
+    for(i = 0; i < select_setor.options.length; i++){
+        if(select_setor.options[i].value == sessionStorage.getItem("SETOR_USUARIO")){
+            select_setor.selectedIndex = i
+            break;
+        }
+    }
+    select_setor.dispatchEvent(new Event("change"));
+}
+
+function mudarValorSelectControlador(){
+    select_controlador = document.getElementById("slc_controlador");
+
+    for(i = 0; i < select_controlador.options.length; i++){
+        if(select_controlador.options[i].value == sessionStorage.getItem("CONTROLADOR")){
+            select_controlador.selectedIndex = i
+            break;
+        }
+    }
+    select_controlador.dispatchEvent(new Event("change"));
+}

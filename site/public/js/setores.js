@@ -30,22 +30,30 @@ function buscarSetores() {
 async function listarSetores() {
         let setores = await buscarSetores()
         let setores_container = document.getElementById("setor-container")
+
         for (setor in setores) {
+
+                if (setores[setor].total_alertas > 10) {
+                        corKpi = "#e6ac00"
+                } else if (setores[setor].total_alertas > 30) {
+                        corKpi = "#E71831"
+                } else {
+                        corKpi = "#4CAF50"
+                }
+
                 setores_container.innerHTML += `
                         <div onclick="selecionarSetor(${setores[setor].id_setor})" class="setor-item">
                         <h1>Setor: ${setores[setor].nome}</h1>
                         <div class="setor-values">
-                                <p>CPU: ${setores[setor].cpu_percent}%</p>
-                                <p>RAM: ${setores[setor].ram_usada_percent}%</p>
-                                <p>DISCO: ${setores[setor].disco_usado_percent}%</p>
+                        <p>Quantidade de Alertas (hoje): <span style="color: ${corKpi};">${setores[setor].total_alertas}</span></p>
                         </div>
                         </div>`
         }
 }
 
 function selecionarSetor(setor) {
-    sessionStorage.setItem("SETOR_USUARIO", setor)
-    window.location.href = "listaControladores.html"
+        sessionStorage.setItem("SETOR_USUARIO", setor)
+        window.location.href = "listaControladores.html"
 }
 
 listarSetores()

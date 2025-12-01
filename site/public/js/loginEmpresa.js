@@ -86,10 +86,12 @@ function entrar() {
                 
                 setTimeout(() => {
                     if(sessionStorage.CARGO_USUARIO == 1) {
-                        window.location = "dashboard_robotica.html";
+                        sessionStorage.setItem("TELA", "dashboard_robotica.html")
+                        window.location = "listaControladores.html";
                     }
                     else {
-                        window.location = "dashboard_manutencao.html";
+                        sessionStorage.setItem("TELA", "dashboard_manutencao.html")
+                        window.location = "listaSetores.html";
                     }
                     
                 }, "1000");
