@@ -77,7 +77,6 @@
                 <div class="div_select">
                     <p>Setor: </p>
                     <select id="slc_setor">
-
                     </select>
 
                     <p>Controlador: </p>
@@ -116,7 +115,8 @@
                     </div>
 
                     <div class="div_grafico">
-                        <p>Picos e Médias de uso de <span id="nome-componente">"Componente"</span> diário (na semana)</p>
+                        <p>Picos e Médias de uso de <span id="nome-componente">"Componente"</span> diário (na semana)
+                        </p>
                         <canvas id="grafico_picos_medias"></canvas>
                     </div>
                     <div class="div-controlador">
@@ -138,6 +138,14 @@
                     <hr>
                     <div id="kpis">
                         <div class="kpi_dashboard" id="total-alertas">
+                            <div class="kpi-tooltip-container">
+                                <span class="kpi-tooltip-label">Legenda &#9432;</span>
+                                <div class="kpi-tooltip">
+                                    <p><span class="tooltip-green"></span> Verde: Nível Estável (Abaixo de 10 alertas)</p>
+                                    <p><span class="tooltip-yellow"></span> Amarelo: Nível Médio (Acima de 10 alertas)</p>
+                                    <p><span class="tooltip-red"></span> Vermelho: Nível Critíco (Acima de 30 alertas)</p>
+                                </div>
+                            </div>
                             <h3>Total de alertas (hoje): </h3>
                             <p id="total-alertas-hoje" class="total-alertas"></p>
                         </div>

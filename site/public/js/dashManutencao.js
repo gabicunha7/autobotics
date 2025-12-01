@@ -210,7 +210,6 @@ function listarNumSeriais(dados) {
 }
 
 function mudarNomeSetor(dado) {
-    mudarValorSelectSetor()
     nomeSetor = document.getElementById("nome-setor");
     console.log(dado)
     nomeSetor.innerHTML = dado[0].nome

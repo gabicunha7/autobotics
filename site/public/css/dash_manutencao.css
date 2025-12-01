@@ -34,7 +34,7 @@ body {
 }
 
 .div-filtro {
-    width: 50vw;
+    width: 53vw;
     background-color: #fff;
     display: flex;
     align-items: center;
@@ -141,6 +141,57 @@ body {
     border-radius: 10px;
 }
 
+.kpi-tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+.kpi-tooltip-label {
+  font-size: 0.8rem;
+  color: black;
+  cursor: pointer;
+  display: inline-block;
+  margin-bottom: 4px;
+}
+
+.kpi-tooltip {
+  visibility: hidden;
+  width: 250px;
+  background-color: #fff;
+  color: #000;
+  text-align: left;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  font-size: 0.85rem;
+}
+
+.kpi-tooltip {
+  font-size: 8px;
+  font-weight: 100;
+}
+
+.kpi-tooltip-container:hover .kpi-tooltip {
+  visibility: visible;
+}
+
+.kpi-tooltip span {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  border-radius: 4px;
+}
+
+.tooltip-green { background-color: #4CAF50; }
+.tooltip-yellow { background-color: #f4b400; }
+.tooltip-red { background-color: #E71831; }
+
 .tituloSetor{
     display: flex;
     flex-direction: row-reverse;
@@ -198,7 +249,7 @@ body {
     gap: 20px;
     font-size: 1.5rem;
     width: 15vw;
-    height: 22vh;
+    height: 27vh;
     margin: 20px;
     padding: 30px;
     align-items: center;
