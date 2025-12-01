@@ -129,6 +129,53 @@ body{
   margin: 20px;
 }
 
+.cards-criticidades {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  width: 100%;
+  order: -1;
+}
+
+.card-criticidade {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 15px;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  text-align: center;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-top: 4px solid #ddd;
+}
+
+#card-critico {
+  border-top-color: #F44336;
+}
+
+#card-medio {
+  border-top-color: #e6ac00;
+}
+
+#card-estavel {
+  border-top-color: #4CAF50;
+}
+
+.card-criticidade p {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.card-criticidade span {
+  font-size: 13px;
+  font-weight: 500;
+}
+
 .card-metrica {
   background-color: #fff;
   padding: 15px;
