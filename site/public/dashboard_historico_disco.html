@@ -110,10 +110,17 @@
                         <h1>Estado dos discos do Setor</h1>
                         <div class="kpis">
                             <div class="kpi_dashboard" id="porcentagem-media">
+                                <div class="kpi-tooltip-container">
+                                <span class="kpi-tooltip-label">Legenda &#9432;</span>
+                                <div class="kpi-tooltip">
+                                    <p><span class="tooltip-green"></span> Verde: Estável</p>
+                                    <p><span class="tooltip-yellow"></span> Amarelo: Médio</p>
+                                    <p><span class="tooltip-red"></span> Vermelho: Crítico</p>
+                                </div>
+                                </div>
                                 <h3>Média de uso de disco do setor hoje</h3>
                                 <div class="kpi_view">
                                     <p class="porcentagem-media" id="porc-media-setor"></p>
-                                    <!-- <button onclick="abrirPopUpCadastro('media_uso')">Visualizar</button> -->
                                     <img src="./assets/icones/media.png" style="width: 20%;">
                                 </div>
                             </div>
