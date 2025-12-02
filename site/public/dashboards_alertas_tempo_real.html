@@ -440,8 +440,9 @@ function atualizarGraficoPorComponentePorHora(lista, janelaHoras = 12) {
   const labels = [];
 
   for (let i = janelaHoras - 1; i >= 0; i--) {
-    const dt = new Date(now.getTime() - i * 3600 * 1000);
-    labels.push({ label: String(dt.getHours()).padStart(2, '0') + ':00', hora: dt });
+      const dt = new Date(now.getTime() - i * 3600 * 1000);
+      dt.setMinutes(0, 0, 0, 0); // normalize to start of the hour
+      labels.push({ label: String(dt.getHours()).padStart(2, '0') + ':00', hora: dt });
   }
 
   const cpu = Array(labels.length).fill(0);
@@ -449,13 +450,14 @@ function atualizarGraficoPorComponentePorHora(lista, janelaHoras = 12) {
   const disco = Array(labels.length).fill(0);
 
   lista.forEach(alerta => {
-    const inicio = parseDateString(alerta.CriadoEm || alerta.firstSeen);
-    if (isNaN(inicio.getTime())) return;
-    const fim = alerta.ConcluidoEm ? new Date(alerta.ConcluidoEm) : null;
+      const inicio = parseDateString(alerta.CriadoEm || alerta.firstSeen);
+      if (isNaN(inicio.getTime())) return;
+      const fim = alerta.ConcluidoEm ? parseDateString(alerta.ConcluidoEm) : null;
 
     labels.forEach((slot, idx) => {
-      const horaSlot = slot.hora;
-      const ativo = horaSlot >= inicio && (!fim || horaSlot <= fim);
+        const slotStart = slot.hora;
+        const slotEnd = new Date(slotStart.getTime() + 3600 * 1000);
+        const ativo = (inicio < slotEnd) && (!fim || fim >= slotStart);
       if (!ativo) return;
 
       const comp = norm(alerta.Descricao?.Componente || '');
@@ -532,8 +534,21 @@ function atualizarHeatmap(dadosAlertas, janelaHoras = 12) {
           const inicio = parseDateString(alerta.CriadoEm || alerta.firstSeen);
           if (isNaN(inicio.getTime())) return;
           const fim = alerta.ConcluidoEm ? parseDateString(alerta.ConcluidoEm) : null;
-        const ativo = slot.date >= inicio && (!fim || slot.date <= fim);
-        if (!ativo) return;
+
+          const slotStart = slot.date;
+          const slotEnd = new Date(slotStart.getTime() + 3600 * 1000);
+          const ativo = (inicio < slotEnd) && (!fim || fim >= slotStart);
+          if (!ativo) {
+            if (DEBUG_HEATMAP) {
+              console.debug('[HEATMAP] alerta não ativo para slot', slot.label,
+                'controlador=', serial,
+                'inicio=', inicio.toISOString(),
+                'fim=', fim ? fim.toISOString() : null,
+                'slotStart=', slotStart.toISOString(),
+                'slotEnd=', slotEnd.toISOString());
+            }
+            return;
+          }
 
         const critStr = norm(alerta.Descricao.Criticidade || '');
         let code = 0;
