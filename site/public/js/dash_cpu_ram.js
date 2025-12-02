@@ -211,7 +211,7 @@ async function criarGraficos(dadosControlador) {
   {
       label: 'Nível crítico RAM(%)',
       data: [parametrosRam[1], parametrosRam[1], parametrosRam[1], parametrosRam[1], parametrosRam[1], parametrosRam[1], parametrosRam[1], parametrosRam[1], parametrosRam[1], parametrosRam[1], parametrosRam[1], parametrosRam[1]],
-      borderColor: 'rgba(255, 75, 201, 1)',
+      borderColor: 'rgba(111, 255, 75, 1)',
       tension: 0.1
     }]
   };

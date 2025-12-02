@@ -33,10 +33,10 @@ async function listarSetores() {
 
         for (setor in setores) {
 
-                if (setores[setor].total_alertas > 10) {
-                        corKpi = "#e6ac00"
-                } else if (setores[setor].total_alertas > 30) {
+                if (setores[setor].total_alertas > 30) {
                         corKpi = "#E71831"
+                } else if (setores[setor].total_alertas > 10) {
+                        corKpi = "#e6ac00"
                 } else {
                         corKpi = "#4CAF50"
                 }

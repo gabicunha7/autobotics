@@ -88,8 +88,8 @@
       <div class="div-usuario">
         <div class="div-img-usuario"><img src="assets/icones/foto_usuario.png" alt=""></div>
         <div>
-          <h6 id="nome-usuario">Usuário</h6>
-          <p id="email-usuario">usuario@email.com</p>
+          <h6 id="nome-usuario"></h6>
+          <p id="email-usuario"></p>
         </div>
       </div>
     </div>
@@ -236,5 +236,10 @@
 
   <script src="js/dash_cpu_ram.js"></script>
 </body>
+
+<script>
+  document.getElementById('nome-usuario').innerText = sessionStorage.NOME_USUARIO || 'Usuário';
+document.getElementById('email-usuario').innerText = sessionStorage.EMAIL_USUARIO || 'usuario@email.com';
+</script>
 
 </html>

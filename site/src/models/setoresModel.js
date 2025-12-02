@@ -13,7 +13,7 @@ function buscarSetores(empresa) {
                 FROM setor AS s
                 LEFT JOIN controlador AS c ON s.id_setor = c.fk_setor
                 LEFT JOIN alerta AS a ON a.fk_controlador = c.id_controlador
-                WHERE s.fk_empresa = ${empresa}
+                WHERE s.fk_empresa = ${empresa} AND date(a.timestamp) = DATE(NOW())
                 GROUP BY s.id_setor 
                 ORDER BY total_alertas DESC; `
     return database.executar(sql)

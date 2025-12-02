@@ -6,7 +6,7 @@ const s3 = new AWS.S3();
 async function lerUltimoArquivo(req, res) {
   try {
     const params = {
-      Bucket: process.env.S3_BUCKET,
+      Bucket: "client-1d4a3f130793f4b0dfc576791dd86b38",
       Prefix: "dashboard_cpu_ram/jsons/"
     };
 
