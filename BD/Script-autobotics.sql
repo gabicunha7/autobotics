@@ -160,8 +160,8 @@ values ("Fabricacao de Componentes", "Este setor é um exemplo de um teste a ser
 
 insert into funcionario (nome, email, fk_setor, fk_empresa, ativo, fk_cargo, senha_hash)
 values ("teste", "teste@gmail.com", null, 1, 1, 2, SHA2("senha123", 256)),
-		("ronaldo", "ronaldo@gmail.com", null, 1, 1, 2, SHA2("senha123", 256)),
-		("fenomeno", "fenomeno@gmail.com", 1, 1, 1, 1, SHA2("senha123", 256));
+		("regiane", "regiane@gmail.com", null, 1, 1, 2, SHA2("senha123", 256)),
+		("tatiane", "tatiane@gmail.com", 1, 1, 1, 1, SHA2("senha123", 256));
 
 insert into parametro(fk_componente, valor, criticidade) values
 (1, 85, 2),
