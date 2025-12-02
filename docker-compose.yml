@@ -1,6 +1,6 @@
 services:
         site:
-                image: gabicunha7/autobotics-site:1.7
+                image: gabicunha7/autobotics-site:1.8
                 ports:
                         - "3333:3333"
                 networks:
