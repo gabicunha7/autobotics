@@ -69,6 +69,7 @@
     </div>
 
     <h1 id="titulo-dashboard">Dashboard de Alertas em Tempo Real - Todos os Controladores</h1>
+    <p id="label-setor" style="margin-top:4px; color:#555; font-size:0.95rem">Setor: —</p>
 
     <div class="div-conteudo">
       <div class="dashboard-wrapper">
@@ -397,6 +398,16 @@ function usarDadosReais(dados) {
     resolvidosHoje = resolvidosHoje.filter(a => serialEquals(a.Descricao?.Maquina, controladorFiltroSelecionado));
   }
 
+  // Garante que a opção 'Todos' mostre apenas controladores do setor do usuário
+  if (controladorFiltroSelecionado === "Todos" && setorUsuarioRaw) {
+    if (controladoresSetor && controladoresSetor.length) {
+      const serialSetUsuario = new Set(controladoresSetor.map(c => normalizeSerialForCompare(c.numero_serial)));
+      ativos = ativos.filter(a => serialSetUsuario.has(normalizeSerialForCompare(a.Descricao?.Maquina || '')));
+      resolvidosHoje = resolvidosHoje.filter(a => serialSetUsuario.has(normalizeSerialForCompare(a.Descricao?.Maquina || '')));
+      console.log("Aplicado filtro 'Todos' pelo setor do usuário. Alertas após filtro:", ativos.length);
+    }
+  }
+
   console.log("Alertas considerados para dashboard (após todos filtros):", ativos.length);
 
   atualizarKPI(ativos);
@@ -613,6 +624,28 @@ criarGraficoComponentes();
   }
 
   popularSelectControladores();
+
+  // busca e exibe nome do setor do usuário (se disponível)
+  async function mostrarNomeSetor() {
+    const setorId = sessionStorage.getItem('SETOR_USUARIO');
+    if (!setorId) return;
+    try {
+      const resp = await fetch('/cpuRam/buscarNomeSetor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ setor: setorId })
+      });
+      if (!resp.ok) return;
+      const dados = await resp.json();
+      if (Array.isArray(dados) && dados[0] && dados[0].nome) {
+        document.getElementById('label-setor').innerText = 'Setor: ' + dados[0].nome;
+      }
+    } catch (e) {
+      console.warn('Não foi possível buscar nome do setor:', e);
+    }
+  }
+
+  mostrarNomeSetor();
 
   async function carregarAlertas() {
     try {
