@@ -23,21 +23,78 @@ body {
 /* ================== TOPO ================== */
 .div-superior {
   display: flex;
+  width: 100%;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.div-filtro {
+  width: 53vw;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  height: 100px;
+  border-radius: 50px;
+  padding: 50px;
+  font-size: 20px;
+}
+
+.div_select {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  font-size: 22px;
+  gap: 20px;
+}
+
+.div_select select {
+  width: 20rem;
+}
+
+.div-usuario {
+  display: flex;
+  width: 20vw;
+  background-color: #fff;
+  margin: 20px;
+  height: 100px;
+  border-radius: 50px;
+  padding: 20px;
+  font-size: 20px;
+}
+
+.div-usuario h6 {
+  font-size: 23px;
+}
+
+.div-img-usuario {
+  margin-right: 15px;
+  margin-left: 15px;
+}
+
+.div-img-usuario img {
+  width: 55px;
+  border-radius: 50%;
+}
+
+.div-info-conteudo {
+  display: flex;
+  padding: 10px;
+  margin-left: 0;
+  margin-right: 0;
   justify-content: space-between;
   margin-bottom: 16px;
 }
 
-.div-filtro,
-.div-usuario {
-  background: #D9D9D9;
-  padding: 14px 26px;
-  border-radius: 45px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
+.div-info-conteudo h3 {
+  font-size: 25px;
+  margin: 0;
 }
 
-.div-img-usuario img { width: 55px; border-radius: 50%; }
+.div-info-conteudo p {
+  font-size: 20px;
+  margin: 0;
+}
 
 /* ================== DASHBOARD GRID ================== */
 .div-conteudo { display: flex; justify-content: center; }
@@ -125,8 +182,8 @@ body {
   color: #000; 
 }
 
-.area-kpi1 .kpi_dashboard .kpi-line span#kpi_medio { color: #f4b400; }  /* amarelo */
-.area-kpi1 .kpi_dashboard .kpi-line span#kpi_critico { color: #E71831; } /* vermelho */
+.area-kpi1 .kpi_dashboard .kpi-line span#kpi_medio { color: #000; }  /* preto */
+.area-kpi1 .kpi_dashboard .kpi-line span#kpi_critico { color: #000; } /* preto */
 
 
 /* ================== SEGUNDA KPI ================== */
@@ -151,7 +208,7 @@ body {
   font-size: 1.8rem;
   color: #000; /* número em preto */
   width: 180px;
-  background-color: #4CAF50;
+  background-color: transparent;
   transition: background-color 0.3s;
 }
 

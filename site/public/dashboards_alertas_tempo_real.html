@@ -35,16 +35,34 @@
             <div class="menu-dropdown-items" id="menuDropdown"></div>
           </div>
 
-          <a class="a-pagina" href="alerta.html">Alertas</a>
-          <a class="a-pagina" href="parametros.html">Parâmetros</a>
-          <a class="a-pagina" href="setor.html">Setores</a>
-          <a class="a-pagina" href="controladores.html">Controladores</a>
-          <a class="a-pagina" href="funcionario.html">Funcionários</a>
+          <a class="a-pagina" href="alerta.html">
+            <img class="icon-pagina" src="assets/icones/alerta_icon.png" alt="">
+            Alertas
+          </a>
+          <a class="a-pagina" href="parametros.html">
+            <img class="icon-pagina" src="assets/icones/parametros_icon.png" alt="">
+            Parâmetros
+          </a>
+          <a class="a-pagina" href="setor.html">
+            <img class="icon-pagina" src="assets/icones/setor_icon.png" alt="">
+            Setores
+          </a>
+          <a class="a-pagina" href="controladores.html">
+            <img class="icon-pagina" src="assets/icones/controlador_icon.png" alt="">
+            Controladores
+          </a>
+          <a class="a-pagina" href="funcionario.html">
+            <img class="icon-pagina" src="assets/icones/userImg.png" alt="">
+            Funcionários
+          </a>
         </div>
       </section>
 
       <a href="index.html">
-        <button id="btn-sair" onclick="limparSessao()">Sair</button>
+        <button id="btn-sair" onclick="limparSessao()">
+          <img class="icon-sair" src="assets/icones/sair_icon.png" alt="">
+          Sair
+        </button>
       </a>
     </section>
   </aside>
@@ -53,14 +71,18 @@
 
     <div class="div-superior">
       <div class="div-filtro">
-        <p>Controlador:</p>
-        <select>
-          <option>Todos</option>
-        </select>
+        <div class="div_select">
+          <p>Controlador:</p>
+          <select>
+            <option>Todos</option>
+          </select>
+        </div>
       </div>
 
       <div class="div-usuario">
-        <div class="div-img-usuario"><img src="assets/icones/foto_usuario.png" alt=""></div>
+        <div class="div-img-usuario">
+          <img src="assets/icones/foto_usuario.png" alt="">
+        </div>
         <div>
           <h6 id="nome-usuario">Usuário</h6>
           <p id="email-usuario">usuario@email.com</p>
@@ -68,8 +90,13 @@
       </div>
     </div>
 
-    <h1 id="titulo-dashboard">Dashboard de Alertas em Tempo Real - Todos os Controladores</h1>
-    <p id="label-setor" style="margin-top:4px; color:#555; font-size:0.95rem">Setor: —</p>
+    <div class="div-info-conteudo">
+      <div>
+        <h3 id="titulo-dashboard">Dashboard de Alertas em Tempo Real</h3>
+        <p id="label-setor" style="margin-top:4px; color:#555; font-size:0.95rem">Setor: —</p>
+      </div>
+      <p id="data_atual"></p>
+    </div>
 
     <div class="div-conteudo">
       <div class="dashboard-wrapper">
@@ -158,6 +185,18 @@ lerJsonS3();
 
 document.getElementById('nome-usuario').innerText = sessionStorage.NOME_USUARIO || 'Usuário';
 document.getElementById('email-usuario').innerText = sessionStorage.EMAIL_USUARIO || 'usuario@email.com';
+
+// Preenche data atual
+function exibirDataAtual() {
+  const dataAtual = new Date();
+  const dia = String(dataAtual.getDate()).padStart(2, '0');
+  const mes = String(dataAtual.getMonth() + 1).padStart(2, '0');
+  const ano = dataAtual.getFullYear();
+  const dataFormatada = `Data: ${dia}/${mes}/${ano}`;
+  document.getElementById('data_atual').innerText = dataFormatada;
+}
+
+exibirDataAtual();
 
 function normalizaSemAcento(s) {
   return (s || "").toString().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
