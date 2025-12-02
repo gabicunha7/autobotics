@@ -167,12 +167,45 @@ function norm(s) {
   return normalizaSemAcento(s || "").toUpperCase().trim();
 }
 
+// Normaliza serial/maquina para comparação: extrai dígitos e remove zeros à esquerda.
+function normalizeSerialForCompare(v) {
+  if (v === undefined || v === null) return '';
+  const s = String(v);
+  const digits = s.replace(/\D/g, '');
+  if (digits.length) return digits.replace(/^0+/, '') || '0';
+  return s.trim().toLowerCase();
+}
+
+function serialEquals(a, b) {
+  return normalizeSerialForCompare(a) === normalizeSerialForCompare(b);
+}
+
+// Parse de datas recebidas do JSON de forma tolerante.
+// Corrige offsets de timezone no formato +HHMM / -HHMM para +HH:MM / -HH:MM
+function parseDateString(s) {
+  if (!s && s !== 0) return new Date(NaN);
+  if (s instanceof Date) return s;
+  if (typeof s !== 'string') return new Date(s);
+
+  let t = s.trim();
+
+  // se terminar com +HHMM ou -HHMM, transforma em +HH:MM
+  t = t.replace(/([+-]\d{2})(\d{2})$/, '$1:$2');
+
+  const dt = new Date(t);
+  if (DEBUG_HEATMAP && isNaN(dt.getTime())) {
+    console.debug('[HEATMAP] parseDateString falhou para:', s, '-> tried:', t);
+  }
+  return dt;
+}
+
 let activeAlerts = new Map();
 let ultimoLoteAlertas = [];
 let controladoresSetor = [];
 let heatmapChart = null;
 let graficoComponentes = null;
 let controladorFiltroSelecionado = "Todos";
+const DEBUG_HEATMAP = true;
 
 async function buscarControladores() {
   try {
@@ -219,7 +252,7 @@ function criarGraficoComponentes() {
 function formatHoraFrom(item) {
   const dtString = item.ConcluidoEm || item.CriadoEm || item.firstSeen;
   if (!dtString) return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  const dt = new Date(dtString);
+  const dt = parseDateString(dtString);
   return isNaN(dt.getTime())
     ? new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     : dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -340,21 +373,28 @@ function usarDadosReais(dados) {
   console.log("Total de alertas abertos antes do filtro:", ativos.length);
 
   // aplica filtro por setor só se SETOR_USUARIO existir
-  if (setorUsuarioNorm) {
-    const filtrados = ativos.filter(a => norm(a.Descricao?.Setor || "") === setorUsuarioNorm);
-    console.log("Alertas após filtro de setor:", filtrados.length, " | Setor usuário:", setorUsuarioRaw);
-
-    // se não encontrou nada para esse setor, não filtra (mostra todos)
-    if (filtrados.length > 0) {
-      ativos = filtrados;
+  if (setorUsuarioRaw) {
+    // se temos a lista de controladores do setor, usa os serials para filtrar
+    if (controladoresSetor && controladoresSetor.length) {
+      const serialSet = new Set(controladoresSetor.map(c => normalizeSerialForCompare(c.numero_serial)));
+      const filtrados = ativos.filter(a => serialSet.has(normalizeSerialForCompare(a.Descricao?.Maquina || '')));
+      console.log("Alertas após filtro de setor (por serials):", filtrados.length, " | Setor usuário:", setorUsuarioRaw);
+      if (filtrados.length > 0) {
+        ativos = filtrados;
+      }
+    } else {
+      // fallback: tenta comparar pelo nome do setor (caso SETOR_USUARIO contenha o nome)
+      const filtrados = ativos.filter(a => norm(a.Descricao?.Setor || "") === setorUsuarioNorm);
+      console.log("Alertas após filtro de setor (por nome fallback):", filtrados.length, " | Setor usuário:", setorUsuarioRaw);
+      if (filtrados.length > 0) ativos = filtrados;
     }
   } else {
     console.warn("SETOR_USUARIO não definido no sessionStorage. Mostrando todos os setores.");
   }
 
   if (controladorFiltroSelecionado !== "Todos") {
-    ativos = ativos.filter(a => a.Descricao?.Maquina === controladorFiltroSelecionado);
-    resolvidosHoje = resolvidosHoje.filter(a => a.Descricao?.Maquina === controladorFiltroSelecionado);
+    ativos = ativos.filter(a => serialEquals(a.Descricao?.Maquina, controladorFiltroSelecionado));
+    resolvidosHoje = resolvidosHoje.filter(a => serialEquals(a.Descricao?.Maquina, controladorFiltroSelecionado));
   }
 
   console.log("Alertas considerados para dashboard (após todos filtros):", ativos.length);
@@ -409,7 +449,7 @@ function atualizarGraficoPorComponentePorHora(lista, janelaHoras = 12) {
   const disco = Array(labels.length).fill(0);
 
   lista.forEach(alerta => {
-    const inicio = new Date(alerta.CriadoEm || alerta.firstSeen);
+    const inicio = parseDateString(alerta.CriadoEm || alerta.firstSeen);
     if (isNaN(inicio.getTime())) return;
     const fim = alerta.ConcluidoEm ? new Date(alerta.ConcluidoEm) : null;
 
@@ -463,6 +503,7 @@ function atualizarHeatmap(dadosAlertas, janelaHoras = 12) {
 
   for (let i = janelaHoras - 1; i >= 0; i--) {
     const dt = new Date(agora.getTime() - i * 3600 * 1000);
+    dt.setMinutes(0, 0, 0, 0); // normalize to start of the hour
     slots.push({ label: String(dt.getHours()).padStart(2, '0') + ':00', date: dt });
   }
 
@@ -476,15 +517,21 @@ function atualizarHeatmap(dadosAlertas, janelaHoras = 12) {
 
       dadosAlertas.forEach(alerta => {
         if (!alerta.Descricao) return;
-        if (alerta.Descricao.Maquina !== serial) return;
+        if (!serialEquals(alerta.Descricao.Maquina, serial)) return;
 
-        if (setorUsuarioNorm) {
-          const setorAlertaNorm = norm(alerta.Descricao.Setor || "");
-          if (setorAlertaNorm !== setorUsuarioNorm) return;
+        if (setorUsuarioRaw) {
+          if (controladoresSetor && controladoresSetor.length) {
+            const serialSet = new Set(controladoresSetor.map(c => normalizeSerialForCompare(c.numero_serial)));
+            if (!serialSet.has(normalizeSerialForCompare(alerta.Descricao.Maquina || ''))) return;
+          } else {
+            const setorAlertaNorm = norm(alerta.Descricao.Setor || "");
+            if (setorAlertaNorm !== setorUsuarioNorm) return;
+          }
         }
 
-        const inicio = new Date(alerta.CriadoEm || alerta.firstSeen);
-        const fim = alerta.ConcluidoEm ? new Date(alerta.ConcluidoEm) : null;
+          const inicio = parseDateString(alerta.CriadoEm || alerta.firstSeen);
+          if (isNaN(inicio.getTime())) return;
+          const fim = alerta.ConcluidoEm ? parseDateString(alerta.ConcluidoEm) : null;
         const ativo = slot.date >= inicio && (!fim || slot.date <= fim);
         if (!ativo) return;
 
@@ -498,6 +545,16 @@ function atualizarHeatmap(dadosAlertas, janelaHoras = 12) {
           melhorAlerta = alerta;
         }
       });
+
+      if (DEBUG_HEATMAP && melhorCodigo > 0) {
+        console.debug('[HEATMAP] encontrou melhorCodigo>', melhorCodigo,
+          'controlador=', serial,
+          'slot=', slot.label,
+          'melhorAlerta.Maquina=', melhorAlerta?.Descricao?.Maquina,
+          'crit=', melhorAlerta?.Descricao?.Criticidade,
+          'inicio=', melhorAlerta?.CriadoEm || melhorAlerta?.firstSeen,
+          'fim=', melhorAlerta?.ConcluidoEm);
+      }
 
       let critLabel = 'Estável';
       if (melhorCodigo === 1) critLabel = 'Média';
