@@ -89,7 +89,7 @@ async function lerUltimoArquivo(req, res) {
     console.log(`Último arquivo encontrado: ${ultimoArquivo.Key}`);
 
     const dadosClient = await s3.getObject({ 
-      Bucket: "testebucket-elt", 
+      Bucket: "client-1d4a3f130793f4b0dfc576791dd86b32", 
       Key: ultimoArquivo.Key 
     }).promise();
     

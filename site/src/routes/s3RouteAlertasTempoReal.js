@@ -8,7 +8,7 @@ AWS.config.update({
 });
 
 const s3 = new AWS.S3();
-const BUCKET = 'testebucket-elt';
+const BUCKET = 'client-1d4a3f130793f4b0dfc576791dd86b32';
 const PASTA = 'dashboard_alertas_tempo_real/jsons/';
 
 const s3Controller = require('../controllers/s3ControllerAlertasTempoReal');
