@@ -1,3 +1,7 @@
+let chartCpuRam = null;
+let chartKpiCpu = null;
+let chartKpiRam = null;
+
 async function buscarCpuParametros() {
   let parametros = await buscarParametros()
 
@@ -52,8 +56,8 @@ async function criarGraficos(dadosControlador) {
   var cpu = []
   var ram = []
 
-  let parametrosRam = buscarRamParametros()
-  let parametrosCpu = buscarCpuParametros()
+  let parametrosRam = await buscarRamParametros()
+  let parametrosCpu = await buscarCpuParametros()
 
   let top5processos = dadosControlador.topProcessos.processos.topProcessos;
 
@@ -69,10 +73,10 @@ async function criarGraficos(dadosControlador) {
 
   console.log(top5processos);
 
-  const horariosChave = Object.keys(medias);
+  let horariosChave = Object.keys(medias);
 
   horariosChave.forEach(horario => {
-    const info = medias[horario];
+    let info = medias[horario];
     console.log(horario, info.cpu, info.ram);
     horarios.push(horario)
     cpu.push(info.cpu)
@@ -105,7 +109,7 @@ async function criarGraficos(dadosControlador) {
   }
 
   // Configuração do gráfico rosca de CPU (KPI)
-  const kpi_cpu_mean = document.getElementById('cpu-mean-pie')
+  let kpi_cpu_mean = document.getElementById('cpu-mean-pie')
 
   let meanCpu = dadosControlador.mediaCpuRam.medias.cpu
   let color = "rgb(70, 255, 45)"
@@ -119,7 +123,7 @@ async function criarGraficos(dadosControlador) {
     document.getElementById('kpi-mean-value-cpu').style.color = color
   }
 
-  const data_kpi_cpu_mean = {
+  let data_kpi_cpu_mean = {
     datasets: [{
       label: 'Média de CPU da última hora (%)',
       data: [meanCpu, 100 - meanCpu],
@@ -131,7 +135,9 @@ async function criarGraficos(dadosControlador) {
     }]
   };
 
-  new Chart(kpi_cpu_mean, {
+  if (chartKpiCpu) chartKpiCpu.destroy();
+
+  chartKpiCpu = new Chart(kpi_cpu_mean, {
     type: 'doughnut',
     data: data_kpi_cpu_mean,
     options: {
@@ -140,7 +146,7 @@ async function criarGraficos(dadosControlador) {
   })
 
   // Configuração do gráfico rosca de RAM (KPI)
-  const kpi_ram_mean = document.getElementById('ram-mean-pie')
+  let kpi_ram_mean = document.getElementById('ram-mean-pie')
 
   let meanRam = dadosControlador.mediaCpuRam.medias.ram
   color = "rgb(70, 255, 45)"
@@ -156,7 +162,7 @@ async function criarGraficos(dadosControlador) {
     document.getElementById('kpi-mean-value-ram-total').style.color = color
   }
 
-  const data_kpi_ram_mean = {
+  let data_kpi_ram_mean = {
     datasets: [{
       label: 'Média de RAM da última hora (%)',
       data: [dadosControlador.mediaCpuRam.medias.ram, 100 - dadosControlador.mediaCpuRam.medias.ram],
@@ -168,7 +174,9 @@ async function criarGraficos(dadosControlador) {
     }]
   };
 
-  new Chart(kpi_ram_mean, {
+  if (chartKpiRam) chartKpiRam.destroy();
+
+  chartKpiRam = new Chart(kpi_ram_mean, {
     type: 'doughnut',
     data: data_kpi_ram_mean,
     options: {
@@ -176,11 +184,11 @@ async function criarGraficos(dadosControlador) {
     }
   })
 
-  // Configuração do gráfico de linha de CPU
-  const cpu_line = document.getElementById('cpu-line-chart');
+  // Configuração do gráfico de linha de CPU e RAM
+  let cpu_line = document.getElementById('cpu-line-chart');
 
-  const labels_cpu_line = horarios.reverse();
-  const data_cpu_line = {
+  let labels_cpu_line = horarios.reverse();
+  let data_cpu_line = {
     labels: labels_cpu_line,
     datasets: [{
       label: 'Média CPU (%)',
@@ -191,12 +199,26 @@ async function criarGraficos(dadosControlador) {
     {
       label: 'Média RAM (%)',
       data: ram.reverse(),
+      borderColor: 'rgba(255, 179, 15, 1)',
+      tension: 0.1
+    },
+    {
+      label: 'Nível crítico CPU(%)',
+      data: [parametrosCpu[1], parametrosCpu[1], parametrosCpu[1], parametrosCpu[1], parametrosCpu[1], parametrosCpu[1], parametrosCpu[1], parametrosCpu[1], parametrosCpu[1], parametrosCpu[1], parametrosCpu[1], parametrosCpu[1]],
       borderColor: 'rgb(255, 75, 75)',
+      tension: 0.1
+    },
+  {
+      label: 'Nível crítico RAM(%)',
+      data: [parametrosRam[1], parametrosRam[1], parametrosRam[1], parametrosRam[1], parametrosRam[1], parametrosRam[1], parametrosRam[1], parametrosRam[1], parametrosRam[1], parametrosRam[1], parametrosRam[1], parametrosRam[1]],
+      borderColor: 'rgba(255, 75, 201, 1)',
       tension: 0.1
     }]
   };
 
-  new Chart(cpu_line, {
+  if (chartCpuRam) chartCpuRam.destroy();
+
+  chartCpuRam = new Chart(cpu_line, {
     type: 'line',
     data: data_cpu_line,
     options: {
@@ -204,7 +226,7 @@ async function criarGraficos(dadosControlador) {
         legend: {
           labels: {
             font: {
-              size: 20
+              size: 16
             }
           }
         }
@@ -218,6 +240,7 @@ async function criarGraficos(dadosControlador) {
           }
         },
         y: {
+          max: 100,
           ticks: {
             font: {
               size: 18
@@ -230,8 +253,23 @@ async function criarGraficos(dadosControlador) {
 }
 
 async function criarKpis(dadosControlador) {
-  let parametrosCpu = buscarCpuParametros()
-  let parametrosRam = buscarRamParametros()
+  var medias = dadosControlador.media5Minutos
+  var horarios = []
+  var cpu = []
+  var ram = []
+
+  let horariosChave = Object.keys(medias);
+
+  horariosChave.forEach(horario => {
+    let info = medias[horario];
+    console.log(horario, info.cpu, info.ram);
+    horarios.push(horario)
+    cpu.push(info.cpu)
+    ram.push(info.ram)
+  });
+
+  let parametrosCpu = await buscarCpuParametros()
+  let parametrosRam = await buscarRamParametros()
 
   // KPI de média de CPU
   var kpi_mean_cpu = document.getElementById("kpi-mean-value-cpu")
@@ -249,11 +287,13 @@ async function criarKpis(dadosControlador) {
   kpi_chart_cpu_time.innerHTML = dadosControlador.picoCpuRam.cpu.timestamp
 
   var kpi_chart_cpu = document.getElementById("kpi-chart-info-value-cpu")
-  if (dadosControlador.picoCpuRam.cpu.valor > parametrosCpu[0]) {
+  
+  
+  if (dadosControlador.picoCpuRam.cpu.valor > parametrosCpu[1]) {
     kpi_chart_cpu.classList.remove("text-green")
     kpi_chart_cpu.classList.add("text-red")
   }
-  else if (dadosControlador.picoCpuRam.cpu.valor > parametrosCpu[1]) {
+  else if (dadosControlador.picoCpuRam.cpu.valor > parametrosCpu[0]) {
     kpi_chart_cpu.classList.remove("text-green")
     kpi_chart_cpu.classList.add("text-yellow")
   }
@@ -262,11 +302,11 @@ async function criarKpis(dadosControlador) {
 
 
   var kpi_chart_ram = document.getElementById("kpi-chart-info-value-ram")
-  if (dadosControlador.picoCpuRam.ram.valor > parametrosRam[0]) {
+  if (dadosControlador.picoCpuRam.ram.valor > parametrosRam[1]) {
     kpi_chart_ram.classList.remove("text-green")
     kpi_chart_ram.classList.add("text-red")
   }
-  else if (dadosControlador.picoCpuRam.ram.valor > parametrosRam[1]) {
+  else if (dadosControlador.picoCpuRam.ram.valor > parametrosRam[0]) {
     kpi_chart_ram.classList.remove("text-green")
     kpi_chart_ram.classList.add("text-yellow")
   }
@@ -282,29 +322,44 @@ async function criarKpis(dadosControlador) {
 
   var kpi_chart_cpu_last = document.getElementById("kpi-chart-info-value-cpu-last")
 
-  if (dadosControlador.ultimasCapturas.cpu.valor > parametrosCpu[0]) {
+  console.log("COMPARANDO SE " + cpu[0] + " EH MAIOR QUE " + parametrosRam[0]);
+
+  if (cpu[0] > parametrosCpu[1]) {
     kpi_chart_cpu_last.classList.remove("text-green")
+    kpi_chart_cpu_last.classList.remove("text-yellow")
     kpi_chart_cpu_last.classList.add("text-red")
   }
-  else if (dadosControlador.ultimasCapturas.cpu.valor > parametrosCpu[1]) {
+  else if (cpu[0] > parametrosCpu[0]) {
     kpi_chart_cpu_last.classList.remove("text-green")
+    kpi_chart_cpu_last.classList.remove("text-red")
     kpi_chart_cpu_last.classList.add("text-yellow")
   }
-  kpi_chart_cpu_last.innerHTML = dadosControlador.ultimasCapturas.cpu.valor
+  else {
+    kpi_chart_cpu_last.classList.remove("text-yellow")
+    kpi_chart_cpu_last.classList.remove("text-red")
+    kpi_chart_cpu_last.classList.add("text-green")
+  }
+  kpi_chart_cpu_last.innerHTML = cpu[0]
 
   var kpi_chart_ram_time_last = document.getElementById("kpi-info-ram-time-last")
   kpi_chart_ram_time_last.innerHTML = dadosControlador.ultimasCapturas.ram.timestamp
 
   var kpi_chart_ram_last = document.getElementById("kpi-chart-info-value-ram-last")
-  kpi_chart_ram_last.innerHTML = dadosControlador.ultimasCapturas.cpu.valor
+  kpi_chart_ram_last.innerHTML = ram[0]
 
-  if (dadosControlador.ultimasCapturas.ram.valor > parametrosRam[0]) {
+  if (ram[0] > parametrosRam[1]) {
     kpi_chart_ram_last.classList.remove("text-green")
     kpi_chart_ram_last.classList.add("text-red")
   }
-  else if (dadosControlador.ultimasCapturas.ram.valor > parametrosRam[1]) {
+  else if (ram[0] > parametrosRam[0]) {
     kpi_chart_ram_last.classList.remove("text-green")
+    kpi_chart_ram_last.classList.remove("text-red")
     kpi_chart_ram_last.classList.add("text-yellow")
+  }
+  else {
+    kpi_chart_ram_last.classList.remove("text-yellow")
+    kpi_chart_ram_last.classList.remove("text-red")
+    kpi_chart_ram_last.classList.add("text-green")
   }
 }
 
@@ -439,7 +494,7 @@ async function listarControladores() {
 
 function trocarControlador() {
   let select = document.getElementById("selectControlador")
-  
+  sessionStorage.setItem("CONTROLADOR", select.value)
   popularDashboard(select.value)
 }
 // Amazon S3
@@ -479,6 +534,7 @@ async function lerJsonS3() {
   }
 }
 listarControladores()
-trocarControlador()
 popularDashboard(sessionStorage.getItem("CONTROLADOR"))
 exibirParametros()
+
+setInterval(() => {popularDashboard(sessionStorage.getItem("CONTROLADOR"))}, 30000)
