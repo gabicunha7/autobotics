@@ -146,12 +146,7 @@ function top5Processos(data, totalRamBytes){
     ram = Number(ram);
 
     // Classificar severidade do processo
-    let severityClass = "process-list-item-estavel";
-    if (cpu >= 90) {
-        severityClass = "process-list-item-critico";
-    } else if (cpu >= 70) {
-        severityClass = "process-list-item-medio";
-    }
+    let severityClass = "process-list-item-padrao";
 
     // Criar elementos HTML
     const item = document.createElement("div");
@@ -201,8 +196,7 @@ function top5Processos(data, totalRamBytes){
 });
 }
 
-// Buscar dados históricos do S3 e atualizar o gráfico de componentes
-// Buscar dados históricos do S3 e atualizar gráfico + KPIs
+//dados históricos do S3 e atualizar gráfico + KPIs
 async function carregarDadosHistoricoS3() {
   try {
     const select = document.getElementById("select-controlador");

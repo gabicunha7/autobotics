@@ -93,7 +93,7 @@
     <div class="div-conteudo">
       <div class="container-conteudo">
         <div class="div-info-conteudo">
-          <h3>Dashboard de Robótica (Tempo real) - Controlador A</h3>
+          <h3>Dashboard de Robótica tempo real</h3>
           <p id="data_atual"></p>
         </div>
         <div>
@@ -295,7 +295,7 @@ function criarGrafico(idCanvas, titulo, valor, cor, chave) {
         {
           label: 'CPU',
           data: dadosPorHora.cpu,
-          borderColor: '#E71831',
+          borderColor: 'grey',
           backgroundColor: 'rgba(231,24,49,0.08)',
           fill: false,
           tension: 0.3
@@ -303,7 +303,7 @@ function criarGrafico(idCanvas, titulo, valor, cor, chave) {
         {
           label: 'RAM',
           data: dadosPorHora.ram,
-          borderColor: '#e6ac00',
+          borderColor: '#890B59',
           backgroundColor: 'rgba(230,172,0,0.08)',
           fill: false,
           tension: 0.3
@@ -311,7 +311,7 @@ function criarGrafico(idCanvas, titulo, valor, cor, chave) {
         {
           label: 'Disco',
           data: dadosPorHora.disco,
-          borderColor: '#4CAF50',
+          borderColor: '#0000FF',
           backgroundColor: 'rgba(76,175,80,0.08)',
           fill: false,
           tension: 0.3

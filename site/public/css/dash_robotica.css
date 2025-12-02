@@ -289,6 +289,12 @@ body{
     border: 1px solid rgb(140, 250, 143);
 }
 
+.process-list-item-padrao {
+    background-color: rgb(241, 241, 241);
+    border-left: 8px solid rgb(126, 126, 126) !important;
+    border: 1px solid rgb(126, 126, 126);
+}
+
 .process-item-info {
     width: 80%;
     padding-left: 20px;
