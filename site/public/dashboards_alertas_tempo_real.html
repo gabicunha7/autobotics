@@ -121,340 +121,453 @@
   </section>
 
   <script>
-    document.getElementById('nome-usuario').innerText = sessionStorage.NOME_USUARIO || 'Usuário';
-    document.getElementById('email-usuario').innerText = sessionStorage.EMAIL_USUARIO || 'usuario@email.com';
+async function lerJsonS3() {
+  try {
+    const resposta = await fetch('/s3RouteAlertasTempoReal/dados/ultimo');
+    const texto = await resposta.text();
 
-    function normalizaSemAcento(s) {
-      return (s || "").toString().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    if (!resposta.ok) {
+      console.error('Erro na requisição /s3RouteHistoricoAlerta/dados/ultimo', resposta.status, texto);
+      const msgEl = document.getElementById('erroBuscaS3');
+      if (msgEl) msgEl.textContent = 'Erro do servidor ao buscar dados: ' + (texto || resposta.status);
+      return null;
     }
 
-    let activeAlerts = new Map();
-    let ultimoLoteAlertas = [];
-    let controladoresSetor = [];
-    let heatmapChart = null;
-    let graficoComponentes = null;
-    let controladorFiltroSelecionado = "Todos";
-
-    async function buscarControladores() {
-      try {
-        const resposta = await fetch("/setores/buscarControladores", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            setor: sessionStorage.getItem("SETOR_USUARIO"),
-            empresa: sessionStorage.getItem("EMPRESA_USUARIO")
-          })
-        });
-        if (!resposta.ok) throw "Erro ao buscar controladores do setor.";
-        const dados = await resposta.json();
-        return dados;
-      } catch (erro) {
-        console.error(erro);
-        return [];
-      }
+    let data;
+    try {
+      data = JSON.parse(texto);
+    } catch (e) {
+      console.warn('Resposta não é JSON, usando texto:', texto);
+      data = texto;
     }
 
-    function criarGraficoComponentes() {
-      const ctx = document.getElementById('grafico_componentes').getContext('2d');
-      graficoComponentes = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: [], datasets: [
-            { label: 'CPU', data: [], borderColor: 'grey', backgroundColor: 'transparent', tension: 0.2, fill: false, pointRadius: 3 },
-            { label: 'RAM', data: [], borderColor: '#890B59', backgroundColor: 'transparent', tension: 0.2, fill: false, pointRadius: 3 },
-            { label: 'Disco', data: [], borderColor: '#0000FF', backgroundColor: 'transparent', tension: 0.2, fill: false, pointRadius: 3 }
-          ]
-        },
-        options: { responsive: true, plugins: { legend: { position: 'top' } }, scales: { x: { display: true, title: { display: true, text: 'Hora' } }, y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
-      });
-    }
+    console.log('ultimo JSON do bucket (histórico de alertas):', data);
+    sessionStorage.JSON_ALERTA = JSON.stringify(data);
+    return data;
 
-    function formatHoraFrom(item) {
-      const dtString = item.ConcluidoEm || item.CriadoEm || item.firstSeen;
-      if (!dtString) return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      const dt = new Date(dtString);
-      return isNaN(dt.getTime()) ? new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    }
+  } catch (err) {
+    console.error('Erro ao buscar último arquivo do S3:', err);
+    const msgEl = document.getElementById('erroBuscaS3');
+    if (msgEl) msgEl.textContent = 'Falha ao buscar dados do S3: ' + (err.message || err);
+    return null;
+  }
+}
 
-    function makeAlertKey(item) {
-      if (item.ID) return String(item.ID);
-      if (item.Key) return String(item.Key);
-      const maquina = item.Descricao?.Maquina || '';
-      const summary = item.Summary || '';
-      const criado = item.CriadoEm ? String(item.CriadoEm) : (item.firstSeen || '');
-      return `${maquina}||${summary}||${criado}`;
-    }
+lerJsonS3();
 
-    function atualizarTituloDashboard() {
-      const titulo = document.getElementById('titulo-dashboard');
-      if (controladorFiltroSelecionado === "Todos") {
-        titulo.innerText = "Dashboard de Alertas em Tempo Real - Todos os Controladores";
-      } else {
-        titulo.innerText = `Dashboard de Alertas em Tempo Real - Controlador ${controladorFiltroSelecionado}`;
-      }
-    }
+document.getElementById('nome-usuario').innerText = sessionStorage.NOME_USUARIO || 'Usuário';
+document.getElementById('email-usuario').innerText = sessionStorage.EMAIL_USUARIO || 'usuario@email.com';
 
-    function popularSelectControladores() {
-      const select = document.querySelector('.div-filtro select');
-      select.innerHTML = '';
-      const optionTodos = document.createElement('option');
-      optionTodos.value = "Todos";
-      optionTodos.text = "Todos";
-      select.appendChild(optionTodos);
+function normalizaSemAcento(s) {
+  return (s || "").toString().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
 
-      controladoresSetor.forEach(ctrl => {
-        const option = document.createElement('option');
-        option.value = ctrl.numero_serial;
-        option.text = "Controlador " + ctrl.numero_serial;
-        select.appendChild(option);
-      });
+// helper para normalização geral
+function norm(s) {
+  return normalizaSemAcento(s || "").toUpperCase().trim();
+}
 
-      select.value = "Todos";
-      atualizarTituloDashboard();
+let activeAlerts = new Map();
+let ultimoLoteAlertas = [];
+let controladoresSetor = [];
+let heatmapChart = null;
+let graficoComponentes = null;
+let controladorFiltroSelecionado = "Todos";
 
-      select.addEventListener('change', (e) => {
-        controladorFiltroSelecionado = e.target.value;
-        atualizarTituloDashboard();
-        usarDadosReais(ultimoLoteAlertas);
-      });
-    }
-
-    function atualizarKPI(ativos) {
-      const total = ativos.length;
-      const medio = ativos.filter(a => ["MEDIO","MÉDIO"].includes(normalizaSemAcento(a.Descricao?.Criticidade||'').toUpperCase())).length;
-      const critico = ativos.filter(a => ["CRITICO","CRÍTICO"].includes(normalizaSemAcento(a.Descricao?.Criticidade||'').toUpperCase())).length;
-
-      document.getElementById("kpi_total").innerText = total;
-      document.getElementById("kpi_medio").innerText = medio;
-      document.getElementById("kpi_critico").innerText = critico;
-
-      const kpiTotalLine = document.getElementById("kpi_total_line");
-
-      if (controladorFiltroSelecionado === "Todos") {
-          if (total <= 7) kpiTotalLine.style.backgroundColor = "#4CAF50";
-          else if (total <= 15) kpiTotalLine.style.backgroundColor = "#f4b400";
-          else kpiTotalLine.style.backgroundColor = "#E71831";
-      } else {
-          if (total === 0) kpiTotalLine.style.backgroundColor = "#4CAF50";
-          else if (total === 1) kpiTotalLine.style.backgroundColor = "#f4b400";
-          else kpiTotalLine.style.backgroundColor = "#E71831";
-      }
-    }
-
-    function usarDadosReais(dados) {
-      const setorUsuario = sessionStorage.getItem("SETOR_USUARIO");
-      let resolvidosHoje = [];
-
-      dados.forEach(item => {
-        const payloadKey = makeAlertKey(item);
-        const existing = activeAlerts.get(payloadKey) || {};
-        const criadoEm = item.CriadoEm || existing.CriadoEm || new Date().toISOString();
-
-        if (item.Status === 'Aberto') {
-          activeAlerts.set(payloadKey, {
-            ID: item.ID,
-            Key: item.Key,
-            Status: 'Aberto',
-            Descricao: item.Descricao || existing.Descricao || {},
-            CriadoEm: criadoEm,
-            Summary: item.Summary || existing.Summary || '',
-            firstSeen: existing.firstSeen || new Date().toISOString()
-          });
-        } else if (item.Status === 'Concluído') {
-          resolvidosHoje.push({
-            ID: item.ID,
-            Key: item.Key,
-            Status: 'Concluído',
-            Descricao: item.Descricao || existing.Descricao || {},
-            CriadoEm: criadoEm,
-            Summary: item.Summary || existing.Summary || '',
-            firstSeen: existing.firstSeen || new Date().toISOString()
-          });
-          activeAlerts.delete(payloadKey);
-        }
-      });
-
-      let ativos = Array.from(activeAlerts.values()).filter(a => a.Descricao?.Setor === setorUsuario);
-      if (controladorFiltroSelecionado !== "Todos") {
-        ativos = ativos.filter(a => a.Descricao?.Maquina === controladorFiltroSelecionado);
-        resolvidosHoje = resolvidosHoje.filter(a => a.Descricao?.Maquina === controladorFiltroSelecionado);
-      }
-
-      atualizarKPI(ativos);
-
-      const feed = document.getElementById('feed_area');
-      feed.innerHTML = '';
-
-      ativos.forEach(item => {
-        const hora = formatHoraFrom(item);
-        const mensagem = `${item.Summary || 'Alerta'} - ${item.Descricao?.Maquina || 'N/A'}`;
-        const criticidade = normalizaSemAcento(item.Descricao?.Criticidade || '').toUpperCase();
-        const div = document.createElement('div');
-        div.className = criticidade === 'CRITICO' ? 'feed-item critico' :
-                        criticidade === 'MEDIO' ? 'feed-item medio' : 'feed-item estavel';
-        div.innerHTML = `<div>${mensagem}</div><div>${hora}</div>`;
-        feed.appendChild(div);
-      });
-
-      resolvidosHoje.forEach(item => {
-        const hora = formatHoraFrom(item);
-        const mensagem = `Resolvido - ${item.Summary || 'Alerta'} - ${item.Descricao?.Maquina || 'N/A'}`;
-        const div = document.createElement('div');
-        div.className = 'feed-item resolvido';
-        div.innerHTML = `<div>${mensagem}</div><div>${hora}</div>`;
-        feed.appendChild(div);
-      });
-
-      document.getElementById('kpi_resolvidos').innerText = resolvidosHoje.length;
-
-      atualizarGraficoPorComponentePorHora(ativos, 12);
-      ultimoLoteAlertas = dados;
-      tentarAtualizarHeatmap();
-    }
-
-    function atualizarGraficoPorComponentePorHora(lista, janelaHoras = 12) {
-      const now = new Date();
-      const labels = [];
-      for (let i = janelaHoras - 1; i >= 0; i--) {
-        const dt = new Date(now.getTime() - i * 3600 * 1000);
-        labels.push({ label: String(dt.getHours()).padStart(2, '0') + ':00', hora: dt });
-      }
-      const cpu = Array(labels.length).fill(0);
-      const ram = Array(labels.length).fill(0);
-      const disco = Array(labels.length).fill(0);
-      const normaliza = s => normalizaSemAcento((s || '')).toUpperCase();
-
-      lista.forEach(alerta => {
-        const inicio = new Date(alerta.CriadoEm || alerta.firstSeen);
-        if (isNaN(inicio.getTime())) return;
-        const fim = alerta.ConcluidoEm ? new Date(alerta.ConcluidoEm) : null;
-
-        labels.forEach((slot, idx) => {
-          const horaSlot = slot.hora;
-          const ativo = horaSlot >= inicio && (!fim || horaSlot <= fim);
-          if (!ativo) return;
-          const comp = normaliza(alerta.Descricao?.Componente || '');
-          if (comp.includes('CPU')) cpu[idx]++;
-          else if (comp.includes('RAM')) ram[idx]++;
-          else if (comp.includes('DISCO') || comp.includes('DISK')) disco[idx]++;
-        });
-      });
-
-      graficoComponentes.data.labels = labels.map(l => l.label);
-      graficoComponentes.data.datasets[0].data = cpu;
-      graficoComponentes.data.datasets[1].data = ram;
-      graficoComponentes.data.datasets[2].data = disco;
-      graficoComponentes.update();
-    }
-
-    anychart.onDocumentReady(function () {
-      heatmapChart = anychart.heatMap([]);
-      const colorScale = anychart.scales.ordinalColor();
-      colorScale.ranges([{ from: 0, to: 0, color: "#4CAF50" }, { from: 1, to: 1, color: "#e6ac00" }, { from: 2, to: 2, color: "#E71831" }]);
-      heatmapChart.colorScale(colorScale);
-      heatmapChart.labels(false);
-      heatmapChart.tooltip().useHtml(true);
-      heatmapChart.container("container");
-      heatmapChart.draw();
+async function buscarControladores() {
+  try {
+    const resposta = await fetch("/setores/buscarControladores", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        setor: sessionStorage.getItem("SETOR_USUARIO"),
+        empresa: sessionStorage.getItem("EMPRESA_USUARIO")
+      })
     });
+    if (!resposta.ok) throw "Erro ao buscar controladores do setor.";
+    const dados = await resposta.json();
+    return dados;
+  } catch (erro) {
+    console.error(erro);
+    return [];
+  }
+}
 
-    function tentarAtualizarHeatmap() {
-      if (!heatmapChart || !ultimoLoteAlertas || !controladoresSetor.length) return;
-      atualizarHeatmap(ultimoLoteAlertas, 12);
-    }
-
-    function atualizarHeatmap(dadosAlertas, janelaHoras = 12) {
-      const setorUsuario = sessionStorage.getItem("SETOR_USUARIO");
-      const agora = new Date();
-      const slots = [];
-      for (let i = janelaHoras - 1; i >= 0; i--) {
-        const dt = new Date(agora.getTime() - i * 3600 * 1000);
-        slots.push({ label: String(dt.getHours()).padStart(2, '0') + ':00', date: dt });
+function criarGraficoComponentes() {
+  const ctx = document.getElementById('grafico_componentes').getContext('2d');
+  graficoComponentes = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [
+        { label: 'CPU', data: [], borderColor: 'grey', backgroundColor: 'transparent', tension: 0.2, fill: false, pointRadius: 3 },
+        { label: 'RAM', data: [], borderColor: '#890B59', backgroundColor: 'transparent', tension: 0.2, fill: false, pointRadius: 3 },
+        { label: 'Disco', data: [], borderColor: '#0000FF', backgroundColor: 'transparent', tension: 0.2, fill: false, pointRadius: 3 }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: 'top' } },
+      scales: {
+        x: { display: true, title: { display: true, text: 'Hora' } },
+        y: { beginAtZero: true, ticks: { stepSize: 1 } }
       }
+    }
+  });
+}
 
-      const dataHeat = [];
-      controladoresSetor.forEach(ctrl => {
-        const serial = ctrl.numero_serial;
-        slots.forEach(slot => {
-          let melhorCodigo = 0;
-          let melhorAlerta = null;
-          dadosAlertas.forEach(alerta => {
-            if (!alerta.Descricao || alerta.Descricao.Maquina !== serial) return;
-            if (alerta.Descricao.Setor !== setorUsuario) return;
-            const inicio = new Date(alerta.CriadoEm || alerta.firstSeen);
-            const fim = alerta.ConcluidoEm ? new Date(alerta.ConcluidoEm) : null;
-            const ativo = slot.date >= inicio && (!fim || slot.date <= fim);
-            if (!ativo) return;
-            const critStr = normalizaSemAcento(alerta.Descricao.Criticidade || '').toUpperCase();
-            let code = 0;
-            if (critStr === 'MEDIO' || critStr === 'MÉDIO') code = 1;
-            else if (critStr === 'CRITICO' || critStr === 'CRÍTICO') code = 2;
-            if (code > melhorCodigo) { melhorCodigo = code; melhorAlerta = alerta; }
-          });
-          let critLabel = 'Estável';
-          if (melhorCodigo === 1) critLabel = 'Média';
-          else if (melhorCodigo === 2) critLabel = 'Crítica';
+function formatHoraFrom(item) {
+  const dtString = item.ConcluidoEm || item.CriadoEm || item.firstSeen;
+  if (!dtString) return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const dt = new Date(dtString);
+  return isNaN(dt.getTime())
+    ? new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    : dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
 
-          dataHeat.push({
-            x: slot.label,
-            y: "Controlador " + serial,
-            heat: melhorCodigo,
-            critLabel: critLabel,
-            controlador: serial,
-            valorAtual: melhorAlerta?.Descricao?.ValorAtual || null,
-            tooltip: `Controlador: ${serial}<br>Hora: ${slot.label}<br>Valor atual: ${melhorAlerta?.Descricao?.ValorAtual || 'Sem alerta'}`
-          });
-        });
+function makeAlertKey(item) {
+  if (item.ID) return String(item.ID);
+  if (item.Key) return String(item.Key);
+  const maquina = item.Descricao?.Maquina || '';
+  const summary = item.Summary || '';
+  const criado = item.CriadoEm ? String(item.CriadoEm) : (item.firstSeen || '');
+  return `${maquina}||${summary}||${criado}`;
+}
+
+function atualizarTituloDashboard() {
+  const titulo = document.getElementById('titulo-dashboard');
+  if (controladorFiltroSelecionado === "Todos") {
+    titulo.innerText = "Dashboard de Alertas em Tempo Real - Todos os Controladores";
+  } else {
+    titulo.innerText = `Dashboard de Alertas em Tempo Real - Controlador ${controladorFiltroSelecionado}`;
+  }
+}
+
+function popularSelectControladores() {
+  const select = document.querySelector('.div-filtro select');
+  select.innerHTML = '';
+
+  const optionTodos = document.createElement('option');
+  optionTodos.value = "Todos";
+  optionTodos.text = "Todos";
+  select.appendChild(optionTodos);
+
+  controladoresSetor.forEach(ctrl => {
+    const option = document.createElement('option');
+    option.value = ctrl.numero_serial;
+    option.text = "Controlador " + ctrl.numero_serial;
+    select.appendChild(option);
+  });
+
+  select.value = "Todos";
+  atualizarTituloDashboard();
+
+  select.addEventListener('change', (e) => {
+    controladorFiltroSelecionado = e.target.value;
+    atualizarTituloDashboard();
+    usarDadosReais(ultimoLoteAlertas);
+  });
+}
+
+function atualizarKPI(ativos) {
+  const total = ativos.length;
+
+  const medio = ativos.filter(a =>
+    ["MEDIO", "MÉDIO"].includes(
+      norm(a.Descricao?.Criticidade || '')
+    )
+  ).length;
+
+  const critico = ativos.filter(a =>
+    ["CRITICO", "CRÍTICO"].includes(
+      norm(a.Descricao?.Criticidade || '')
+    )
+  ).length;
+
+  document.getElementById("kpi_total").innerText = total;
+  document.getElementById("kpi_medio").innerText = medio;
+  document.getElementById("kpi_critico").innerText = critico;
+
+  const kpiTotalLine = document.getElementById("kpi_total_line");
+
+  if (controladorFiltroSelecionado === "Todos") {
+    if (total <= 7) kpiTotalLine.style.backgroundColor = "#4CAF50";
+    else if (total <= 15) kpiTotalLine.style.backgroundColor = "#f4b400";
+    else kpiTotalLine.style.backgroundColor = "#E71831";
+  } else {
+    if (total === 0) kpiTotalLine.style.backgroundColor = "#4CAF50";
+    else if (total === 1) kpiTotalLine.style.backgroundColor = "#f4b400";
+    else kpiTotalLine.style.backgroundColor = "#E71831";
+  }
+}
+
+function usarDadosReais(dados) {
+  const setorUsuarioRaw = sessionStorage.getItem("SETOR_USUARIO") || "";
+  const setorUsuarioNorm = setorUsuarioRaw ? norm(setorUsuarioRaw) : null;
+
+  let resolvidosHoje = [];
+
+  dados.forEach(item => {
+    const payloadKey = makeAlertKey(item);
+    const existing = activeAlerts.get(payloadKey) || {};
+    const criadoEm = item.CriadoEm || existing.CriadoEm || new Date().toISOString();
+
+    if (item.Status === 'Aberto') {
+      activeAlerts.set(payloadKey, {
+        ID: item.ID,
+        Key: item.Key,
+        Status: 'Aberto',
+        Descricao: item.Descricao || existing.Descricao || {},
+        CriadoEm: criadoEm,
+        Summary: item.Summary || existing.Summary || '',
+        firstSeen: existing.firstSeen || new Date().toISOString()
+      });
+    } else if (item.Status === 'Concluído') {
+      resolvidosHoje.push({
+        ID: item.ID,
+        Key: item.Key,
+        Status: 'Concluído',
+        Descricao: item.Descricao || existing.Descricao || {},
+        CriadoEm: criadoEm,
+        Summary: item.Summary || existing.Summary || '',
+        firstSeen: existing.firstSeen || new Date().toISOString()
+      });
+      activeAlerts.delete(payloadKey);
+    }
+  });
+
+  let ativos = Array.from(activeAlerts.values());
+  console.log("Total de alertas abertos antes do filtro:", ativos.length);
+
+  // aplica filtro por setor só se SETOR_USUARIO existir
+  if (setorUsuarioNorm) {
+    const filtrados = ativos.filter(a => norm(a.Descricao?.Setor || "") === setorUsuarioNorm);
+    console.log("Alertas após filtro de setor:", filtrados.length, " | Setor usuário:", setorUsuarioRaw);
+
+    // se não encontrou nada para esse setor, não filtra (mostra todos)
+    if (filtrados.length > 0) {
+      ativos = filtrados;
+    }
+  } else {
+    console.warn("SETOR_USUARIO não definido no sessionStorage. Mostrando todos os setores.");
+  }
+
+  if (controladorFiltroSelecionado !== "Todos") {
+    ativos = ativos.filter(a => a.Descricao?.Maquina === controladorFiltroSelecionado);
+    resolvidosHoje = resolvidosHoje.filter(a => a.Descricao?.Maquina === controladorFiltroSelecionado);
+  }
+
+  console.log("Alertas considerados para dashboard (após todos filtros):", ativos.length);
+
+  atualizarKPI(ativos);
+
+  const feed = document.getElementById('feed_area');
+  feed.innerHTML = '';
+
+  ativos.forEach(item => {
+    const hora = formatHoraFrom(item);
+    const mensagem = `${item.Summary || 'Alerta'} - ${item.Descricao?.Maquina || 'N/A'}`;
+    const criticidade = norm(item.Descricao?.Criticidade || '');
+    const div = document.createElement('div');
+
+    div.className =
+      criticidade === 'CRITICO' ? 'feed-item critico' :
+      criticidade === 'MEDIO'  ? 'feed-item medio'   :
+                                 'feed-item estavel';
+
+    div.innerHTML = `<div>${mensagem}</div><div>${hora}</div>`;
+    feed.appendChild(div);
+  });
+
+  resolvidosHoje.forEach(item => {
+    const hora = formatHoraFrom(item);
+    const mensagem = `Resolvido - ${item.Summary || 'Alerta'} - ${item.Descricao?.Maquina || 'N/A'}`;
+    const div = document.createElement('div');
+    div.className = 'feed-item resolvido';
+    div.innerHTML = `<div>${mensagem}</div><div>${hora}</div>`;
+    feed.appendChild(div);
+  });
+
+  document.getElementById('kpi_resolvidos').innerText = resolvidosHoje.length;
+
+  atualizarGraficoPorComponentePorHora(ativos, 12);
+  ultimoLoteAlertas = dados;
+  tentarAtualizarHeatmap();
+}
+
+function atualizarGraficoPorComponentePorHora(lista, janelaHoras = 12) {
+  const now = new Date();
+  const labels = [];
+
+  for (let i = janelaHoras - 1; i >= 0; i--) {
+    const dt = new Date(now.getTime() - i * 3600 * 1000);
+    labels.push({ label: String(dt.getHours()).padStart(2, '0') + ':00', hora: dt });
+  }
+
+  const cpu = Array(labels.length).fill(0);
+  const ram = Array(labels.length).fill(0);
+  const disco = Array(labels.length).fill(0);
+
+  lista.forEach(alerta => {
+    const inicio = new Date(alerta.CriadoEm || alerta.firstSeen);
+    if (isNaN(inicio.getTime())) return;
+    const fim = alerta.ConcluidoEm ? new Date(alerta.ConcluidoEm) : null;
+
+    labels.forEach((slot, idx) => {
+      const horaSlot = slot.hora;
+      const ativo = horaSlot >= inicio && (!fim || horaSlot <= fim);
+      if (!ativo) return;
+
+      const comp = norm(alerta.Descricao?.Componente || '');
+      if (comp.includes('CPU')) cpu[idx]++;
+      else if (comp.includes('RAM')) ram[idx]++;
+      else if (comp.includes('DISCO') || comp.includes('DISK')) disco[idx]++;
+    });
+  });
+
+  graficoComponentes.data.labels = labels.map(l => l.label);
+  graficoComponentes.data.datasets[0].data = cpu;
+  graficoComponentes.data.datasets[1].data = ram;
+  graficoComponentes.data.datasets[2].data = disco;
+  graficoComponentes.update();
+}
+
+anychart.onDocumentReady(function () {
+  heatmapChart = anychart.heatMap([]);
+  const colorScale = anychart.scales.ordinalColor();
+
+  colorScale.ranges([
+    { from: 0, to: 0, color: "#4CAF50" },
+    { from: 1, to: 1, color: "#e6ac00" },
+    { from: 2, to: 2, color: "#E71831" }
+  ]);
+
+  heatmapChart.colorScale(colorScale);
+  heatmapChart.labels(false);
+  heatmapChart.tooltip().useHtml(true);
+  heatmapChart.container("container");
+  heatmapChart.draw();
+});
+
+function tentarAtualizarHeatmap() {
+  if (!heatmapChart || !ultimoLoteAlertas || !controladoresSetor.length) return;
+  atualizarHeatmap(ultimoLoteAlertas, 12);
+}
+
+function atualizarHeatmap(dadosAlertas, janelaHoras = 12) {
+  const setorUsuarioRaw = sessionStorage.getItem("SETOR_USUARIO") || "";
+  const setorUsuarioNorm = setorUsuarioRaw ? norm(setorUsuarioRaw) : null;
+
+  const agora = new Date();
+  const slots = [];
+
+  for (let i = janelaHoras - 1; i >= 0; i--) {
+    const dt = new Date(agora.getTime() - i * 3600 * 1000);
+    slots.push({ label: String(dt.getHours()).padStart(2, '0') + ':00', date: dt });
+  }
+
+  const dataHeat = [];
+
+  controladoresSetor.forEach(ctrl => {
+    const serial = ctrl.numero_serial;
+    slots.forEach(slot => {
+      let melhorCodigo = 0;
+      let melhorAlerta = null;
+
+      dadosAlertas.forEach(alerta => {
+        if (!alerta.Descricao) return;
+        if (alerta.Descricao.Maquina !== serial) return;
+
+        if (setorUsuarioNorm) {
+          const setorAlertaNorm = norm(alerta.Descricao.Setor || "");
+          if (setorAlertaNorm !== setorUsuarioNorm) return;
+        }
+
+        const inicio = new Date(alerta.CriadoEm || alerta.firstSeen);
+        const fim = alerta.ConcluidoEm ? new Date(alerta.ConcluidoEm) : null;
+        const ativo = slot.date >= inicio && (!fim || slot.date <= fim);
+        if (!ativo) return;
+
+        const critStr = norm(alerta.Descricao.Criticidade || '');
+        let code = 0;
+        if (critStr === 'MEDIO') code = 1;
+        else if (critStr === 'CRITICO') code = 2;
+
+        if (code > melhorCodigo) {
+          melhorCodigo = code;
+          melhorAlerta = alerta;
+        }
       });
 
-      heatmapChart.data(dataHeat);
+      let critLabel = 'Estável';
+      if (melhorCodigo === 1) critLabel = 'Média';
+      else if (melhorCodigo === 2) critLabel = 'Crítica';
 
-      heatmapChart.tooltip().useHtml(true).titleFormat(function () {
-        return this.getData('critLabel') || 'Estável';
-      }).format(function () {
-        return this.getData('tooltip');
+      dataHeat.push({
+        x: slot.label,
+        y: "Controlador " + serial,
+        heat: melhorCodigo,
+        critLabel: critLabel,
+        controlador: serial,
+        valorAtual: melhorAlerta?.Descricao?.ValorAtual || null,
+        tooltip: `Controlador: ${serial}<br>Hora: ${slot.label}<br>Valor atual: ${melhorAlerta?.Descricao?.ValorAtual || 'Sem alerta'}`
       });
-    }
+    });
+  });
 
-    criarGraficoComponentes();
+  heatmapChart.data(dataHeat);
 
-    (async function inicializarDashboard() {
-      controladoresSetor = await buscarControladores();
-      if (!controladoresSetor.length) {
-        console.warn("Nenhum controlador retornado do setor, usando mock.");
-        controladoresSetor = [
-          { id_controlador: 1, numero_serial: "0001" },
-          { id_controlador: 2, numero_serial: "0002" },
-          { id_controlador: 3, numero_serial: "0003" }
-        ];
-      }
+  heatmapChart.tooltip()
+    .useHtml(true)
+    .titleFormat(function () {
+      return this.getData('critLabel') || 'Estável';
+    })
+    .format(function () {
+      return this.getData('tooltip');
+    });
+}
 
-      popularSelectControladores();
+criarGraficoComponentes();
 
-      async function carregarAlertas() {
-        try {
-          const resposta = await fetch('/s3RouteAlertasTempoReal/dados/ultimo');
-          if (!resposta.ok) throw new Error("Erro ao buscar alertas do S3");
-          let dados = await resposta.json();
-          // Garantir que seja um array
-          if (!Array.isArray(dados)) {
-            if (dados.alertas && Array.isArray(dados.alertas)) {
-              dados = dados.alertas;
-            } else {
-              dados = [];
-            }
-          }
-          usarDadosReais(dados);
-        } catch (erro) {
-          console.error("Erro ao carregar alertas:", erro);
+(async function inicializarDashboard() {
+  controladoresSetor = await buscarControladores();
+  if (!controladoresSetor.length) {
+    console.warn("Nenhum controlador retornado do setor, usando mock.");
+    controladoresSetor = [
+      { id_controlador: 1, numero_serial: "0001" },
+      { id_controlador: 2, numero_serial: "0002" },
+      { id_controlador: 3, numero_serial: "0003" }
+    ];
+  }
+
+  popularSelectControladores();
+
+  async function carregarAlertas() {
+    try {
+      const resposta = await fetch('/s3RouteAlertasTempoReal/dados/ultimo');
+      console.log("Resposta fetch alertas S3:", resposta);
+      if (!resposta.ok) throw new Error("Erro ao buscar alertas do S3");
+      let dados = await resposta.json();
+
+      if (!Array.isArray(dados)) {
+        if (dados.alertas && Array.isArray(dados.alertas)) {
+          dados = dados.alertas;
+        } else {
+          dados = [];
         }
       }
+      usarDadosReais(dados);
+    } catch (erro) {
+      console.error("Erro ao carregar alertas:", erro);
+    }
+  }
 
-      carregarAlertas();
-      setInterval(carregarAlertas, 30 * 1000);
+  carregarAlertas();
+  setInterval(carregarAlertas, 30 * 1000);
+})();
+</script>
 
-    })();
-  </script>
+
 
 </body>
 
