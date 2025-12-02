@@ -263,10 +263,10 @@ function listarAlertasNoSetor(dado) {
     if (typeof dado != "object") {
         totalAlertas.innerHTML = 0;
     } else {
-        if (dado[0].total_alertas > 10) {
+        if (dado[0].total_alertas > 30) {
+            corKpi = "#E71831" 
+        } else if (dado[0].total_alertas > 10) {
             corKpi = "#e6ac00"
-        } else if (dado[0].total_alertas > 30) {
-            corKpi = "#E71831"
         } else {
             corKpi = "#4CAF50"
         }
